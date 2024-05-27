@@ -14,6 +14,7 @@ class DetailKegiatan extends Model
 
     protected $fillable = [
         'title',
+        'no_detail_kegiatan',
         'no_kontrak',
         'jenis_pengadaan',
         'nilai_kontrak',
@@ -51,69 +52,68 @@ class DetailKegiatan extends Model
     // scope untuk filter detail kegiatan
     public function scopeFilter($query, $request)
     {
-			if (request()->has('search')) {
-					if (!empty($request->search)) {
-							$query->where('title', 'like', '%'.$request->search.'%');
-					}
-			}
-			if (request()->has('jenis_paket')) {
-					if (!empty($request->jenis_paket)) {
-							$query->whereHas('kegiatan', function($kegiatan) use($request){
-									$kegiatan->where('jenis_paket', $request->jenis_paket);
-							});
-					}
-			}
-			if (request()->has('bulan')) {
-				if (!empty($request->bulan)) {
-						$query->whereMonth('detail_kegiatan.created_at', $this->convertMonth($request->bulan));
-				}
-			}
-			if (request()->has('tahun')) {
-					if (!empty($request->tahun)) {
-						$query->whereYear('detail_kegiatan.created_at', $request->tahun);
-					}
-			}
-
+        if (request()->has('search')) {
+            if (!empty($request->search)) {
+                $query->where('title', 'like', '%' . $request->search . '%');
+            }
+        }
+        if (request()->has('jenis_paket')) {
+            if (!empty($request->jenis_paket)) {
+                $query->whereHas('kegiatan', function ($kegiatan) use ($request) {
+                    $kegiatan->where('jenis_paket', $request->jenis_paket);
+                });
+            }
+        }
+        if (request()->has('bulan')) {
+            if (!empty($request->bulan)) {
+                $query->whereMonth('detail_kegiatan.created_at', $this->convertMonth($request->bulan));
+            }
+        }
+        if (request()->has('tahun')) {
+            if (!empty($request->tahun)) {
+                $query->whereYear('detail_kegiatan.created_at', $request->tahun);
+            }
+        }
     }
-		public function convertMonth($month)
-		{
-			switch ($month) {
-				case 'januari':
-          return '01';
-          break;
-        case 'februari':
-          return '02';
-          break;
-        case 'maret':
-          return '03';
-          break;
-        case 'april':
-          return '04';
-          break;
-        case 'mei':
-          return '05';
-          break;
-        case 'juni':
-          return '06';
-          break;
-        case 'juli':
-          return '07';
-          break;
-        case 'agustus':
-          return '08';
-          break;
-        case 'september':
-          return '09';
-          break;
-        case 'oktober':
-          return '10';
-          break;
-        case 'november':
-          return '11';
-				case 'desember':
-					return '12';
-				default :
-					return '';
-			}
-		}
+    public function convertMonth($month)
+    {
+        switch ($month) {
+            case 'januari':
+                return '01';
+                break;
+            case 'februari':
+                return '02';
+                break;
+            case 'maret':
+                return '03';
+                break;
+            case 'april':
+                return '04';
+                break;
+            case 'mei':
+                return '05';
+                break;
+            case 'juni':
+                return '06';
+                break;
+            case 'juli':
+                return '07';
+                break;
+            case 'agustus':
+                return '08';
+                break;
+            case 'september':
+                return '09';
+                break;
+            case 'oktober':
+                return '10';
+                break;
+            case 'november':
+                return '11';
+            case 'desember':
+                return '12';
+            default:
+                return '';
+        }
+    }
 }

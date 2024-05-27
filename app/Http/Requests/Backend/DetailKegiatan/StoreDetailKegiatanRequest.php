@@ -25,6 +25,7 @@ class StoreDetailKegiatanRequest extends FormRequest
     {
         return [
             'title' => 'required',
+            'no_detail_kegiatan' => 'required',
             'no_kontrak' => 'required',
             'jenis_pengadaan' => 'required',
             'awal_kontrak' => 'required',

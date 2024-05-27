@@ -23,6 +23,7 @@ class DetailKegiatanController extends Controller
     {
         $detailKegiatan = DetailKegiatan::create([
             'title' => $request->title,
+            'no_detail_kegiatan' => $request->no_detail_kegiatan,
             'no_kontrak' => $request->no_kontrak,
             'jenis_pengadaan' => $request->jenis_pengadaan,
             'nilai_kontrak' => 0,
@@ -59,7 +60,7 @@ class DetailKegiatanController extends Controller
      */
     public function update(UpdateDetailKegiatanRequest $request, DetailKegiatan $detailKegiatan): RedirectResponse
     {
-        if($detailKegiatan->update([
+        if ($detailKegiatan->update([
             'title' => $request->title,
             'no_kontrak' => $request->no_kontrak,
             'jenis_pengadaan' => $request->jenis_pengadaan,
@@ -90,7 +91,7 @@ class DetailKegiatanController extends Controller
      */
     public function updateAnggaran(UpdateDetailAnggaranRequest $request, DetailKegiatan $detailKegiatan): RedirectResponse
     {
-        if($detailKegiatan->update([
+        if ($detailKegiatan->update([
             'target' => $request->target ?? null,
             'real' => $request->real ?? null,
             'dev' => $request->dev ?? null,
@@ -113,7 +114,7 @@ class DetailKegiatanController extends Controller
      */
     public function destroy(DetailKegiatan $detailKegiatan): RedirectResponse
     {
-        if($detailKegiatan->delete()) {
+        if ($detailKegiatan->delete()) {
             return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Kegiatan berhasil dihapus');
         }
         return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Kegiatan gagal dihapus');
@@ -121,24 +122,23 @@ class DetailKegiatanController extends Controller
 
     public function updateProgress(Request $request)
     {
-      try {
-        $detail = DetailKegiatan::where('detail_kegiatan_id', $request->detail_kegiatan_id)
-        ->update([
-          'progress' => $request->progress
-        ]);
-        //return response
-        return response()->json([
-            'success' => true,
-            'message' => 'Data Berhasil diupdate!',
-            'data'    => $detail  
-        ]);
-      } catch (\Throwable $th) {
-        return response()->json([
-          'success' => false,
-          'message' => 'Data Gagal diupdate!',
-          'data'    => []  
-      ]);
-      }
-        
+        try {
+            $detail = DetailKegiatan::where('detail_kegiatan_id', $request->detail_kegiatan_id)
+                ->update([
+                    'progress' => $request->progress
+                ]);
+            //return response
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Berhasil diupdate!',
+                'data'    => $detail
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Gagal diupdate!',
+                'data'    => []
+            ]);
+        }
     }
 }
