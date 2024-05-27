@@ -187,6 +187,9 @@
                                                                         <div class="col-12 " data-toggle="collapse">
                                                                             <table class="table table-borderless">
                                                                                 <tr>
+                                                                                    <td class="text-lightblue" style="width:5%;">
+                                                                                        <strong>{{$detail->no_detail_kegiatan}}</strong>
+                                                                                    </td>
                                                                                     <td class="text-lightblue" style="width:50%;">
                                                                                         <strong>{{$detail->title}}</strong>
                                                                                     </td>
@@ -923,6 +926,10 @@
                                 <input type="text" class="form-control" name="title" placeholder="Silahkan masukan judul Kegiatan" required>
                             </div>
                             <div class="form-group">
+                                <label class="text-darkblue">Kode Kegiatan</label>
+                                <input type="text" class="form-control" name="no_rek_program" placeholder="Silahkan masukan nomor rekening program" required>
+                            </div>
+                            <div class="form-group">
                                 <label class="text-darkblue">Nomor Rekening</label>
                                 <input type="text" class="form-control" name="no_rek" placeholder="Silahkan masukan nomor rekening" required>
                             </div>
@@ -943,10 +950,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label class="text-darkblue">Nomor Rekening Program</label>
-                                <input type="text" class="form-control" name="no_rek_program" placeholder="Silahkan masukan nomor rekening program" required>
-                            </div>
+
                             <div class="form-group">
                                 <label class="text-darkblue">Bidang</label>
                                 <select name="bidang_id" id="bidang_id" class="form-control" required>
