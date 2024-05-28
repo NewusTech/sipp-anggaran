@@ -190,7 +190,7 @@
                                                                                     <td class="text-lightblue" style="width:5%;">
                                                                                         <strong>{{$detail->no_detail_kegiatan}}</strong>
                                                                                     </td>
-                                                                                    <td class="text-lightblue" style="width:50%;">
+                                                                                    <td class="text-lightblue" style="width:35%;">
                                                                                         <strong>{{$detail->title}}</strong>
                                                                                     </td>
                                                                                     <td>
@@ -222,7 +222,7 @@
                                                                                             <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $detail->id]) }}" class="btn btn-sm btn-warning " style="color: #f5faff"><i class="fas fa-edit"></i> Edit Anggaran</a>
                                                                                             @endcan
                                                                                             @can('hapus detail kegiatan')
-                                                                                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-pg-detail-delete-{{$detail->id}}"><i class="fas fa-trash"></i> Hapus</button>
+                                                                                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-lg-detail-delete-{{$detail->id}}"><i class="fas fa-trash"></i> Hapus</button>
                                                                                             @endcan
                                                                                         </div>
                                                                                     </td>
