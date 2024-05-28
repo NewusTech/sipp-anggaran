@@ -60,8 +60,8 @@
                     </button>
                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-lg-create">Manual</a>
-                        <a class="dropdown-item" href="#">Upload Excel DPA</a>
-                        <a class="dropdown-item" href="#">Import SIMDA</a>
+                        <!-- <a class="dropdown-item" href="#">Upload Excel DPA</a>
+                        <a class="dropdown-item" href="#">Import SIMDA</a> -->
                     </div>
                     @endcan
                     {{-- </div> --}}
