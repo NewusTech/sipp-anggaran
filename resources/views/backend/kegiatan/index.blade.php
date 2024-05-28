@@ -268,7 +268,7 @@
                                                                                     <input type="text" class="form-control" name="title" value="{{$kegiatan->title}}" placeholder="Silahkan masukan judul Kegiatan" required>
                                                                                 </div>
                                                                                 <div class="form-group">
-                                                                                    <label class="text-darkblue">Nomor Rekening</label>
+                                                                                    <label class="text-darkblue">Kode Kegiatan</label>
                                                                                     <input type="text" class="form-control" name="no_rek" value="{{$kegiatan->no_rek}}" placeholder="Silahkan masukan nomor rekening" required>
                                                                                 </div>
                                                                                 <div class="form-group">

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('detail_kegiatan', function (Blueprint $table) {
-            $table->unsignedInteger('no_detail_kegiatan')->after('id');
+            $table->string('no_detail_kegiatan')->after('id');
         });
     }
 
