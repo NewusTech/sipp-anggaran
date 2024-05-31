@@ -49,22 +49,40 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="card-action-right">
-                    <a href="{{route('backend.kegiatan.search')}}" class="btn btn-default btn-sm"><i class="fas fa-search"></i> Pencarian</a>
-                    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal-lg-dana"><i class="fa fa-money"></i> Sumber Dana</button>
-                    <!-- <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal-lg-print"><i class="fas fa-print"></i> Cetak Laporan</button> -->
-                    {{-- <div class="input-group-prepend"> --}}
-                    @can('tambah kegiatan')
-                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                        <i class="fas fa-plus"></i> Tambah
-                    </button>
-                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-lg-create">Manual</a>
-                        <!-- <a class="dropdown-item" href="#">Upload Excel DPA</a>
-                        <a class="dropdown-item" href="#">Import SIMDA</a> -->
+                <div class="flex justify-content-between">
+                    <div class="col-6">
+                        <form action="" method="GET">
+                            <div class="row m-0">
+                                <div class="col-3">
+                                    <label for="filter">Filter Tahun</label>
+                                </div>
+                                <div class="col-6">
+                                    <select name="tahun" id="tahun_kegiatan" class="form-control flex" onchange="this.form.submit()" required>
+                                        <option value="" selected>-- Pilih Tahun --</option>
+                                        @for ($i = 0; $i < 5; $i++) <option value="{{date('Y')-$i}}">{{((int)date('Y'))-$i}}</option>
+                                            @endfor
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    @endcan
-                    {{-- </div> --}}
+                    <div class="card-action-right">
+                        <a href="{{route('backend.kegiatan.search')}}" class="btn btn-default btn-sm"><i class="fas fa-search"></i>Pencarian</a>
+                        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal-lg-dana"><i class="fa fa-money"></i> Sumber Dana</button>
+                        <!-- <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal-lg-print"><i class="fas fa-print"></i> Cetak Laporan</button> -->
+                        {{-- <div class="input-group-prepend"> --}}
+                        @can('tambah kegiatan')
+                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-lg-create">Manual</a>
+                            <!-- <a class="dropdown-item" href="#">Upload Excel DPA</a>
+                            <a class="dropdown-item" href="#">Import SIMDA</a> -->
+                        </div>
+                        @endcan
+                        {{-- </div> --}}
+                    </div>
                 </div>
             </div>
             <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
