@@ -3,7 +3,7 @@
         <div class="col-12">
             <table class="table table-responsive">
                 <tr>
-                    <td class="text-bold text-darkblue">Bidang</td>
+                    <td class="text-bold text-darkblue">Kegiatan</td>
                     <td>{{ $detail->kegiatan->title }}</td>
                 </tr>
                 <tr>
