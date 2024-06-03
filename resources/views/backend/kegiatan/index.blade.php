@@ -122,7 +122,7 @@
                                                 <tbody>
                                                     @foreach ($item->kegiatan as $kegiatan)
                                                     @if ($kegiatan->is_arship == 0)
-                                                    <tr>
+                                                    <tr id="table-detail-kegiatan">
                                                         <td>
                                                             <dl>
                                                                 <dd>
@@ -190,6 +190,56 @@
 
                                                         </td>
                                                     </tr>
+                                                    <tr id="card-detail-kegiatan">
+                                                        <td>
+                                                            <div class="card">
+                                                                <div class="taf text-darkblue px-4">{{$kegiatan->title}}</div>
+                                                                <div class="row">
+                                                                    <div class="px-3">
+                                                                        <div class=""><strong>No
+                                                                                Rekening</strong></div>
+                                                                        <div class=""><strong>Total Pagu</strong>
+                                                                        </div>
+                                                                        <div class=""><strong>Reailasi</strong>
+                                                                        </div>
+                                                                        <div class=""><strong>Sisa
+                                                                                Anggaran</strong></div>
+                                                                    </div>
+                                                                    <div class="">
+                                                                        <div class="">{{ $kegiatan->no_rek }}</div>
+                                                                        <div class="">{{ number_format($kegiatan->alokasi) }}</div>
+                                                                        <div class="">{{ number_format($kegiatan->total_realisasi) }}</div>
+                                                                        <div class="">{{ number_format($kegiatan->total_sisa) }}</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="px-2">
+                                                                    <dl>
+                                                                        <dd>
+                                                                            <div class="btn-action">
+                                                                                @can('tambah detail kegiatan')
+                                                                                <button type="button" style="color: white;" class="btn btn-block btn-primary btn-sm" data-toggle="modal" data-target="#modal-lg-tambah-detail-{{$kegiatan->id}}"><i class="fas fa-plus"></i> Tambah</button>
+                                                                                @endcan
+                                                                                @can('ubah detail kegiatan')
+                                                                                <button type="button" class="btn btn-block btn-success btn-sm" data-toggle="modal" data-target="#modal-arship-{{$kegiatan->id}}"><i class="fa fa-archive"></i> Arsipkan</button>
+                                                                                @endcan
+                                                                                @can('hapus detail kegiatan')
+                                                                                <button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal" data-target="#modal-hapus-{{$kegiatan->id}}"><i class="fas fa-trash"></i> Hapus</button>
+                                                                                @endcan
+                                                                            </div>
+                                                                        </dd>
+                                                                        @can('ubah detail kegiatan')
+                                                                        <dd>
+                                                                            <div class="btn-action">
+                                                                                <button type="button" style="color: white;" class="btn btn-block btn-warning btn-sm" data-toggle="modal" data-target="#modal-lg-edit-{{$kegiatan->id}}"><i class="fas fa-edit"></i> Edit</button>
+                                                                                <button type="button" style="color: white;" class="btn btn-block btn-warning btn-sm" data-toggle="modal" data-target="#modal-lg-edit-pptk-{{$kegiatan->id}}"><i class="fas fa-edit"></i> Edit PPTK / Pimpinan Teknis</button>
+                                                                            </div>
+                                                                        </dd>
+                                                                        @endcan
+                                                                    </dl>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
                                                     <tr>
                                                         <td colspan="5">
                                                             <div id="accordion-detail">
@@ -204,7 +254,7 @@
                                                                     <div class="row">
                                                                         <div class="col-12 " data-toggle="collapse">
                                                                             <table class="table table-borderless">
-                                                                                <tr>
+                                                                                <tr id="table-detail-kegiatan">
                                                                                     <td class="text-lightblue" style="width:5%;">
                                                                                         <strong>{{$detail->no_detail_kegiatan}}</strong>
                                                                                     </td>
@@ -242,6 +292,52 @@
                                                                                             @can('hapus detail kegiatan')
                                                                                             <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-lg-detail-delete-{{$detail->id}}"><i class="fas fa-trash"></i> Hapus</button>
                                                                                             @endcan
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr id="card-detail-kegiatan">
+                                                                                    <td>
+                                                                                        <div class="card">
+                                                                                            <div class="row">
+                                                                                                <div class="pe-3">
+                                                                                                    <div class="col">
+                                                                                                        <div class="text-darkblue"><strong>No Detail kegiatan</strong></div>
+                                                                                                        <div class="">{{ $detail->no_detail_kegiatan }}</div>
+                                                                                                    </div>
+                                                                                                    <div class="col">
+                                                                                                        <div class="text-darkblue"><strong>Judul</strong></div>
+                                                                                                        <div class="">{{$detail->title}}</div>
+                                                                                                    </div>
+                                                                                                    <div class="col">
+                                                                                                        <div class="text-darkblue"><strong>Pagu</strong></div>
+                                                                                                        <div class="">Rp.{{ number_format($detail->pagu) }}</div>
+                                                                                                    </div>
+                                                                                                    <div class="col">
+                                                                                                        <div class="text-darkblue"><strong>Progress</strong></div>
+                                                                                                        <div class="">
+                                                                                                            @if ((int)$detail->progress > 0 && $detail->progress < 100) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $detail->id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{'Sedang Dikerjakan'}}</a>
+                                                                                                                @elseif ((int)$detail->progress == 100)
+                                                                                                                <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $detail->id]) }}" class="btn btn-sm btn-success rounded btn-block">{{'Sudah Selesai'}}</a>
+                                                                                                                @else
+                                                                                                                <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $detail->id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
+                                                                                                                @endif
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col">
+                                                                                                        @can('lihat detail kegiatan')
+                                                                                                        <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail->id]) }}" class=" btn btn-sm btn-default "><i class="fas fa-eye"></i> Lihat Detail</a>
+                                                                                                        @endcan
+                                                                                                        @can('hapus detail kegiatan')
+                                                                                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-lg-detail-delete-{{$detail->id}}"><i class="fas fa-trash"></i> Hapus</button>
+                                                                                                        @endcan
+                                                                                                    </div>
+                                                                                                    <div class="col">
+                                                                                                        @can('ubah detail kegiatan')
+                                                                                                        <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $detail->id]) }}" class="btn btn-sm btn-warning " style="color: #f5faff"><i class="fas fa-edit"></i> Edit Anggaran</a>
+                                                                                                        @endcan
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
                                                                                         </div>
                                                                                     </td>
                                                                                 </tr>
@@ -440,14 +536,11 @@
 
                                     <div id="collapse-program-{{$item->id}}" class="collapse" aria-labelledby="heading-program-{{$item->id}}" data-parent="#accordion-program">
                                         <div class="card-body table-responsive p-0" style="height: 500px;">
-                                            <div id="kegiatan">
-
-                                            </div>
                                             <table class="table  text-nowrap">
                                                 <tbody>
                                                     @foreach ($item->kegiatan as $kegiatan)
                                                     @if ($kegiatan->is_arship == 0)
-                                                    <tr>
+                                                    <tr id="table-detail-program">
                                                         <td>
                                                             <dl>
                                                                 <dd>
@@ -514,6 +607,56 @@
                                                             </dl>
                                                         </td>
                                                     </tr>
+                                                    <tr id="card-detail-program">
+                                                        <td>
+                                                            <div class="card">
+                                                                <div class="taf text-darkblue px-4">{{$kegiatan->title}}</div>
+                                                                <div class="row">
+                                                                    <div class="px-3">
+                                                                        <div class=""><strong>No
+                                                                                Rekening</strong></div>
+                                                                        <div class=""><strong>Total Pagu</strong>
+                                                                        </div>
+                                                                        <div class=""><strong>Reailasi</strong>
+                                                                        </div>
+                                                                        <div class=""><strong>Sisa
+                                                                                Anggaran</strong></div>
+                                                                    </div>
+                                                                    <div class="">
+                                                                        <div class="">{{ $kegiatan->no_rek }}</div>
+                                                                        <div class="">{{ number_format($kegiatan->alokasi) }}</div>
+                                                                        <div class="">{{ number_format($kegiatan->total_realisasi) }}</div>
+                                                                        <div class="">{{ number_format($kegiatan->total_sisa) }}</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="px-2">
+                                                                    <dl>
+                                                                        <dd>
+                                                                            <div class="btn-action">
+                                                                                @can('tambah detail kegiatan')
+                                                                                <button type="button" style="color: white;" class="btn btn-block btn-primary btn-sm" data-toggle="modal" data-target="#modal-lg-tambah-detail-pr-{{$kegiatan->id}}"><i class="fas fa-plus"></i> Tambah</button>
+                                                                                @endcan
+                                                                                @can('ubah detail kegiatan')
+                                                                                <button type="button" class="btn btn-block btn-success btn-sm" data-toggle="modal" data-target="#modal-arship-pr-{{$kegiatan->id}}"><i class="fa fa-archive"></i> Arsipkan</button>
+                                                                                @endcan
+                                                                                @can('hapus detail kegiatan')
+                                                                                <button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal" data-target="#modal-hapus-pr-{{$kegiatan->id}}"><i class="fas fa-trash"></i> Hapus</button>
+                                                                                @endcan
+                                                                            </div>
+                                                                        </dd>
+                                                                        @can('ubah detail kegiatan')
+                                                                        <dd>
+                                                                            <div class="btn-action">
+                                                                                <button type="button" style="color: white;" class="btn btn-block btn-warning btn-sm" data-toggle="modal" data-target="#modal-lg-edit-pr-{{$kegiatan->id}}"><i class="fas fa-edit"></i> Edit</button>
+                                                                                <button type="button" style="color: white;" class="btn btn-block btn-warning btn-sm" data-toggle="modal" data-target="#modal-lg-edit-pptk-pr-{{$kegiatan->id}}"><i class="fas fa-edit"></i> Edit PPTK / Pimpinan Teknis</button>
+                                                                            </div>
+                                                                        </dd>
+                                                                        @endcan
+                                                                    </dl>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
                                                     <tr>
                                                         <td colspan="5">
                                                             <div id="accordion-program-detail">
@@ -528,7 +671,7 @@
                                                                     <div class="row">
                                                                         <div class="col-12 " data-toggle="collapse">
                                                                             <table class="table table-borderless">
-                                                                                <tr>
+                                                                                <tr id="table-detail-program">
                                                                                     <td class="text-lightblue" style="width:50%;">
                                                                                         <strong>{{$detail->title}}</strong>
                                                                                     </td>
@@ -563,6 +706,52 @@
                                                                                             @can('hapus detail kegiatan')
                                                                                             <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-pg-detail-delete-pr-{{$detail->id}}"><i class="fas fa-trash"></i> Hapus</button>
                                                                                             @endcan
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr id="card-detail-kegiatan">
+                                                                                    <td>
+                                                                                        <div class="card">
+                                                                                            <div class="row">
+                                                                                                <div class="pe-3">
+                                                                                                    <div class="col">
+                                                                                                        <div class="text-darkblue"><strong>No Detail kegiatan</strong></div>
+                                                                                                        <div class="">{{ $detail->no_detail_kegiatan }}</div>
+                                                                                                    </div>
+                                                                                                    <div class="col">
+                                                                                                        <div class="text-darkblue"><strong>Judul</strong></div>
+                                                                                                        <div class="">{{$detail->title}}</div>
+                                                                                                    </div>
+                                                                                                    <div class="col">
+                                                                                                        <div class="text-darkblue"><strong>Pagu</strong></div>
+                                                                                                        <div class="">Rp.{{ number_format($detail->pagu) }}</div>
+                                                                                                    </div>
+                                                                                                    <div class="col">
+                                                                                                        <div class="text-darkblue"><strong>Progress</strong></div>
+                                                                                                        <div class="">
+                                                                                                            @if ((int)$detail->progress > 0 && $detail->progress < 100) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $detail->id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{'Sedang Dikerjakan'}}</a>
+                                                                                                                @elseif ((int)$detail->progress == 100)
+                                                                                                                <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $detail->id]) }}" class="btn btn-sm btn-success rounded btn-block">{{'Sudah Selesai'}}</a>
+                                                                                                                @else
+                                                                                                                <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $detail->id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
+                                                                                                                @endif
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col">
+                                                                                                        @can('lihat detail kegiatan')
+                                                                                                        <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail->id]) }}" class=" btn btn-sm btn-default "><i class="fas fa-eye"></i> Lihat Detail</a>
+                                                                                                        @endcan
+                                                                                                        @can('hapus detail kegiatan')
+                                                                                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-lg-detail-delete-{{$detail->id}}"><i class="fas fa-trash"></i> Hapus</button>
+                                                                                                        @endcan
+                                                                                                    </div>
+                                                                                                    <div class="col">
+                                                                                                        @can('ubah detail kegiatan')
+                                                                                                        <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $detail->id]) }}" class="btn btn-sm btn-warning " style="color: #f5faff"><i class="fas fa-edit"></i> Edit Anggaran</a>
+                                                                                                        @endcan
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
                                                                                         </div>
                                                                                     </td>
                                                                                 </tr>
