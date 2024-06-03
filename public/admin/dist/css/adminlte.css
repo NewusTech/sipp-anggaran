@@ -2185,10 +2185,10 @@ pre code {
     text-align: left;
 }
 
-.btn-action{
-  display:flex;
-  justify-content:end;
-  align-items:center;
+.btn-action {
+    display: flex;
+    justify-content: end;
+    align-items: center;
 }
 
 .btn-login {
@@ -37667,8 +37667,8 @@ a.disabled.mailbox-attachment-close {
 
 @media(min-width: 576px) {
 
-    #card-detail-kegiatan,
-    #card-detail-program {
+    .card-detail-kegiatan,
+    .card-detail-program {
         display: none !important;
     }
 }
@@ -37679,20 +37679,20 @@ a.disabled.mailbox-attachment-close {
         max-height: 50px;
     }
 
-    #table-detail-kegiatan {
-        display: none;
+    .table-detail-kegiatan {
+        display: none !important;
     }
 
-    #card-detail-kegiatan {
+    .card-detail-kegiatan {
         display: flex;
         flex-direction: row !important;
     }
 
-    #table-detail-program {
-        display: none;
+    .table-detail-program {
+        display: none !important;
     }
 
-    #card-detail-program {
+    .card-detail-program {
         display: flex;
         flex-direction: row !important;
     }

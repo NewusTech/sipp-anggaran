@@ -128,10 +128,10 @@
                                                 <tbody>
                                                     @foreach ($item->kegiatan as $kegiatan)
                                                     @if ($kegiatan->is_arship == 0)
-                                                    <tr id="table-detail-kegiatan">
+                                                    <tr class="table-detail-kegiatan">
                                                         <td>
                                                             <dl>
-                                                                <dd>
+                                          '                      <dd>
                                                                     <span class="text-darkblue">{{$kegiatan->title}}</span>
                                                                 </dd>
                                                                 <dd style="margin-bottom: 20px;margin-top: 10px;">
@@ -196,7 +196,7 @@
 
                                                         </td>
                                                     </tr>
-                                                    <tr id="card-detail-kegiatan">
+                                                    <tr class="card-detail-kegiatan">
                                                         <td>
                                                             <div class="card">
                                                                 <div class="taf text-darkblue px-4">{{$kegiatan->title}}</div>
@@ -260,7 +260,7 @@
                                                                     <div class="row">
                                                                         <div class="col-12 " data-toggle="collapse">
                                                                             <table class="table table-borderless">
-                                                                                <tr id="table-detail-kegiatan">
+                                                                                <tr class="table-detail-kegiatan">
                                                                                     <td class="text-lightblue" style="width:5%;">
                                                                                         <strong>{{$detail->no_detail_kegiatan}}</strong>
                                                                                     </td>
@@ -301,7 +301,7 @@
                                                                                         </div>
                                                                                     </td>
                                                                                 </tr>
-                                                                                <tr id="card-detail-kegiatan">
+                                                                                <tr class="card-detail-kegiatan">
                                                                                     <td>
                                                                                         <div class="card">
                                                                                             <div class="row">
@@ -546,7 +546,7 @@
                                                 <tbody>
                                                     @foreach ($item->kegiatan as $kegiatan)
                                                     @if ($kegiatan->is_arship == 0)
-                                                    <tr id="table-detail-program">
+                                                    <tr class="table-detail-program">
                                                         <td>
                                                             <dl>
                                                                 <dd>
@@ -613,7 +613,7 @@
                                                             </dl>
                                                         </td>
                                                     </tr>
-                                                    <tr id="card-detail-program">
+                                                    <tr class="card-detail-program">
                                                         <td>
                                                             <div class="card">
                                                                 <div class="taf text-darkblue px-4">{{$kegiatan->title}}</div>
@@ -715,7 +715,7 @@
                                                                                         </div>
                                                                                     </td>
                                                                                 </tr>
-                                                                                <tr id="card-detail-kegiatan">
+                                                                                <tr class="card-detail-kegiatan">
                                                                                     <td>
                                                                                         <div class="card">
                                                                                             <div class="row">
