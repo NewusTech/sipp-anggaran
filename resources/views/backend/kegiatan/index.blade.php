@@ -50,39 +50,45 @@
         <div class="card">
             <div class="card-body">
                 <div class="flex justify-content-between">
-                    <div class="col-6">
-                        <form action="" method="GET">
-                            <div class="row m-0">
-                                <div class="col-3">
-                                    <label for="filter">Filter Tahun</label>
-                                </div>
-                                <div class="col-6">
-                                    <select name="tahun" id="tahun_kegiatan" class="form-control flex" onchange="this.form.submit()" required>
-                                        <option value="" selected>-- Pilih Tahun --</option>
-                                        @for ($i = 0; $i < 5; $i++) <option value="{{date('Y')-$i}}">{{((int)date('Y'))-$i}}</option>
-                                            @endfor
-                                    </select>
-                                </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 col-md-4 mb-3">
+                                <form action="" method="GET">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-4 col-md-3 col-lg-2 mb-2 mb-md-0">
+                                            <label for="filter">Filter Tahun</label>
+                                        </div>
+                                        <div class="col-12 col-sm-8 col-md-9 col-lg-10">
+                                            <select name="tahun" id="tahun_kegiatan" class="form-control" onchange="this.form.submit()" required>
+                                                <option value="" selected>-- Pilih Tahun --</option>
+                                                @for ($i = 0; $i < 5; $i++) <option value="{{ date('Y') - $i }}">{{ ((int)date('Y')) - $i }}</option>
+                                                    @endfor
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
-                    </div>
-                    <div class="card-action-right">
-                        <a href="{{route('backend.kegiatan.search')}}" class="btn btn-default btn-sm"><i class="fas fa-search"></i>Pencarian</a>
-                        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal-lg-dana"><i class="fa fa-money"></i> Sumber Dana</button>
-                        <!-- <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal-lg-print"><i class="fas fa-print"></i> Cetak Laporan</button> -->
-                        {{-- <div class="input-group-prepend"> --}}
-                        @can('tambah kegiatan')
-                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                            <i class="fas fa-plus"></i> Tambah
-                        </button>
-                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-lg-create">Manual</a>
-                            <!-- <a class="dropdown-item" href="#">Upload Excel DPA</a>
-                            <a class="dropdown-item" href="#">Import SIMDA</a> -->
+                            <div class="col-12 col-md-8 d-flex justify-content-end align-items-center">
+                                <a href="{{ route('backend.kegiatan.search') }}" class="btn btn-default btn-sm me-2">
+                                    <i class="fas fa-search"></i> Pencarian
+                                </a>
+                                <button type="button" class="btn btn-default btn-sm me-2" data-toggle="modal" data-target="#modal-lg-dana">
+                                    <i class="fa fa-money"></i> Sumber Dana
+                                </button>
+                                @can('tambah kegiatan')
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-plus"></i> Tambah
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-lg-create">Manual</a>
+                                    </div>
+                                </div>
+                                @endcan
+                            </div>
                         </div>
-                        @endcan
-                        {{-- </div> --}}
                     </div>
+
                 </div>
             </div>
             <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
