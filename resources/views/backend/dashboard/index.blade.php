@@ -17,10 +17,10 @@
 @section('main')
 <form action="{{route('backend.dashboard.index')}}" method="GET">
     <div class="row">
-        <div class="col-3">
+        <div class=" mx-3 col-2 col-md-1 col-lg-1">
             <label for="filter">Filter Tahun</label>
         </div>
-        <div class="col-9">
+        <div class="col-3">
             <select name="tahun" id="tahun" class="form-control" onchange="this.form.submit()" required>
                 <option value="" selected>-- Pilih Tahun --</option>
                 @for ($i = 0; $i < 5; $i++) <option value="{{date('Y')-$i}}" {{request()->get('tahun') == date('Y')-$i ? 'selected' : ''}}>{{((int)date('Y'))-$i}}</option>
