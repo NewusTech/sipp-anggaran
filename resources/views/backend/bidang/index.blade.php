@@ -31,9 +31,9 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-							<div class="card-action-right">
-								<button id="addBidang" class="btn btn-primary btn-sm btn-add" data-toggle="modal" data-target="#modal-lg-create"><i class="fas fa-plus"></i> Tambah Bidang</button>
-							</div>
+                    <div class="card-action-right">
+                        <button id="addBidang" class="btn btn-primary btn-sm btn-add" data-toggle="modal" data-target="#modal-lg-create"><i class="fas fa-plus"></i> Tambah Bidang</button>
+                    </div>
                 <div class="row">
                     <h4 class="text-darkblue"><strong> DATA BIDANG </strong></h4>
                 </div>
@@ -45,21 +45,24 @@
                 <div class="tab-content" id="custom-content-below-tabContent">
                     <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
                         <div class="row">
-                            <div class="col-12">
-                                <table id="example1" class="table ">
+                            <div class="col-12 table-responsive">
+                                <table id="example1" class="table">
                                     <thead>
                                     <tr>
-                                        <th style="width: 80%; padding:1rem 2.25rem;">Nama Bidang</th>
-                                        <th style="text-align: center">Aksi</th>
+                                        <th>Nama Bidang</th>
+                                        <th style="text-align: end">Aksi</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach ($bidang as $item)
                                     <tr>
-                                        <td>{{$item->kode}} | {{$item->name}}</td>
+                                        <td style="overflow: hidden;
+                                                    text-overflow: ellipsis;
+                                                    white-space: nowrap;"
+                                        >{{$item->kode}} | {{$item->name}}</td>
                                         <td class="btn-action">
-                                            <button type="button" style="color: white;" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal-lg-edit-{{$item->id}}"><i class="fas fa-edit"></i> Edit</button>
-                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$item->id}}"><i class="fas fa-trash"></i> Hapus</button>
+                                            <button type="button" style="color: white;" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal-lg-edit-{{$item->id}}"><i class="fas fa-edit"></i> </button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$item->id}}"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
                                     <div class="modal fade" id="modal-lg-edit-{{$item->id}}" style="padding-right: 17px; ">
@@ -78,10 +81,10 @@
                                                     <div class="row">
                                                     <div class="col-sm-12">
                                                         <!-- text input -->
-																												<div class="form-group">
-																													<label class="text-darkblue">Kode</label>
-																													<input type="text" class="form-control" name="kode" value="{{$item->kode}}" placeholder="Silahkan masukan Kode" required>
-																												</div>
+                                                        <div class="form-group">
+                                                            <label class="text-darkblue">Kode</label>
+                                                            <input type="text" class="form-control" name="kode" value="{{$item->kode}}" placeholder="Silahkan masukan Kode" required>
+                                                        </div>
                                                         <div class="form-group">
                                                         <label class="text-darkblue">Nama Bidang</label>
                                                         <input type="text" class="form-control" name="name" value="{{$item->name}}" placeholder="Silahkan masukan nama bidang" required>
@@ -189,7 +192,6 @@
 <script>
   $(function () {
     $("#example1").DataTable({
-        "responsive": true,
         "autoWidth": true,
         "paging": true,
         "lengthChange": true,
