@@ -2185,10 +2185,10 @@ pre code {
     text-align: left;
 }
 
-.btn-action {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.btn-action{
+  display:flex;
+  justify-content:end;
+  align-items:center;
 }
 
 .btn-login {
