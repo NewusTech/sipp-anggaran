@@ -37,15 +37,15 @@ class KegiatanController extends Controller
         if (str_contains($role[0], "Staff") || str_contains($role[0], "Kepala Bidang")) {
             $bidang = Bidang::where('id', $this->bidang_id)->orderBy('created_at', 'desc')->get();
 
-            $kegiatanProgram = Kegiatan::where('bidang_id', $this->bidang_id)->pluck('program');
-            $program = Program::where('id', $kegiatanProgram)->get();
+            // $kegiatanProgram = Kegiatan::where('bidang_id', $this->bidang_id)->pluck('program');
+            // $program = Program::where('id', $kegiatanProgram)->get();
         } else {
             $bidang = Bidang::orderBy('created_at', 'desc')->get();
-            $program = Program::orderBy('created_at', 'desc')->get();
         }
         // dd($bidang);
         // dd($program);
 
+        $program = Program::orderBy('created_at', 'desc')->get();
         $bidang->map(function ($item) {
             if ($this->request['tahun'] != null) {
                 $kegiatan = Kegiatan::where('bidang_id', $item->id)->where('is_arship', 0)->where('tahun', $this->request['tahun'])->orderBy('created_at', 'desc')->get();
