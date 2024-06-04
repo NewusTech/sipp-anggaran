@@ -21,6 +21,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class KegiatanController extends Controller
 {
+    public $bidang_id;
+    public $request;
     /**
      * Display a listing of the resource.
      *
@@ -29,18 +31,21 @@ class KegiatanController extends Controller
     public function index(Request $request)
     {
         $this->request = $request;
-        $bidang_id =  Auth::user()->bidang_id;
+        $this->bidang_id =  Auth::user()->bidang_id;
         $role = Auth::user()->getRoleNames();
-        if (str_contains($role[0], "Staff")) {
-            $bidang = Bidang::where('id', $bidang_id)->orderBy('created_at', 'desc')
-                ->get();
-        } else {
-            $bidang = Bidang::orderBy('created_at', 'desc')
-                ->get();
-        }
+        // dd($role);
+        if (str_contains($role[0], "Staff") || str_contains($role[0], "Kepala Bidang")) {
+            $bidang = Bidang::where('id', $this->bidang_id)->orderBy('created_at', 'desc')->get();
 
-        $program = Program::orderBy('created_at', 'desc')
-            ->get();
+            $kegiatanProgram = Kegiatan::where('bidang_id', $this->bidang_id)->pluck('program');
+            $program = Program::where('id', $kegiatanProgram)->get();
+        } else {
+            $bidang = Bidang::orderBy('created_at', 'desc')->get();
+            $program = Program::orderBy('created_at', 'desc')->get();
+        }
+        // dd($bidang);
+        // dd($program);
+
         $bidang->map(function ($item) {
             if ($this->request['tahun'] != null) {
                 $kegiatan = Kegiatan::where('bidang_id', $item->id)->where('is_arship', 0)->where('tahun', $this->request['tahun'])->orderBy('created_at', 'desc')->get();
