@@ -48,17 +48,17 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body p-0 m-0">
                 <div class="flex justify-content-between">
-                    <div class="container">
+                    <div class="container p-0 m-0">
                         <div class="row">
-                            <div class="col-12 col-md-4 mb-3">
+                            <div class="col-12 col-md-4">
                                 <form action="" method="GET">
                                     <div class="row">
-                                        <div class="col-12 col-sm-4 col-md-3 col-lg-2 mb-2 mb-md-0">
+                                        <div class="col-sm-4 col-md-3 col-lg-2 mb-2 mb-md-0">
                                             <label for="filter">Filter Tahun</label>
                                         </div>
-                                        <div class="col-12 col-sm-8 col-md-9 col-lg-10">
+                                        <div class="col-sm-8 col-md-9 col-lg-10">
                                             <select name="tahun" id="tahun_kegiatan" class="form-control" onchange="this.form.submit()" required>
                                                 <option value="" selected>-- Pilih Tahun --</option>
                                                 @for ($i = 0; $i < 5; $i++) <option value="{{ date('Y') - $i }}">{{ ((int)date('Y')) - $i }}</option>
@@ -131,7 +131,7 @@
                                                     <tr class="table-detail-kegiatan">
                                                         <td>
                                                             <dl>
-                                          '                      <dd>
+                                                                ' <dd>
                                                                     <span class="text-darkblue">{{$kegiatan->title}}</span>
                                                                 </dd>
                                                                 <dd style="margin-bottom: 20px;margin-top: 10px;">
