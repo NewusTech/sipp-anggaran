@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ProgresKegiatan extends Model
 {
     use HasFactory, SoftDeletes;
-
-    protected $table = 'progress_kegiatan';
+    protected $table = 'progres_kegiatan';
     protected $guarded = ['id'];
 }
