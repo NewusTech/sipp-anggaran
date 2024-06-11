@@ -7,6 +7,8 @@ use App\Http\Requests\Backend\DetailKegiatan\StoreDetailKegiatanRequest;
 use App\Http\Requests\Backend\DetailKegiatan\UpdateDetailAnggaranRequest;
 use App\Http\Requests\Backend\DetailKegiatan\UpdateDetailKegiatanRequest;
 use App\Models\DetailKegiatan;
+use App\Models\RencanaKegiatan;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -43,6 +45,20 @@ class DetailKegiatanController extends Controller
             'penyedia_jasa_id' => $request->penyedia_jasa_id,
             'progress' => 0
         ]);
+
+        $startDate = Carbon::parse($request->awal_kontrak);
+        $endDate = Carbon::parse($request->akhir_kontrak);
+
+        $progressData = [];
+        for ($date = $startDate; $date->lte($endDate); $date->addMonth()) {
+            $progressData[] = [
+                'detail_kegiatan_id' => $detailKegiatan->id,
+                'bulan' => $date->format('Y-m'),
+                'keuangan' => 0,
+                'fisik' => 0,
+            ];
+        }
+        RencanaKegiatan::insert($progressData);
 
         if ($detailKegiatan) {
             return redirect()->route('backend.kegiatan.index')->with('success', 'Detail Kegiatan berhasil disimpan');
