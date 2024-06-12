@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
+<script src="sweetalert2.all.min.js"></script>
 <style>
     .leaflet-container {
         height: 310px;
@@ -100,6 +100,9 @@
                     <li class="nav-item">
                         <a class="nav-link {{session('tab') == 'anggaran'? 'active' : ''}}" id="custom-content-below-anggaran-tab" data-toggle="pill" href="#custom-content-above-anggaran" role="tab" aria-controls="custom-content-below-anggaran" aria-selected="true">Anggaran</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{session('tab') == 'kurva_s'? 'active' : ''}}" id="custom-content-below-progres-tab" data-toggle="pill" href="#custom-content-below-progres" role="tab" aria-controls="custom-content-below-detail" aria-selected="true">Progres</a>
+                    </li>
                     {{-- <li class="nav-item">
 													<a class="nav-link {{session('tab') == 'pengambilan'? 'active' : ''}}" id="custom-content-below-pengembalian-tab" data-toggle="pill" href="#custom-content-above-pengembalian" role="tab" aria-controls="custom-content-below-pengembalian" aria-selected="true">Rencana Pengembalian</a>
                     </li> --}}
@@ -115,6 +118,7 @@
                     @include('backend.kegiatan._penanggung_jawab')
                     @include('backend.kegiatan._anggaran')
                     @include('backend.kegiatan._kurva_s')
+                    @include('backend.kegiatan._progres')
                     {{-- @include('backend.kegiatan._pengambilan') --}}
                     @include('backend.kegiatan._dokumentasi')
                     @include('backend.kegiatan._grafik')
@@ -136,8 +140,12 @@
 <script src="{{ asset('admin') }}/plugins/chart.js/Chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {{-- <script src="{{ asset('js/select_files.js') }}"></script>--}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 
 <script>
     $(function() {
@@ -610,6 +618,29 @@
             },
             error: function(response) {
                 console.log('error');
+            }
+        });
+    }
+</script>
+
+<!-- Delete Progres Alert -->
+<script>
+    function onDeleteProgres(id) {
+        Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "Data yang dihapus tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            // console.log(result);
+            if (result.isConfirmed) {
+                let form = document.getElementById('deleteProgresForm');
+                form.action = `/backend/detail-anggaran/delete-progres/${id}`;
+                form.submit();
             }
         });
     }

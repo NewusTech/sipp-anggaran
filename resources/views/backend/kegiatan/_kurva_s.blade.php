@@ -21,10 +21,10 @@
                                     <input type="hidden" name="data[{{ $loop->index }}][bulan]" value="{{ $dataKurvaS->bulan }}">
                                 </td>
                                 <td class="p-2">
-                                    <input type="text" class="form-control form-control-sm" name="data[{{ $loop->index }}][keuangan]" value="{{ $dataKurvaS->keuangan }}">
+                                    <input type="number" class="form-control form-control-sm" name="data[{{ $loop->index }}][keuangan]" value="{{ $dataKurvaS->keuangan }}">
                                 </td>
                                 <td class="p-2">
-                                    <input type="text" class="form-control form-control-sm" name="data[{{ $loop->index }}][fisik]" value="{{ $dataKurvaS->fisik }}">
+                                    <input type="number" class="form-control form-control-sm" name="data[{{ $loop->index }}][fisik]" value="{{ $dataKurvaS->fisik }}">
                                 </td>
                             </tr>
                             @endforeach

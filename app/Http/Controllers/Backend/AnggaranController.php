@@ -7,6 +7,7 @@ use App\Http\Requests\Backend\Anggaran\StoreAnggaranRequest;
 use App\Http\Requests\Backend\Anggaran\UpdateAnggaranRequest;
 use App\Models\Anggaran;
 use App\Models\DetailKegiatan;
+use App\Models\ProgresKegiatan;
 use App\Models\RencanaKegiatan;
 use App\Models\Dokumentasi;
 use Carbon\Carbon;
@@ -89,6 +90,13 @@ class AnggaranController extends Controller
         $program = Program::where('id', $kegiatan->program)->first();
         $kegiatan->penanggung = $penanggung;
         $kegiatan->program = $program->name;
+        $kurvaS = RencanaKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
+        $bulanKurvaS = $kurvaS->pluck('bulan')->map(function ($bulan) {
+            return Carbon::parse($bulan)->locale('id')->isoFormat('MMMM');
+        })->toArray();
+        $dataBulan = ['keuangan' => $kurvaS->pluck('keuangan'), 'fisik' => $kurvaS->pluck('fisik')];
+        $bulan = json_encode($bulanKurvaS);
+        $dataBulan = json_encode($dataBulan);
         $totalbelanjaOperasi = Anggaran::where('detail_kegiatan_id', '=', $detail->id)->where('daya_serap', 'Belanja Operasi')->sum('daya_serap_kontrak');
         $totalbelanjaModal = Anggaran::where('detail_kegiatan_id', '=', $detail->id)->where('daya_serap', 'Belanja Modal')->sum('daya_serap_kontrak');
         $totalbelanjaTakTerduga = Anggaran::where('detail_kegiatan_id', '=', $detail->id)->where('daya_serap', 'Belanja Tak Terduga')->sum('daya_serap_kontrak');
@@ -106,6 +114,9 @@ class AnggaranController extends Controller
                 'dokumentasi',
                 'isEdit',
                 'kegiatan',
+                'kurvaS',
+                'bulan',
+                'dataBulan',
                 'program',
                 'totalbelanjaOperasi',
                 'totalbelanjaModal',
@@ -129,6 +140,9 @@ class AnggaranController extends Controller
         $kegiatan = Kegiatan::where('id', $detail->kegiatan_id)->orderBy('created_at', 'desc')->first();
         $penanggung = PenanggungJawab::where('kegiatan_id', $kegiatan->id)->first();
         $program = Program::where('id', $kegiatan->program)->first();
+        $progres = ProgresKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
+        $progresFisik = $progres->where('jenis_progres', 'fisik');
+        $progresKeuangan = $progres->where('jenis_progres', 'keuangan');
         $kegiatan->penanggung = $penanggung;
         $kegiatan->program = $program->name;
         $kurvaS = RencanaKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
@@ -158,6 +172,8 @@ class AnggaranController extends Controller
                 'kurvaS',
                 'bulan',
                 'dataBulan',
+                'progresFisik',
+                'progresKeuangan',
                 'program',
                 'totalbelanjaOperasi',
                 'totalbelanjaModal',
@@ -241,7 +257,7 @@ class AnggaranController extends Controller
     public function updateKurva(Request $request, $detail_kegiatan_id)
     {
 
-        $dataBaru = $request->input('data'); // Mengambil array 'data'
+        $dataBaru = $request->input('data');
 
         foreach ($dataBaru as $data) {
             RencanaKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)
@@ -253,6 +269,40 @@ class AnggaranController extends Controller
         }
 
         return redirect()->back()->with('success', 'Data kurva berhasil diperbarui.');
+    }
+
+
+    public function addProgres(Request $request, $detail_kegiatan_id)
+    {
+        $progres = new ProgresKegiatan();
+        $progres->detail_kegiatan_id = $detail_kegiatan_id;
+        $progres->tanggal = $request->tanggal;
+        $progres->nilai = $request->nilai;
+        $progres->jenis_progres = $request->jenis_progres;
+        $progres->save();
+
+        return redirect()->back()->with('success', 'Progres kegiatan berhasil ditambahkan');
+    }
+
+    public function updateProgres(Request $request, $id)
+    {
+
+        $progres = ProgresKegiatan::find($id);
+        $progres->update([
+            'tanggal' => $request->tanggal,
+            'nilai' => $request->nilai
+        ]);
+
+        return redirect()->back()->with('success', 'Progres kegiatan berhasil diperbarui');
+    }
+
+    public function deleteProgres($id)
+    {
+
+        $progres = ProgresKegiatan::find($id);
+        $progres->delete();
+
+        return redirect()->back()->with('success', 'Progres kegiatan berhasil dihapus');
     }
 
 

@@ -196,6 +196,9 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
         Route::get('detail/{detail_kegiatan_id}', [AnggaranController::class, 'show'])->name('index');
         Route::get('edit/{detail_kegiatan_id}', [AnggaranController::class, 'edit'])->name('edit');
         Route::put('update-kurva/{detail_kegiatan_id}', [AnggaranController::class, 'updateKurva'])->name('update_kurva');
+        Route::post('tambah-progres/{detail_kegiatan_id}', [AnggaranController::class, 'addProgres'])->name('tambah_progres');
+        Route::put('update-progres/{id}', [AnggaranController::class, 'updateProgres'])->name('update_progres');
+        Route::delete('delete-progres/{id}', [AnggaranController::class, 'deleteProgres'])->name('delete_progres');
         Route::post('/', [AnggaranController::class, 'store'])->name('store');
         Route::put('/{anggaran}', [AnggaranController::class, 'update'])->name('update');
         Route::delete('/{anggaran}', [AnggaranController::class, 'destroy'])->name('destroy');
