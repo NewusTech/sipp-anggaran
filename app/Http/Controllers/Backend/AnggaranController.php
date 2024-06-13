@@ -88,6 +88,9 @@ class AnggaranController extends Controller
         $kegiatan = Kegiatan::where('id', $detail->kegiatan_id)->orderBy('created_at', 'desc')->first();
         $penanggung = PenanggungJawab::where('kegiatan_id', $kegiatan->id)->first();
         $program = Program::where('id', $kegiatan->program)->first();
+        $progres = ProgresKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
+        $progresFisik = $progres->where('jenis_progres', 'fisik');
+        $progresKeuangan = $progres->where('jenis_progres', 'keuangan');
         $kegiatan->penanggung = $penanggung;
         $kegiatan->program = $program->name;
         $kurvaS = RencanaKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
@@ -118,6 +121,8 @@ class AnggaranController extends Controller
                 'bulan',
                 'dataBulan',
                 'program',
+                'progresFisik',
+                'progresKeuangan',
                 'totalbelanjaOperasi',
                 'totalbelanjaModal',
                 'totalbelanjaTakTerduga',
