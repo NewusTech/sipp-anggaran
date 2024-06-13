@@ -49,15 +49,31 @@ class DetailKegiatanController extends Controller
         $startDate = Carbon::parse($request->awal_kontrak);
         $endDate = Carbon::parse($request->akhir_kontrak);
 
+        // Hitung jumlah minggu antara startDate dan endDate
+        $totalWeeks = ceil($startDate->diffInWeeks($endDate));
+
         $progressData = [];
-        for ($date = $startDate; $date->lte($endDate); $date->addMonth()) {
+        $currentMonth = $startDate->month;
+        $weekInMonth = 1;
+
+        for ($i = 0; $i < $totalWeeks; $i++) {
             $progressData[] = [
                 'detail_kegiatan_id' => $detailKegiatan->id,
-                'bulan' => $date->format('Y-m'),
+                'bulan' => $startDate->format('Y-m'),
+                'minggu' => $weekInMonth,
                 'keuangan' => 0,
-                'fisik' => 0,
             ];
+
+            $startDate->addWeek();
+
+            if ($startDate->month !== $currentMonth) {
+                $currentMonth = $startDate->month;
+                $weekInMonth = 1;
+            } else {
+                $weekInMonth++;
+            }
         }
+
         RencanaKegiatan::insert($progressData);
 
         if ($detailKegiatan) {
