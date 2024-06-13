@@ -83,7 +83,7 @@
             <!-- Messages Dropdown Menu -->
             <li class="nav-item dropdown">
                 <div class="image nav-link mb-1" data-toggle="dropdown">
-                    <img src="{{ auth()->user()->image == "" ? asset('uploads') . "/" . auth()->user()->image : asset('image/profile.png') }}" height="37px" width="40px" class="img-circle elevation-1" alt="User Image">
+                    <img src="{{ auth()->user()->image ? asset('uploads/' . auth()->user()->image) : asset('image/profile.png') }}" height="37px" width="40px" class="img-circle elevation-1" alt="User Image">
                     <span class="ml-2">{{ auth()->user()->name }}</span>
                 </div>
                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
