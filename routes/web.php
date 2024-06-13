@@ -195,6 +195,10 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
     Route::group(['prefix' => 'detail-anggaran', 'as' => 'detail_anggaran.'], function () {
         Route::get('detail/{detail_kegiatan_id}', [AnggaranController::class, 'show'])->name('index');
         Route::get('edit/{detail_kegiatan_id}', [AnggaranController::class, 'edit'])->name('edit');
+        Route::put('update-kurva/{detail_kegiatan_id}', [AnggaranController::class, 'updateKurva'])->name('update_kurva');
+        Route::post('tambah-progres/{detail_kegiatan_id}', [AnggaranController::class, 'addProgres'])->name('tambah_progres');
+        Route::put('update-progres/{id}', [AnggaranController::class, 'updateProgres'])->name('update_progres');
+        Route::delete('delete-progres/{id}', [AnggaranController::class, 'deleteProgres'])->name('delete_progres');
         Route::post('/', [AnggaranController::class, 'store'])->name('store');
         Route::put('/{anggaran}', [AnggaranController::class, 'update'])->name('update');
         Route::delete('/{anggaran}', [AnggaranController::class, 'destroy'])->name('destroy');
@@ -215,84 +219,83 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
         Route::delete('/{detail_kegiatan}', [PengambilanController::class, 'destroy'])->name('destroy');
     });
 
-		Route::group(['prefix' => 'urusan'], function () {
-			Route::get('/', [UrusanController::class, 'index'])->name('urusan.index');
-			Route::get('/create', [UrusanController::class, 'create'])->name('urusan.create');
-			Route::post('/', [UrusanController::class, 'store'])->name('urusan.store');
-			Route::get('/{id}/edit', [UrusanController::class, 'edit'])->name('urusan.edit');
-			Route::put('/{id}', [UrusanController::class, 'update'])->name('urusan.update');
-			Route::delete('/{id}', [UrusanController::class, 'destroy'])->name('urusan.destroy');
-			Route::get('/{id}', [UrusanController::class, 'show'])->name('urusan.show');
-		});
+    Route::group(['prefix' => 'urusan'], function () {
+        Route::get('/', [UrusanController::class, 'index'])->name('urusan.index');
+        Route::get('/create', [UrusanController::class, 'create'])->name('urusan.create');
+        Route::post('/', [UrusanController::class, 'store'])->name('urusan.store');
+        Route::get('/{id}/edit', [UrusanController::class, 'edit'])->name('urusan.edit');
+        Route::put('/{id}', [UrusanController::class, 'update'])->name('urusan.update');
+        Route::delete('/{id}', [UrusanController::class, 'destroy'])->name('urusan.destroy');
+        Route::get('/{id}', [UrusanController::class, 'show'])->name('urusan.show');
+    });
 
-		Route::group(['prefix' => 'organisasi'], function () {
-			Route::get('/', [OrganisasiController::class, 'index'])->name('organisasi.index');
-			Route::get('/create', [OrganisasiController::class, 'create'])->name('organisasi.create');
-			Route::post('/', [OrganisasiController::class, 'store'])->name('organisasi.store');
-			Route::get('/{id}/edit', [OrganisasiController::class, 'edit'])->name('organisasi.edit');
-			Route::put('/{id}', [OrganisasiController::class, 'update'])->name('organisasi.update');
-			Route::delete('/{id}', [OrganisasiController::class, 'destroy'])->name('organisasi.destroy');
-			Route::get('/{id}', [OrganisasiController::class, 'show'])->name('organisasi.show');
-		});
+    Route::group(['prefix' => 'organisasi'], function () {
+        Route::get('/', [OrganisasiController::class, 'index'])->name('organisasi.index');
+        Route::get('/create', [OrganisasiController::class, 'create'])->name('organisasi.create');
+        Route::post('/', [OrganisasiController::class, 'store'])->name('organisasi.store');
+        Route::get('/{id}/edit', [OrganisasiController::class, 'edit'])->name('organisasi.edit');
+        Route::put('/{id}', [OrganisasiController::class, 'update'])->name('organisasi.update');
+        Route::delete('/{id}', [OrganisasiController::class, 'destroy'])->name('organisasi.destroy');
+        Route::get('/{id}', [OrganisasiController::class, 'show'])->name('organisasi.show');
+    });
 
-		Route::group(['prefix' => 'unit'], function () {
-			Route::get('/', [UnitController::class, 'index'])->name('unit.index');
-			Route::get('/create', [UnitController::class, 'create'])->name('unit.create');
-			Route::post('/', [UnitController::class, 'store'])->name('unit.store');
-			Route::get('/{id}/edit', [UnitController::class, 'edit'])->name('unit.edit');
-			Route::put('/{id}', [UnitController::class, 'update'])->name('unit.update');
-			Route::delete('/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
-			Route::get('/{id}', [UnitController::class, 'show'])->name('unit.show');
-		});
+    Route::group(['prefix' => 'unit'], function () {
+        Route::get('/', [UnitController::class, 'index'])->name('unit.index');
+        Route::get('/create', [UnitController::class, 'create'])->name('unit.create');
+        Route::post('/', [UnitController::class, 'store'])->name('unit.store');
+        Route::get('/{id}/edit', [UnitController::class, 'edit'])->name('unit.edit');
+        Route::put('/{id}', [UnitController::class, 'update'])->name('unit.update');
+        Route::delete('/{id}', [UnitController::class, 'destroy'])->name('unit.destroy');
+        Route::get('/{id}', [UnitController::class, 'show'])->name('unit.show');
+    });
 
-		Route::group(['prefix' => 'sumber-dana', 'as' => 'sumber_dana.'], function () {
-			Route::get('/', [SumberDanaController::class, 'index'])->name('index');
-			Route::get('/create', [SumberDanaController::class, 'create'])->name('create');
-			Route::post('/', [SumberDanaController::class, 'store'])->name('store');
-			Route::get('/{id}/edit', [SumberDanaController::class, 'edit'])->name('edit');
-			Route::put('/{id}', [SumberDanaController::class, 'update'])->name('update');
-			Route::delete('/{id}', [SumberDanaController::class, 'destroy'])->name('destroy');
-			Route::get('/{id}', [SumberDanaController::class, 'show'])->name('show');
-		});
+    Route::group(['prefix' => 'sumber-dana', 'as' => 'sumber_dana.'], function () {
+        Route::get('/', [SumberDanaController::class, 'index'])->name('index');
+        Route::get('/create', [SumberDanaController::class, 'create'])->name('create');
+        Route::post('/', [SumberDanaController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [SumberDanaController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [SumberDanaController::class, 'update'])->name('update');
+        Route::delete('/{id}', [SumberDanaController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}', [SumberDanaController::class, 'show'])->name('show');
+    });
 
-		Route::group(['prefix' => 'dpa', 'as' => 'dpa.'], function () {
-			Route::get('/', [DpaController::class, 'index'])->name('index');
-			Route::get('/create', [DpaController::class, 'create'])->name('create');
-			Route::post('/', [DpaController::class, 'store'])->name('store');
-			Route::get('/{id}/edit', [DpaController::class, 'edit'])->name('edit');
-			Route::put('/{id}', [DpaController::class, 'update'])->name('update');
-			Route::delete('/{id}', [DpaController::class, 'destroy'])->name('destroy');
-			Route::get('/{id}', [DpaController::class, 'show'])->name('show');
-			Route::get('/{id}/result', [DpaController::class, 'result'])->name('result');
-		});
+    Route::group(['prefix' => 'dpa', 'as' => 'dpa.'], function () {
+        Route::get('/', [DpaController::class, 'index'])->name('index');
+        Route::get('/create', [DpaController::class, 'create'])->name('create');
+        Route::post('/', [DpaController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [DpaController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [DpaController::class, 'update'])->name('update');
+        Route::delete('/{id}', [DpaController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}', [DpaController::class, 'show'])->name('show');
+        Route::get('/{id}/result', [DpaController::class, 'result'])->name('result');
+    });
 
-		Route::group(['prefix' => 'rencana', 'as' => 'rencana.'], function () {
-			Route::get('/', [DpaController::class, 'getByProgram'])->name('program');
-			Route::get('/{program_id}', [DpaController::class, 'getByKegiatan'])->name('kegiatan');
-			Route::get('/{program_id}/detail/{kegiatan_id}', [DpaController::class, 'getByDetailKegiatan'])->name('detail');
-			Route::get('/pengambilan/{detail_kegiatan_id}', [DpaController::class, 'getByPengambilan'])->name('pengambilan');
-		});
+    Route::group(['prefix' => 'rencana', 'as' => 'rencana.'], function () {
+        Route::get('/', [DpaController::class, 'getByProgram'])->name('program');
+        Route::get('/{program_id}', [DpaController::class, 'getByKegiatan'])->name('kegiatan');
+        Route::get('/{program_id}/detail/{kegiatan_id}', [DpaController::class, 'getByDetailKegiatan'])->name('detail');
+        Route::get('/pengambilan/{detail_kegiatan_id}', [DpaController::class, 'getByPengambilan'])->name('pengambilan');
+    });
 
-		Route::group(['prefix' => 'sub-kegiatan', 'as' => 'sub_kegiatan.'], function () {
-			Route::post('/{id}', [SubKegiatanController::class, 'store'])->name('store');
-			Route::put('/{id}', [SubKegiatanController::class, 'update'])->name('update');
-			Route::delete('/{id}', [SubKegiatanController::class, 'destroy'])->name('destroy');
-		});
+    Route::group(['prefix' => 'sub-kegiatan', 'as' => 'sub_kegiatan.'], function () {
+        Route::post('/{id}', [SubKegiatanController::class, 'store'])->name('store');
+        Route::put('/{id}', [SubKegiatanController::class, 'update'])->name('update');
+        Route::delete('/{id}', [SubKegiatanController::class, 'destroy'])->name('destroy');
+    });
 
     Route::group(['prefix' => 'pengguna-anggaran', 'as' => 'pengguna_anggaran.'], function () {
-			Route::post('/', [PenggunaAnggaranController::class, 'store'])->name('store');
-			Route::put('/{id}', [PenggunaAnggaranController::class, 'update'])->name('update');
-			Route::delete('/{id}', [PenggunaAnggaranController::class, 'destroy'])->name('destroy');
-		});
+        Route::post('/', [PenggunaAnggaranController::class, 'store'])->name('store');
+        Route::put('/{id}', [PenggunaAnggaranController::class, 'update'])->name('update');
+        Route::delete('/{id}', [PenggunaAnggaranController::class, 'destroy'])->name('destroy');
+    });
 
     Route::group(['prefix' => 'tanda-tangan', 'as' => 'tanda_tangan.'], function () {
-			Route::post('/', [TandaTanganController::class, 'store'])->name('store');
-			Route::put('/{id}', [TandaTanganController::class, 'update'])->name('update');
-			Route::delete('/{id}', [TandaTanganController::class, 'destroy'])->name('destroy');
-		});
-		Route::get('/download/fisik', [DashboardController::class, 'downloadPaketFisik'])->name('download.fisik');
-		Route::get('/download/nonfisik', [DashboardController::class, 'downloadPaketNonFisik'])->name('download.nonfisik');
-		Route::get('/download/kegiatan', [DashboardController::class, 'downloadPaketKegiatan'])->name('download.kegiatan');
-		Route::get('/laporan', [KegiatanController::class, 'laporan'])->name('laporan');
-
+        Route::post('/', [TandaTanganController::class, 'store'])->name('store');
+        Route::put('/{id}', [TandaTanganController::class, 'update'])->name('update');
+        Route::delete('/{id}', [TandaTanganController::class, 'destroy'])->name('destroy');
+    });
+    Route::get('/download/fisik', [DashboardController::class, 'downloadPaketFisik'])->name('download.fisik');
+    Route::get('/download/nonfisik', [DashboardController::class, 'downloadPaketNonFisik'])->name('download.nonfisik');
+    Route::get('/download/kegiatan', [DashboardController::class, 'downloadPaketKegiatan'])->name('download.kegiatan');
+    Route::get('/laporan', [KegiatanController::class, 'laporan'])->name('laporan');
 });

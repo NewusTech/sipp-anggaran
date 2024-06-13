@@ -131,7 +131,7 @@
                                                     <tr class="table-detail-kegiatan">
                                                         <td>
                                                             <dl>
-                                                                ' <dd>
+                                                                <dd>
                                                                     <span class="text-darkblue">{{$kegiatan->title}}</span>
                                                                 </dd>
                                                                 <dd style="margin-bottom: 20px;margin-top: 10px;">
