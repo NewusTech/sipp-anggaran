@@ -27,7 +27,7 @@
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle text-darkblue">Kegiatan</a>
                     <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-                        <li><a href="{{route('backend.kegiatan.index')}}" class="dropdown-item">Tambah Kegiatan</a></li>
+                        <li><a href="{{route('backend.kegiatan.index')}}" class="dropdown-item">Tambah</a></li>
                         <li><a href="{{route('backend.arsip.index')}}" class="dropdown-item ">Data Arsip</a></li>
                         <li><a href="{{route('backend.penyedia_jasa.index')}}" class="dropdown-item">Penyedia Jasa</a></li>
                     </ul>

@@ -1,12 +1,7 @@
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <div class="container">
         <a href="/" class="navbar-brand">
-            <img
-                src="{{ asset('image/logo.jpg') }}"
-                alt="PUPR Logo"
-                class="brand-image elevation-3"
-                style="opacity: 0.8"
-            />
+            <img src="{{ asset('image/logo.jpg') }}" alt="PUPR Logo" class="brand-image elevation-3" style="opacity: 0.8" />
             <span class="brand-text font-weight-light text-bold">PU-Net</span>
         </a>
 
@@ -14,24 +9,13 @@
         <div class="collapse navbar-collapse order-3" id="navbarCollapse">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                <a href="/" class="nav-link">Dashboard</a>
+                    <a href="/" class="nav-link">Dashboard</a>
                 </li>
                 @can('lihat pengaturan')
                 <li class="nav-item dropdown">
-                    <a
-                        id="dropdownSubMenu1"
-                        href="#"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                        class="nav-link dropdown-toggle"
-                        >Kegiatan</a
-                    >
-                    <ul
-                        aria-labelledby="dropdownSubMenu1"
-                        class="dropdown-menu border-0 shadow"
-                    >
-                        <li><a href="{{route('backend.kegiatan.index')}}" class="dropdown-item">Tambah Kegiatan</a></li>
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Kegiatan</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                        <li><a href="{{route('backend.kegiatan.index')}}" class="dropdown-item">Tambah</a></li>
                         <li><a href="#" class="dropdown-item">Data Arsip</a></li>
                         <li><a href="{{route('backend.penyedia_jasa.index')}}" class="dropdown-item">Penyedia Jasa</a></li>
                     </ul>
@@ -40,19 +24,8 @@
 
                 @can('lihat pengaturan')
                 <li class="nav-item dropdown">
-                    <a
-                        id="dropdownSubMenu1"
-                        href="#"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                        class="nav-link dropdown-toggle"
-                        >Informasi</a
-                    >
-                    <ul
-                        aria-labelledby="dropdownSubMenu1"
-                        class="dropdown-menu border-0 shadow"
-                    >
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Informasi</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                         <li><a href="{{route('backend.informasi_utama.index')}}" class="dropdown-item">Informasi Utama</a></li>
                         <li><a href="{{route('backend.informasi_tagihan.index')}}" class="dropdown-item">Informasi Tagihan</a></li>
                     </ul>
@@ -60,31 +33,21 @@
                 @endcan
 
                 @can('lihat pengaturan')
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Petunjuk</a>
-                    </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Petunjuk</a>
+                </li>
                 @endcan
 
                 @can('lihat pengaturan')
-                    <li class="nav-item dropdown">
-                        <a
-                            id="dropdownSubMenu1"
-                            href="#"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                            class="nav-link dropdown-toggle"
-                        >Pengaturan</a>
-                        <ul
-                            aria-labelledby="dropdownSubMenu1"
-                            class="dropdown-menu border-0 shadow"
-                        >
-                            <li><a href="{{route('backend.bidang.index')}}" class="dropdown-item">Pengaturan Bidang</a></li>
-                            <li><a href="{{route('backend.program.index')}}" class="dropdown-item">Pengaturan Program</a></li>
-                            <li><a href="{{route('backend.users.index')}}" class="dropdown-item">Pengelolaan User</a></li>
-                            <li><a href="{{route('backend.nomenklatur.index')}}" class="dropdown-item">Pengaturan Nomenklatur</a></li>
-                        </ul>
-                    </li>
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Pengaturan</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                        <li><a href="{{route('backend.bidang.index')}}" class="dropdown-item">Pengaturan Bidang</a></li>
+                        <li><a href="{{route('backend.program.index')}}" class="dropdown-item">Pengaturan Program</a></li>
+                        <li><a href="{{route('backend.users.index')}}" class="dropdown-item">Pengelolaan User</a></li>
+                        <li><a href="{{route('backend.nomenklatur.index')}}" class="dropdown-item">Pengaturan Nomenklatur</a></li>
+                    </ul>
+                </li>
                 @endcan
 
             </ul>
