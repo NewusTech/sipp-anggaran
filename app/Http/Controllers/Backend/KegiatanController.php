@@ -33,7 +33,7 @@ class KegiatanController extends Controller
         $this->request = $request;
         $this->bidang_id =  Auth::user()->bidang_id;
         $role = Auth::user()->getRoleNames();
-        if (str_contains($role[0], "Staff") || str_contains($role[0], "Kepala Bidang")) {
+        if (str_contains($role[0], "Staff") || str_contains($role[0], "Kepala Bidang") || str_contains($role[0], "Kontraktor") || str_contains($role[0], "Konsultan")) {
             $bidang = Bidang::where('id', $this->bidang_id)->orderBy('created_at', 'desc')->get();
 
             $kegiatanProgram = Kegiatan::where('bidang_id', $this->bidang_id)->pluck('program')->first();

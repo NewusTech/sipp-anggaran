@@ -90,6 +90,24 @@ class DetailKegiatanController extends Controller
      * @param DetailKegiatan $detailKegiatan
      * @return RedirectResponse
      */
+
+    public function updateVerifikasi(UpdateDetailKegiatanRequest $request, DetailKegiatan $detailKegiatan): RedirectResponse
+    {
+        $filteredRequest = array_filter($request->only([
+            'verifikasi_admin',
+            'komentar_admin',
+            'verifikasi_pengawas',
+            'komentar_pengawas'
+        ]), function ($value) {
+            return $value !== null;
+        });
+
+        if ($detailKegiatan->update($filteredRequest)) {
+            return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Kegiatan berhasil diubah');
+        }
+
+        return redirect()->route('backend.kegiatan.index')->with('error', 'Data Detail Kegiatan gagal diubah');
+    }
     public function update(UpdateDetailKegiatanRequest $request, DetailKegiatan $detailKegiatan): RedirectResponse
     {
         if ($detailKegiatan->update([
@@ -107,8 +125,13 @@ class DetailKegiatanController extends Controller
             'kegiatan_id' => $request->kegiatan_id,
             'daya_serap_kontrak' => $request->daya_serap_kontrak ?? 0,
             'sisa_kontrak' => $request->sisa_kontrak ?? 0,
-            'sisa_anggaran' => $request->sisa_anggaran ?? 0
+            'sisa_anggaran' => $request->sisa_anggaran ?? 0,
+            'verifikasi_admin' => $request->verifikasi_admin,
+            'komentar_admin' => $request->komentar_admin,
+            'verifikasi_pengawas' => $request->verifikasi_pengawas,
+            'komentar_pengawas' => $request->komentar_pengawas,
         ])) {
+            // dd($request->verifikasi_pengawas, $detailKegiatan->verifikasi_pengawas);
             return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Kegiatan berhasil diubah');
         }
         return redirect()->route('backend.kegiatan.index')->with('error', 'Data Detail Kegiatan gagal diubah');
