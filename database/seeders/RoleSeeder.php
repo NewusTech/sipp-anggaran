@@ -48,5 +48,9 @@ class RoleSeeder extends Seeder
             'name' => 'Staff Administrasi',
             'guard_name' => 'web'
         ]);
+        Role::create([
+            'name' => 'Kontraktor',
+            'guard_name' => 'web'
+        ]);
     }
 }

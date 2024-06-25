@@ -31,7 +31,11 @@ class DetailKegiatan extends Model
         'alamat',
         'kegiatan_id',
         'penyedia_jasa_id',
-        'realisasi'
+        'realisasi',
+        'verifikasi_admin',
+        'komentar_admin',
+        'verifikasi_pengawas',
+        'komentar_pengawas',
     ];
 
     protected $casts = [

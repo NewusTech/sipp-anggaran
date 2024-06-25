@@ -58,6 +58,9 @@
                         @can('lihat role')
                         <li><a href="{{route('backend.roles.index')}}" class="dropdown-item">Pengelolaan Role</a></li>
                         @endcan
+                        @can('lihat permission')
+                        <li><a href="{{route('backend.permissions.index')}}" class="dropdown-item">Pengelolaan Permission</a></li>
+                        @endcan
                         @can('lihat sumber dana')
                         <li><a href="{{route('backend.sumber_dana.index')}}" class="dropdown-item">Pengaturan Sumber Dana</a></li>
                         @endcan

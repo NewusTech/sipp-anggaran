@@ -189,6 +189,7 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
         Route::post('/', [DetailKegiatanController::class, 'store'])->name('store');
         Route::post('/progress', [DetailKegiatanController::class, 'updateProgress'])->name('update.progress');
         Route::put('/{detail_kegiatan}', [DetailKegiatanController::class, 'update'])->name('update');
+        Route::put('/verifikasi/{detail_kegiatan}', [DetailKegiatanController::class, 'updateVerifikasi'])->name('verifikasi');
         Route::put('detail/{detail_kegiatan}', [DetailKegiatanController::class, 'updateAnggaran'])->name('update.detail');
         Route::delete('/{detail_kegiatan}', [DetailKegiatanController::class, 'destroy'])->name('destroy');
     });

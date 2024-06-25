@@ -97,9 +97,9 @@
                     <li class="nav-item">
                         <a class="nav-link" id="custom-content-below-penanggung_jawab-tab" data-toggle="pill" href="#custom-content-above-penanggung_jawab" role="tab" aria-controls="custom-content-below-penanggung_jawab" aria-selected="true">Penanggung Jawab</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link {{session('tab') == 'anggaran'? 'active' : ''}}" id="custom-content-below-anggaran-tab" data-toggle="pill" href="#custom-content-above-anggaran" role="tab" aria-controls="custom-content-below-anggaran" aria-selected="true">Anggaran</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link {{session('tab') == 'kurva_s'? 'active' : ''}}" id="custom-content-below-progres-tab" data-toggle="pill" href="#custom-content-below-progres" role="tab" aria-controls="custom-content-below-detail" aria-selected="true">Progres</a>
                     </li>
@@ -109,9 +109,9 @@
                     <li class="nav-item">
                         <a class="nav-link {{session('tab') == 'dokumentasi'? 'active' : ''}}" id="custom-content-below-dokumentasi-tab" data-toggle="pill" href="#custom-content-above-dokumentasi" role="tab" aria-controls="custom-content-below-dokumentasi" aria-selected="true">Dokumentasi</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link " id="custom-content-below-grafik-tab" data-toggle="pill" href="#custom-content-above-grafik" role="tab" aria-controls="custom-content-below-grafik" aria-selected="true">Grafik</a>
-                    </li>
+                    </li> -->
                 </ul>
                 <div class="tab-content" id="custom-content-below-tabContent">
                     @include('backend.kegiatan._detail')
