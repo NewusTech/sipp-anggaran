@@ -61,8 +61,12 @@ class UserController extends Controller
         $saveImage = "profile_images/" . $image;
         $bidang_id = null;
         if (str_contains($request->roles[0], "Staff")) {
-            $bidang_id = Auth::user()->bidang_id;
-        }else{
+            if (Auth::user()->bidang_id != $request->bidang_id) {
+                $bidang_id = $request->bidang_id;
+            } else {
+                $bidang_id = Auth::user()->bidang_id;
+            }
+        } else {
             $bidang_id = $request->bidang_id;
         }
         $user = User::create([
@@ -113,8 +117,12 @@ class UserController extends Controller
     {
         $bidang_id = null;
         if (str_contains($request->roles[0], "Staff")) {
-            $bidang_id = Auth::user()->bidang_id;
-        }else{
+            if (Auth::user()->bidang_id != $request->bidang_id) {
+                $bidang_id = $request->bidang_id;
+            } else {
+                $bidang_id = Auth::user()->bidang_id;
+            }
+        } else {
             $bidang_id = $request->bidang_id;
         }
         $user->update([

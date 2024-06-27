@@ -41,7 +41,7 @@
                 <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
                     <form action="" method="GET">
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-1">
                                 <select name="bulan" id="bulan_laporan" class="form-control" required>
                                     <option value="" selected>-- Pilih Bulan --</option>
                                     <option value="januari" {{$bulan == "januari"?"selected":""}}>Januari</option>
@@ -59,6 +59,14 @@
                                 </select>
                             </div>
                             <div class="col-3">
+                                <select name="bidang" id="bidangId" class="form-control" required>
+                                    <option value="" selected>-- Pilih Bidang --</option>
+                                    @foreach ($bidang as $item)
+                                    <option value="{{$item->id}}" {{Auth::user()->bidang_id == $item->id?"selected":""}}>{{$item->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-1">
                                 <select name="tahun" id="tahun_laporan" class="form-control" required>
                                     <option value="" selected>-- Pilih Tahun --</option>
                                     @for ($i = 0; $i < 5; $i++) <option value="{{date('Y')-$i}}" {{$tahun == (date('Y')-$i) ? "selected" : ""}}>{{((int)date('Y'))-$i}}</option>
@@ -78,63 +86,53 @@
         </div>
         <!-- /.card -->
         <div class="card">
-            <div class="card-body">
-                <div class="table-responsive p-0 text-center">
+            <div class="card-body d-flex flex-column justify-content-center">
+                <div class="col text-center">
                     <h4><strong>RELASI LAPORAN KEUANGAN DINAS PUPR</strong></h4>
                     <h4><strong>KABUPATEN TULANG BAWANG BARAT TAHUN {{$tahun ? $tahun : 'SEMUA TAHUN'}}</strong></h4>
                     <h4><strong>BULAN {{$bulan ? strtoupper($bulan) : '-'}}</strong></h4>
+                </div>
+                <div class="col">
                     <table class="table table-bordered">
                         <thead class="text-bold">
                             <tr>
-                                <td rowspan="3">Program/Kegiatan/Sub Kegiatan</td>
-                                <td colspan="15">Anggaran</td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">Total</td>
-                                <td colspan="3">Belanja Operasi</td>
-                                <td colspan="3">Belanja Modal</td>
-                                <td colspan="3">Belanja Tidak Terduga</td>
-                                <td colspan="3">Belanja Transfer</td>
-                            </tr>
-                            <tr>
+                                <td>No</td>
+                                <td>Tahun / Kontrak</td>
+                                <td>Program/Kegiatan/Sub Kegiatan</td>
+                                <td>Nama Paket</td>
+                                <td>Pagu</td>
                                 <td>Anggaran</td>
                                 <td>Realisasi</td>
-                                <td>%</td>
-                                <td>Anggaran</td>
-                                <td>Realisasi</td>
-                                <td>%</td>
-                                <td>Anggaran</td>
-                                <td>Realisasi</td>
-                                <td>%</td>
-                                <td>Anggaran</td>
-                                <td>Realisasi</td>
-                                <td>%</td>
-                                <td>Anggaran</td>
-                                <td>Realisasi</td>
-                                <td>%</td>
+                                <td>Sisa</td>
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($details->count() > 0)
-                            @foreach ($details as $item)
+                            @if ($bidang->count() > 0)
+                            @foreach ($bidang as $item)
+                            @foreach ($item->kegiatan as $kegiatan)
                             <tr>
-                                <td>{{$item->program_title.'/'.$item->kegiatan_title.'/'.$item->sub_kegiatan_title}}</td>
-                                <td>Rp.{{number_format($item->alokasi)}}</td>
-                                <td>Rp.{{number_format($item->pagu)}}</td>
-                                <td>{{$item->pagu ? round(($item->pagu/$item->alokasi)*100,1) : 0}}%</td>
-                                <td>Rp.{{number_format($item->anggaran_belanja_operasi)}}</td>
-                                <td>Rp.{{number_format($item->pengambilan_belanja_operasi)}}</td>
-                                <td>{{$item->pengambilan_belanja_operasi ? round(($item->pengambilan_belanja_operasi/$item->anggaran_belanja_operasi)*100,1) : 0}}%</td>
-                                <td>Rp.{{number_format($item->anggaran_belanja_modal)}}</td>
-                                <td>Rp.{{number_format($item->pengambilan_belanja_modal)}}</td>
-                                <td>{{$item->pengambilan_belanja_modal ? round(($item->pengambilan_belanja_modal/$item->anggaran_belanja_modal)*100,1) : 0}}%</td>
-                                <td>Rp.{{number_format($item->anggaran_belanja_tak_terduga)}}</td>
-                                <td>Rp.{{number_format($item->pengambilan_belanja_tak_terduga)}}</td>
-                                <td>{{$item->pengambilan_belanja_tak_terduga ? round(($item->pengambilan_belanja_tak_terduga/$item->anggaran_belanja_tak_terduga)*100,1) : 0}}%</td>
-                                <td>Rp.{{number_format($item->anggaran_belanja_transfer)}}</td>
-                                <td>Rp.{{number_format($item->pengambilan_belanja_transfer)}}</td>
-                                <td>{{$item->pengambilan_belanja_transfer ? round(($item->pengambilan_belanja_transfer/$item->anggaran_belanja_transfer)*100,1) : 0}}%</td>
+                                <td>{{$loop->iteration}}</td>
+                                <td>{{\Carbon\Carbon::parse($kegiatan->created_at)->format('Y')}}</td>
+                                <td>{{$kegiatan->title}}</td>
+                                <td>Fisik</td>
+                                <td>Rp.{{number_format($kegiatan->alokasi)}}</td>
+                                <td>Rp.10.000.000 (dummy data)</td>
+                                <td>{{$kegiatan->no_rek}}</td>
+                                <td>%</td>
                             </tr>
+                            @foreach ($kegiatan->detail as $detail)
+                            <tr>
+                                <td></td>
+                                <td>{{\Carbon\Carbon::parse($detail->awal_kontrak )->format('d-m-Y') . ' - ' . \Carbon\Carbon::parse($detail->akhir_kontrak)->format('d-m-Y')}}</td>
+                                <td>{{$detail->title}}</td>
+                                <td>Fisik</td>
+                                <td>Rp.{{number_format($detail->pagu)}}</td>
+                                <td>Rp.10.000.000 (dummy data)</td>
+                                <td>{{$detail->nomor_kontrak}}</td>
+                                <td>%</td>
+                            </tr>
+                            @endforeach
+                            @endforeach
                             @endforeach
                             @else
                             <tr>
@@ -142,39 +140,9 @@
                             </tr>
                             @endif
                             <tr class="text-bold">
-                                <td>Jumlah Belanja Operasi</td>
-                                <td>Rp.{{number_format($details->sum('anggaran_belanja_operasi'))}}</td>
-                                <td>Rp.{{number_format($details->sum('pengambilan_belanja_operasi'))}}</td>
-                                <td>{{$details->sum('pengambilan_belanja_operasi') ? round(($details->sum('pengambilan_belanja_operasi')/$details->sum('anggaran_belanja_operasi'))*100, 1) : 0 }}%</td>
-                                <td colspan="12"></td>
-                            </tr>
-                            <tr class="text-bold">
-                                <td>Jumlah Belanja Modal</td>
-                                <td>Rp.{{number_format($details->sum('anggaran_belanja_modal'))}}</td>
-                                <td>Rp.{{number_format($details->sum('pengambilan_belanja_modal'))}}</td>
-                                <td>{{$details->sum('pengambilan_belanja_modal') ? round(($details->sum('pengambilan_belanja_modal')/$details->sum('anggaran_belanja_modal'))*100, 1): 0}}%</td>
-                                <td colspan="12"></td>
-                            </tr>
-                            <tr class="text-bold">
-                                <td>Jumlah Belanja Tidak Terduga</td>
-                                <td>Rp.{{number_format($details->sum('anggaran_belanja_tak_terduga'))}}</td>
-                                <td>Rp.{{number_format($details->sum('pengambilan_belanja_tak_terduga'))}}</td>
-                                <td>{{$details->sum('pengambilan_belanja_tak_terduga') ? round(($details->sum('pengambilan_belanja_tak_terduga')/$details->sum('anggaran_belanja_tak_terduga'))*100, 1): 0}}%</td>
-                                <td colspan="12"></td>
-                            </tr>
-                            <tr class="text-bold">
-                                <td>Jumlah Belanja Transfer</td>
-                                <td>Rp.{{number_format($details->sum('anggaran_belanja_transfer'))}}</td>
-                                <td>Rp.{{number_format($details->sum('pengambilan_belanja_transfer'))}}</td>
-                                <td>{{$details->sum('pengambilan_belanja_transfer') ? round(($details->sum('pengambilan_belanja_transfer')/$details->sum('anggaran_belanja_transfer'))*100, 1): 0}}%</td>
-                                <td colspan="12"></td>
-                            </tr>
-                            <tr class="text-bold">
                                 <td>Total</td>
                                 <td>Rp.{{number_format($details->sum('alokasi'))}}</td>
                                 <td>Rp.{{number_format($details->sum('pagu'))}}</td>
-                                <td>{{$details->sum('pagu') ? round(($details->sum('pagu')/$details->sum('alokasi'))*100, 1): 0}}%</td>
-                                <td colspan="12"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -182,6 +150,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 </div>
 @endsection

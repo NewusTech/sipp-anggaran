@@ -110,141 +110,149 @@
                     <div class="row">
                         <div class="col-12">
                             <div id="accordion">
-                            @foreach ($bidang as $item)
-            <div class="card">
-                <div class="p-3">
-                    <div id="heading-{{$item->id}}" onclick="getKegiatan({{$item->id}})" class="p-2 mb-2" data-toggle="collapse" data-target="#collapse-{{$item->id}}" aria-expanded="true" aria-controls="collapseOne">
-                        <div class="card-table">
-                            <p class="taf text-darkblue">
-                                <strong>{{$item->name}}</strong>
-                            </p>
-                            <div class="card-table-cell tar">
-                                <button type="button" class=" btn btn-sm btn-secondary rounded" style="width: 120pt"><strong>Total Kegiatan : {{$item->kegiatan->count()}}</strong></button>
-                                <button type="button" class="btn btn-sm btn-secondary rounded" style="width: 200pt"><strong>Total Pagu : Rp {{number_format($item->kegiatan->sum('alokasi'))}}</strong></button>
-                            </div>
-                        </div>
-                    </div>
-                    <table class="table table-bordered align-middle">
-                        <thead>
-                            <tr>
-                                <th class="text-center" colspan="2">Kode</th>
-                                <th class="text-center" rowspan="2">Program / Kegiatan / Sub Kegiatan</th>
-                                <th class="text-center" rowspan="2">Output</th>
-                                <th class="text-center" colspan="2">Alokasi</th>
-                                <th class="text-center" rowspan="2">Verifikasi Admin</th>
-                                <th class="text-center" rowspan="2">Komentar</th>
-                                <th class="text-center" rowspan="2">Verifikasi Pengawas</th>
-                                <th class="text-center" rowspan="2">Komentar</th>
-                                <th class="text-center" rowspan="2">Aksi</th>
-                            </tr>
-                            <tr>
-                                <th class="text-center">Kegiatan</th>
-                                <th class="text-center">Sub Kegiatan</th>
-                                <th class="text-center">Pagu</th>
-                                <th class="text-center">Realisasi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($item->kegiatan as $kegiatan)
-                            @if ($kegiatan->is_arship == 0)
-                            <tr class="table-success">
-                                <td>{{$kegiatan->no_rek}}</td>
-                                <td></td>
-                                <td class="text-center ">{{$kegiatan->title}}</td>
-                                <td class="text-center">Fisik</td>
-                                <td class="text-center">Rp.{{number_format($kegiatan->alokasi)}}</td>
-                                <td class="text-center">Rp.{{number_format($kegiatan->total_realisasi)}}</td>
-                                <td class="text-center" colspan="4"></td>
-                                <td>
-                                    <div class="d-flex">
-                                        <div class="btn-action">
-                                            <button type="button" style="color: white;" class="btn btn-block btn-warning btn-sm" data-toggle="modal" data-target="#modal-lg-edit-{{$kegiatan->id}}"><i class="fas fa-edit"></i></button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            @foreach ($kegiatan->detail_kegiatan as $detail)
-                            <tr>
-                                <td></td>
-                                <td>{{$detail->no_detail_kegiatan}}</td>
-                                <td class="text-center ">{{$detail->title}}</td>
-                                <td class="text-center">Fisik</td>
-                                <td class="text-center">Rp.{{number_format($detail->nilai_kontrak)}}</td>
-                                <td class="text-center">Rp.{{number_format($detail->realisasi)}}</td>
-                                <td class="text-center">
-                                    <form action="{{ route('backend.detail_kegiatan.verifikasi', $detail->id) }}" method="POST">
-                                        @method('PUT')
-                                        @csrf
-                                        <div class="form-check">
-                                            @can('verifikasi admin')
-                                            <input type="hidden" name="verifikasi_admin" value="false"> <!-- Memastikan ketika unchecked checkbox nilainya tetap di kirim -->
-                                            <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" name="verifikasi_admin" value="{{ $detail->verifikasi_admin == 'true' ? 'true' : 'false' }}" {{ $detail->verifikasi_admin == 'true' ? 'checked' : '' }} onchange="this.form.submit()">
-                                            @else
-                                            <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" {{ $detail->verifikasi_admin == 'true' ? 'checked' : '' }} disabled>
-                                            @endcan
-                                        </div>
-                                    </form>
-                                </td>
-                                <td class="text-center">
-                                    <div class="form-floating" data-toggle="modal" data-target="#modal-lg-komentar-admin-{{$detail->id}}">
-                                        @can('komentar admin')
-                                        <textarea class="form-control" placeholder="Komentar" id="komentarAdmin" name="komentar_admin">{{ $detail->komentar_admin}}</textarea>
-                                        @else
-                                        <textarea class="form-control" placeholder="Komentar" disabled>{{ $detail->komentar_admin}}</textarea>
-                                        @endcan
-                                    </div>
-                                    @include('backend.kegiatan._modal_komentar', ['param'=>'admin'])
-                                </td>
-                                <td class="text-center">
-                                    <div class="form-check">
-                                        <form action="{{ route('backend.detail_kegiatan.verifikasi', $detail->id) }}" method="POST">
-                                            @method('PUT')
-                                            @csrf
-                                            <div class="form-check">
-                                                @can('verifikasi pengawas')
-                                                <input type="hidden" name="verifikasi_pengawas" value="false"> <!-- Memastikan ketika unchecked checkbox nilainya tetap di kirim -->
-                                                <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="verifikasiPengawas" name="verifikasi_pengawas" value="{{ $detail->verifikasi_pengawas == 'true' ? 'false' : 'true' }}" {{ $detail->verifikasi_pengawas == 'true' ? 'checked' : '' }} onchange="this.form.submit()">
-                                                @else
-                                                <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" {{ $detail->verifikasi_pengawas == 'true' ? 'checked' : '' }} disabled>
-                                                @endcan
+                                @foreach ($bidang as $item)
+                                <div class="card">
+                                    <div class="p-3">
+                                        <div id="heading-{{$item->id}}" onclick="getKegiatan({{$item->id}})" class="p-2 mb-2" data-toggle="collapse" data-target="#collapse-{{$item->id}}" aria-expanded="true" aria-controls="collapseOne">
+                                            <div class="card-table">
+                                                <p class="taf text-darkblue">
+                                                    <strong>{{$item->name}}</strong>
+                                                </p>
+                                                <div class="card-table-cell tar">
+                                                    <button type="button" class=" btn btn-sm btn-secondary rounded" style="width: 120pt"><strong>Total Kegiatan : {{$item->kegiatan->count()}}</strong></button>
+                                                    <button type="button" class="btn btn-sm btn-secondary rounded" style="width: 200pt"><strong>Total Pagu : Rp {{number_format($item->kegiatan->sum('alokasi'))}}</strong></button>
+                                                </div>
                                             </div>
-                                        </form>
+                                        </div>
+                                        <table class="table table-bordered align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center" colspan="2">Kode</th>
+                                                    <th class="text-center" rowspan="2">Judul</th>
+                                                    <th class="text-center" rowspan="2">Output</th>
+                                                    <th class="text-center" colspan="2">Alokasi</th>
+                                                    <th class="text-center" rowspan="2">Verifikasi Admin</th>
+                                                    <th class="text-center" rowspan="2">Komentar</th>
+                                                    <th class="text-center" rowspan="2">Verifikasi Pengawas</th>
+                                                    <th class="text-center" rowspan="2">Komentar</th>
+                                                    <th class="text-center" rowspan="2">Aksi</th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-center">Kegiatan</th>
+                                                    <th class="text-center">Sub Kegiatan</th>
+                                                    <th class="text-center">Pagu</th>
+                                                    <th class="text-center">Realisasi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($item->kegiatan as $kegiatan)
+                                                @if ($kegiatan->is_arship == 0)
+                                                <tr class="table-success">
+                                                    <td>{{$kegiatan->no_rek}}</td>
+                                                    <td></td>
+                                                    <td class="text-center ">{{$kegiatan->title}}</td>
+                                                    <td class="text-center">Fisik</td>
+                                                    <td class="text-center">Rp.{{number_format($kegiatan->alokasi)}}</td>
+                                                    <td class="text-center">Rp.{{number_format($kegiatan->total_realisasi)}}</td>
+                                                    <td class="text-center" colspan="4"></td>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <div class="btn-action">
+                                                                @can('tambah detail kegiatan')
+                                                                <button type="button" style="color: white;" class="btn btn-block btn-primary btn-sm" data-toggle="modal" data-target="#modal-lg-tambah-detail-{{$kegiatan->id}}"><i class="fas fa-plus"></i></button>
+                                                                @endcan
+                                                                @can('ubah detail kegiatan')
+                                                                <button type="button" style="color: white;" class="btn btn-block btn-warning btn-sm" data-toggle="modal" data-target="#modal-lg-edit-{{$kegiatan->id}}"><i class="fas fa-edit"></i></button>
+                                                                @endcan
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                @include('backend.kegiatan._modal_update_pptk')
+                                                @include('backend.kegiatan._modal_add_detail')
+
+                                                @foreach ($kegiatan->detail_kegiatan as $detail)
+                                                <tr>
+                                                    <td></td>
+                                                    <td>{{$detail->no_detail_kegiatan}}</td>
+                                                    <td class="text-center ">{{$detail->title}}</td>
+                                                    <td class="text-center">Fisik</td>
+                                                    <td class="text-center">Rp.{{number_format($detail->nilai_kontrak)}}</td>
+                                                    <td class="text-center">Rp.{{number_format($detail->realisasi)}}</td>
+                                                    <td class="text-center">
+                                                        <form action="{{ route('backend.detail_kegiatan.verifikasi', $detail->id) }}" method="POST">
+                                                            @method('PUT')
+                                                            @csrf
+                                                            <div class="form-check">
+                                                                @can('verifikasi admin')
+                                                                <input type="hidden" name="verifikasi_admin" value="false"> <!-- Memastikan ketika unchecked checkbox nilainya tetap di kirim -->
+                                                                <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" name="verifikasi_admin" value="{{ $detail->verifikasi_admin == 'true' ? 'true' : 'false' }}" {{ $detail->verifikasi_admin == 'true' ? 'checked' : '' }} onchange="this.form.submit()">
+                                                                @else
+                                                                <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" {{ $detail->verifikasi_admin == 'true' ? 'checked' : '' }} disabled>
+                                                                @endcan
+                                                            </div>
+                                                        </form>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <div class="form-floating" data-toggle="modal" data-target="#modal-lg-komentar-admin-{{$detail->id}}">
+                                                            @can('komentar admin')
+                                                            <textarea class="form-control" placeholder="Komentar" id="komentarAdmin" name="komentar_admin">{{ $detail->komentar_admin}}</textarea>
+                                                            @else
+                                                            <textarea class="form-control" placeholder="Komentar" disabled>{{ $detail->komentar_admin}}</textarea>
+                                                            @endcan
+                                                        </div>
+                                                        @include('backend.kegiatan._modal_komentar', ['param'=>'admin'])
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <div class="form-check">
+                                                            <form action="{{ route('backend.detail_kegiatan.verifikasi', $detail->id) }}" method="POST">
+                                                                @method('PUT')
+                                                                @csrf
+                                                                <div class="form-check">
+                                                                    @can('verifikasi pengawas')
+                                                                    <input type="hidden" name="verifikasi_pengawas" value="false"> <!-- Memastikan ketika unchecked checkbox nilainya tetap di kirim -->
+                                                                    <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="verifikasiPengawas" name="verifikasi_pengawas" value="{{ $detail->verifikasi_pengawas == 'true' ? 'false' : 'true' }}" {{ $detail->verifikasi_pengawas == 'true' ? 'checked' : '' }} onchange="this.form.submit()">
+                                                                    @else
+                                                                    <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" {{ $detail->verifikasi_pengawas == 'true' ? 'checked' : '' }} disabled>
+                                                                    @endcan
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <div class="form-floating" data-toggle="modal" data-target="#modal-lg-komentar-pengawas-{{$detail->id}}">
+                                                            @can('komentar pengawas')
+                                                            <textarea class="form-control" placeholder="Komentar" id="komentarPengawas" name="komentar_pengawas">{{ $detail->komentar_pengawas}}</textarea>
+                                                            @else
+                                                            <textarea class="form-control" placeholder="Komentar" disabled>{{ $detail->komentar_pengawas}}</textarea>
+                                                            @endcan
+                                                        </div>
+                                                        @include('backend.kegiatan._modal_komentar', ['param'=>'pengawas'])
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            @can('lihat detail kegiatan')
+                                                            <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail->id]) }}" class=" btn btn-sm btn-secondary "><i class="fas fa-eye"></i></a>
+                                                            @endcan
+                                                            @can('hapus detail kegiatan')
+                                                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-lg-detail-delete-{{$detail->id}}"><i class="fas fa-trash"></i></button>
+                                                            @endcan
+                                                            @can('ubah detail kegiatan')
+                                                            <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $detail->id]) }}" class="btn btn-sm btn-warning " style="color: #f5faff"><i class="fas fa-edit"></i></a>
+                                                            @endcan
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                @include('backend.kegiatan._modal_delete_detail')
+                                                @endforeach
+                                                @include('backend.kegiatan._modal_edit_kegiatan')
+                                                @endif
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                     </div>
-                                </td>
-                                <td class="text-center">
-                                    <div class="form-floating" data-toggle="modal" data-target="#modal-lg-komentar-pengawas-{{$detail->id}}">
-                                        @can('komentar pengawas')
-                                        <textarea class="form-control" placeholder="Komentar" id="komentarPengawas" name="komentar_pengawas">{{ $detail->komentar_pengawas}}</textarea>
-                                        @else
-                                        <textarea class="form-control" placeholder="Komentar" disabled>{{ $detail->komentar_pengawas}}</textarea>
-                                        @endcan
-                                    </div>
-                                    @include('backend.kegiatan._modal_komentar', ['param'=>'pengawas'])
-                                </td>
-                                <td>
-                                    <div class="d-flex">
-                                        @can('lihat detail kegiatan')
-                                        <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail->id]) }}" class=" btn btn-sm btn-primary "><i class="fas fa-eye"></i></a>
-                                        @endcan
-                                        @can('hapus detail kegiatan')
-                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-lg-detail-delete-{{$detail->id}}"><i class="fas fa-trash"></i></button>
-                                        @endcan
-                                        @can('ubah detail kegiatan')
-                                        <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $detail->id]) }}" class="btn btn-sm btn-warning " style="color: #f5faff"><i class="fas fa-edit"></i></a>
-                                        @endcan
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                            @include('backend.kegiatan._modal_edit_kegiatan')
-                            @endif
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            @endforeach
+                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>

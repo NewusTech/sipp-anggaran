@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class PenyediaJasa extends Model
 {
     use HasFactory, SoftDeletes;
-    
+
     protected $table = 'penyedia_jasa';
     /**
      * The attributes that are mass assignable.
@@ -19,6 +19,7 @@ class PenyediaJasa extends Model
     protected $fillable = [
         'name',
         'telepon',
-        'join_date'
+        'join_date',
+        'email'
     ];
 }

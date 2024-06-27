@@ -41,6 +41,7 @@ class PenyediaJasaController extends Controller
             'name' => $request->name,
             'telepon' => $request->telepon,
             'join_date' => $request->join_date,
+            'email' => $request->email,
         ]);
         return redirect()->route('backend.penyedia_jasa.index')->with('success', 'Penyedia Jasa berhasil disimpan');
     }
@@ -76,10 +77,11 @@ class PenyediaJasaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = PenyediaJasa::where('id', '=',$id)->update([
+        $user = PenyediaJasa::where('id', '=', $id)->update([
             'name' => $request->name,
             'telepon' => $request->telepon,
             'join_date' => $request->join_date,
+            'email' => $request->email
         ]);
         return redirect()->route('backend.penyedia_jasa.index')->with('success', 'Penyedia Jasa berhasil disimpan');
     }
@@ -92,7 +94,7 @@ class PenyediaJasaController extends Controller
      */
     public function destroy($id)
     {
-        $penyedia_jasa = PenyediaJasa::where('id',$id)->first();
+        $penyedia_jasa = PenyediaJasa::where('id', $id)->first();
         $penyedia_jasa->delete();
         return redirect()->route('backend.penyedia_jasa.index')->with('success', 'Penyedia Jasa berhasil dihapus');
     }

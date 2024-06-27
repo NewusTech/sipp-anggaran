@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Anggaran\StoreAnggaranRequest;
 use App\Http\Requests\Backend\Anggaran\UpdateAnggaranRequest;
 use App\Models\Anggaran;
+use App\Models\Bidang;
 use App\Models\DetailKegiatan;
 use App\Models\ProgresKegiatan;
 use App\Models\RencanaKegiatan;
@@ -81,12 +82,13 @@ class AnggaranController extends Controller
      */
     public function show($detail_kegiatan_id): View|Factory|Application
     {
+        $bidang = Bidang::all();
         $detail = DetailKegiatan::with('penyedia')->where('id', $detail_kegiatan_id)->first();
         $anggaran = Anggaran::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
         $dokumentasi = Dokumentasi::where('detail_kegiatan_id', $detail_kegiatan_id)->with('files')->get();
         $isEdit = true;
         $kegiatan = Kegiatan::where('id', $detail->kegiatan_id)->orderBy('created_at', 'desc')->first();
-        $penanggung = PenanggungJawab::where('kegiatan_id', $kegiatan->id)->first();
+        $penanggung = PenanggungJawab::where('detail_kegiatan_id', $detail_kegiatan_id)->first();
         $program = Program::where('id', $kegiatan->program)->first();
         $progres = ProgresKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
         $progresFisik = $progres->where('jenis_progres', 'fisik');
@@ -112,6 +114,7 @@ class AnggaranController extends Controller
         return view(
             'backend.kegiatan.edit_anggaran',
             compact(
+                'bidang',
                 'detail',
                 'anggaran',
                 'dokumentasi',
@@ -138,6 +141,7 @@ class AnggaranController extends Controller
 
     public function edit($detail_kegiatan_id): View|Factory|Application
     {
+        $bidang = Bidang::all();
         $detail = DetailKegiatan::with('penyedia')->where('id', $detail_kegiatan_id)->first();
         $anggaran = Anggaran::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
         $dokumentasi = Dokumentasi::where('detail_kegiatan_id', $detail_kegiatan_id)->with('files')->get();
@@ -169,6 +173,7 @@ class AnggaranController extends Controller
         return view(
             'backend.kegiatan.edit_anggaran',
             compact(
+                'bidang',
                 'detail',
                 'anggaran',
                 'dokumentasi',
@@ -265,12 +270,15 @@ class AnggaranController extends Controller
         $dataBaru = $request->input('data');
 
         foreach ($dataBaru as $data) {
-            RencanaKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)
-                ->where('bulan', $data['bulan'])
-                ->update([
+            $rencanaKegiatan = RencanaKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)
+                ->where('minggu', $data['bulan'])->update([
                     'keuangan' => $data['keuangan'],
                     'fisik' => $data['fisik']
                 ]);
+            // dd($data['bulan'], $rencanaKegiatan->get());
+
+            // $rencana = RencanaKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
+            // dd($data['keuangan'], $data['fisik'], $rencana);
         }
 
         return redirect()->back()->with('success', 'Data kurva berhasil diperbarui.');
