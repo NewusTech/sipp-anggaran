@@ -36,14 +36,18 @@ class Kegiatan extends Model
         return $this->belongsTo(Bidang::class);
     }
 
+    public function detail()
+    {
+        return $this->hasMany(DetailKegiatan::class, 'kegiatan_id', 'id');
+    }
+
     // scope untuk filter detail kegiatan
     public function scopeFilter($query, $request)
     {
-			if (request()->has('tahun')) {
-					if (!empty($request->tahun)) {
-						$query->whereYear('kegiatan.created_at', $request->tahun);
-					}
-			}
-
+        if (request()->has('tahun')) {
+            if (!empty($request->tahun)) {
+                $query->whereYear('kegiatan.created_at', $request->tahun);
+            }
+        }
     }
 }

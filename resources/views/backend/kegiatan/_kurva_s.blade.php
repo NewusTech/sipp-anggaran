@@ -20,16 +20,24 @@
                                 <tr class="p-2">
                                     <td class="p-2">
                                         {{ \Carbon\Carbon::parse($dataKurvaS->bulan)->locale('id')->isoFormat('MMMM') }}
-                                        <input type="hidden" name="data[{{ $loop->index }}][bulan]" value="{{ $dataKurvaS->bulan }}">
+                                        <input type="hidden" name="data[{{ $loop->index }}][minggu]" value="{{ $dataKurvaS->minggu }}">
                                     </td>
                                     <td class="p-2">
                                         {{ $dataKurvaS->minggu }}
                                     </td>
                                     <td class="p-2">
-                                        <input type="number" class="form-control form-control-sm" name="data[{{ $loop->index }}][keuangan]" value="{{ $dataKurvaS->keuangan }}">
+                                        @can('ubah kurva')
+                                        <input type="number" class="form-control form-control-sm" name="data[{{ $loop->index }}][keuangan]" value="{{ $dataKurvaS->keuangan}}">
+                                        @else
+                                        <input type="number" class="form-control form-control-sm" value="{{ $dataKurvaS->keuangan }}" disabled>
+                                        @endcan
                                     </td>
                                     <td class="p-2">
-                                        <input type="number" class="form-control form-control-sm" name="data[{{ $loop->index }}][fisik]" value="{{ $dataKurvaS->fisik }}">
+                                        @can('ubah kurva')
+                                        <input type="number" class="form-control form-control-sm" name="data[{{ $loop->index }}][fisik]" value="{{ $dataKurvaS->fisik}}">
+                                        @else
+                                        <input type="number" class="form-control form-control-sm" value="{{ $dataKurvaS->fisik }}" disabled>
+                                        @endcan
                                     </td>
                                 </tr>
                                 @endforeach
@@ -37,7 +45,9 @@
                         </table>
                     </div>
                     <div class="text-left" style="margin-bottom: 2.25rem">
+                        @can('ubah kurva')
                         <button type="submit" class="btn btn-primary btn-sm text-white"><i class="fas fa-save mx-2"></i>Simpan</button>
+                        @endcan
                     </div>
                 </form>
             </div>

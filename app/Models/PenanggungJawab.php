@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class PenanggungJawab extends Model
 {
     use HasFactory, SoftDeletes;
-    
+
     protected $table = 'penanggung_jawab';
     /**
      * The attributes that are mass assignable.
@@ -28,6 +28,7 @@ class PenanggungJawab extends Model
         'ppk_telpon',
         'ppk_bidang_id',
         'kegiatan_id',
+        'detail_kegiatan_id',
     ];
 
     protected $with = ['bidang_pptk', 'bidang_ppk'];
