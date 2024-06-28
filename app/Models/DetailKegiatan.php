@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DetailKegiatan extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $guarded = ['id'];
     protected $table = 'detail_kegiatan';
 
@@ -51,6 +53,11 @@ class DetailKegiatan extends Model
     public function penyedia(): BelongsTo
     {
         return $this->belongsTo(PenyediaJasa::class, 'penyedia_jasa_id', 'id');
+    }
+
+    public function progres(): HasMany
+    {
+        return $this->hasMany(ProgresKegiatan::class, 'detail_kegiatan_id', 'id');
     }
 
     // scope untuk filter detail kegiatan
