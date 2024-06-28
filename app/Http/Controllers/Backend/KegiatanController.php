@@ -79,7 +79,9 @@ class KegiatanController extends Controller
                 });
                 $query->penanggung = $penanggung;
                 $query->detail_kegiatan = $detailKegiatan;
-                $query->total_pagu = $detailKegiatan->sum('pagu');
+                $query->total_pagu = $detailKegiatan->sum(function ($detail) {
+                    return (int) $detail->pagu;
+                });
                 $query->total_realisasi = $detailKegiatan->sum('total_realisasi');
                 $query->total_sisa = $query->alokasi - $detailKegiatan->sum('total_realisasi');
             });
@@ -103,7 +105,9 @@ class KegiatanController extends Controller
                 });
                 $query->penanggung = $penanggung;
                 $query->detail_kegiatan = $detailKegiatan;
-                $query->total_pagu = $detailKegiatan->sum('pagu');
+                $query->total_pagu = $detailKegiatan->sum(function ($detail) {
+                    return (int) $detail->pagu;
+                });
                 $query->total_realisasi = $detailKegiatan->sum('total_realisasi');
                 $query->total_sisa = $query->alokasi - $detailKegiatan->sum('total_realisasi');
             });
