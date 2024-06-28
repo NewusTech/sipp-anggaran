@@ -106,7 +106,6 @@
                                 <td>Kegiatan/Sub Kegiatan</td>
                                 <td>Paket</td>
                                 <td>Pagu</td>
-                                <td>Anggaran</td>
                                 <td colspan="2">Realisasi</td>
                                 <td>Sisa</td>
                             </tr>
@@ -121,7 +120,6 @@
                                 <td>{{$kegiatan->title}}</td>
                                 <td>{{$kegiatan->jenis_paket}}</td>
                                 <td>Rp.{{number_format($kegiatan->alokasi)}}</td>
-                                <td>Rp.10.000.000 (dummy data)</td>
                                 <td>Fisik</td>
                                 <td>Keuangan</td>
                                 <td>Rp.</td>
@@ -132,24 +130,28 @@
                                 <td>{{\Carbon\Carbon::parse($detail->awal_kontrak )->format('d-m-Y') . ' - ' . \Carbon\Carbon::parse($detail->akhir_kontrak)->format('d-m-Y')}}</td>
                                 <td>{{$detail->title}}</td>
                                 <td>Fisik</td>
-                                <td>Rp.{{$detail->pagu}}</td>
-                                <td>Rp.10.000.000 (dummy data)</td>
+                                <td>Rp.{{number_format((int)$detail->pagu)}}</td>
                                 <td>
                                     @if ($detail->progres->count()>0 )
-                                    {{$detail->progres->where('jenis_progres','fisik')->sum('nilai')}}
+                                    {{$detail->progres->where('jenis_progres','fisik')->sum('nilai')}}%
                                     @else
                                     {{'Data Kosong'}}
                                     @endif
-
                                 </td>
                                 <td>
                                     @if ($detail->progres->count()>0)
-                                    {{$detail->progres->where('jenis_progres','keuangan')->sum('nilai')}}
+                                    {{'Rp.'. number_format($detail->progres->where('jenis_progres','keuangan')->sum('nilai'))}}
                                     @else
                                     {{'Data Kosong'}}
                                     @endif
                                 </td>
-                                <td>Rp.</td>
+                                <td>
+                                    @if ($detail->progres->count()>0)
+                                    {{'Rp.'. number_format((int)$detail->pagu - $detail->progres->where('jenis_progres','keuangan')->sum('nilai'))}}
+                                    @else
+                                    {{'Invalid'}}
+                                    @endif
+                                </td>
                             </tr>
                             @endforeach
                             @endforeach
@@ -162,7 +164,7 @@
                             <tr class="text-bold">
                                 <td>Total</td>
                                 <td>Rp.{{number_format($details->sum('alokasi'))}}</td>
-                                <td>Rp.{{number_format($details->sum('pagu'))}}</td>
+                                <td>Rp.{{number_format($details->sum(function ($detail){return (int)$detail->pagu;}))}}</td>
                             </tr>
                         </tbody>
                     </table>

@@ -423,7 +423,7 @@
                                                                                                     <label class="text-darkblue">Pagu</label>
                                                                                                 </dt>
                                                                                                 <dd>
-                                                                                                    <span class="text-darkblue">Rp.{{ number_format($detail->pagu) }}</span>
+                                                                                                    <span class="text-darkblue">Rp.{{ number_format((int)$detail->pagu) }}</span>
                                                                                                 </dd>
                                                                                             </dl>
                                                                                         </div>
@@ -465,7 +465,7 @@
                                                                                                     </div>
                                                                                                     <div class="col">
                                                                                                         <div class="text-darkblue"><strong>Pagu</strong></div>
-                                                                                                        <div class="">Rp.{{ number_format($detail->pagu) }}</div>
+                                                                                                        <div class="">Rp.{{ number_format((int)$detail->pagu) }}</div>
                                                                                                     </div>
                                                                                                     <div class="col">
                                                                                                         <div class="text-darkblue"><strong>Progress</strong></div>
