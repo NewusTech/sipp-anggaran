@@ -5,6 +5,12 @@
 <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+<style>
+    .table th,
+    .table td {
+        padding: 8px;
+    }
+</style>
 @endsection
 @section('breadcump')
 <div class="col-sm-6">
@@ -88,21 +94,20 @@
         <div class="card">
             <div class="card-body d-flex flex-column justify-content-center">
                 <div class="col text-center">
-                    <h4><strong>RELASI LAPORAN KEUANGAN DINAS PUPR</strong></h4>
-                    <h4><strong>KABUPATEN TULANG BAWANG BARAT TAHUN {{$tahun ? $tahun : 'SEMUA TAHUN'}}</strong></h4>
-                    <h4><strong>BULAN {{$bulan ? strtoupper($bulan) : '-'}}</strong></h4>
+                    <h4><strong>RELASI LAPORAN KEGIATAN DINAS PUPR</strong></h4>
+                    <h4><strong>KABUPATEN TULANG BAWANG BARAT </strong></h4>
                 </div>
-                <div class="col">
-                    <table class="table table-bordered">
+                <div class="col mt-3">
+                    <table class="table table-bordered align-middle">
                         <thead class="text-bold">
                             <tr>
                                 <td>No</td>
                                 <td>Tahun / Kontrak</td>
-                                <td>Program/Kegiatan/Sub Kegiatan</td>
-                                <td>Nama Paket</td>
+                                <td>Kegiatan/Sub Kegiatan</td>
+                                <td>Paket</td>
                                 <td>Pagu</td>
                                 <td>Anggaran</td>
-                                <td>Realisasi</td>
+                                <td colspan="2">Realisasi</td>
                                 <td>Sisa</td>
                             </tr>
                         </thead>
@@ -114,11 +119,12 @@
                                 <td>{{$loop->iteration}}</td>
                                 <td>{{\Carbon\Carbon::parse($kegiatan->created_at)->format('Y')}}</td>
                                 <td>{{$kegiatan->title}}</td>
-                                <td>Fisik</td>
+                                <td>{{$kegiatan->jenis_paket}}</td>
                                 <td>Rp.{{number_format($kegiatan->alokasi)}}</td>
                                 <td>Rp.10.000.000 (dummy data)</td>
-                                <td>{{$kegiatan->no_rek}}</td>
-                                <td>%</td>
+                                <td>Fisik</td>
+                                <td>Keuangan</td>
+                                <td>Rp.</td>
                             </tr>
                             @foreach ($kegiatan->detail as $detail)
                             <tr>
@@ -126,10 +132,24 @@
                                 <td>{{\Carbon\Carbon::parse($detail->awal_kontrak )->format('d-m-Y') . ' - ' . \Carbon\Carbon::parse($detail->akhir_kontrak)->format('d-m-Y')}}</td>
                                 <td>{{$detail->title}}</td>
                                 <td>Fisik</td>
-                                <td>Rp.{{number_format($detail->pagu)}}</td>
+                                <td>Rp.{{$detail->pagu}}</td>
                                 <td>Rp.10.000.000 (dummy data)</td>
-                                <td>{{$detail->nomor_kontrak}}</td>
-                                <td>%</td>
+                                <td>
+                                    @if ($detail->progres->count()>0 )
+                                    {{$detail->progres->where('jenis_progres','fisik')->sum('nilai')}}
+                                    @else
+                                    {{'Data Kosong'}}
+                                    @endif
+
+                                </td>
+                                <td>
+                                    @if ($detail->progres->count()>0)
+                                    {{$detail->progres->where('jenis_progres','keuangan')->sum('nilai')}}
+                                    @else
+                                    {{'Data Kosong'}}
+                                    @endif
+                                </td>
+                                <td>Rp.</td>
                             </tr>
                             @endforeach
                             @endforeach

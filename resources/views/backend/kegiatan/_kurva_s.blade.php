@@ -20,10 +20,11 @@
                                 <tr class="p-2">
                                     <td class="p-2">
                                         {{ \Carbon\Carbon::parse($dataKurvaS->bulan)->locale('id')->isoFormat('MMMM') }}
-                                        <input type="hidden" name="data[{{ $loop->index }}][minggu]" value="{{ $dataKurvaS->minggu }}">
+                                        <input type="hidden" name="data[{{ $loop->index }}][bulan]" value="{{ $dataKurvaS->bulan }}">
                                     </td>
                                     <td class="p-2">
                                         {{ $dataKurvaS->minggu }}
+                                        <input type="hidden" name="data[{{ $loop->index }}][minggu]" value="{{ $dataKurvaS->minggu }}">
                                     </td>
                                     <td class="p-2">
                                         @can('ubah kurva')

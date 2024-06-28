@@ -257,7 +257,7 @@ class KegiatanController extends Controller
         $bidang_id = null;
         $role = Auth::user()->getRoleNames();
         $idBidangKontraktor = $this->getIdBidangKontraktor($role);
-        $kegiatan_id = null;
+        $kegiatan_id = Kegiatan::pluck('id');
         $penyedia_jasa = PenyediaJasa::where('email', Auth::user()->email)->first();
         if (str_contains($role[0], "Staff") || str_contains($role[0], "Kepala Bidang") || str_contains($role[0], "Kontraktor")) {
             $bidang_id = Auth::user()->bidang_id;
@@ -269,9 +269,12 @@ class KegiatanController extends Controller
         if ($requestBidang) {
             $bidang_id = $requestBidang;
         }
-        $bidang = Bidang::where('id', $bidang_id)->get();
+        $bidang = Bidang::with('kegiatan.detail.progres')->where('id', $bidang_id)->get();
+        if ($bidang_id == null) {
+            $bidang = Bidang::with('kegiatan.detail.progres')->get();
+        }
         $kegiatan = Kegiatan::whereIn('id', $kegiatan_id->toArray())->get();
-        $details = $role[0] == 'Kontraktor' ? DetailKegiatan::where('penyedia_jasa_id', $penyedia_jasa->id)->get() : DetailKegiatan::whereIn('kegiatan_id', $kegiatan_id->toArray())->get();
+        $details = $role[0] == 'Kontraktor' ? DetailKegiatan::with('progres')->where('penyedia_jasa_id', $penyedia_jasa->id)->get() : DetailKegiatan::with('progres')->whereIn('kegiatan_id', $kegiatan_id->toArray())->get();
 
         return view('backend.kegiatan.laporan', compact(['details', 'tahun', 'bulan', 'bidang']));
     }
