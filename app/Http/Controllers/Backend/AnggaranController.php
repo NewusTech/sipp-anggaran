@@ -271,7 +271,7 @@ class AnggaranController extends Controller
 
         foreach ($dataBaru as $data) {
             $rencanaKegiatan = RencanaKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)
-                ->where('minggu', $data['bulan'])->update([
+                ->where('minggu', $data['minggu'])->where('bulan', $data['bulan'])->update([
                     'keuangan' => $data['keuangan'],
                     'fisik' => $data['fisik']
                 ]);
