@@ -185,8 +185,8 @@
                                                             @csrf
                                                             <div class="form-check">
                                                                 @can('verifikasi admin')
-                                                                <input type="hidden" name="verifikasi_admin" value="false"> <!-- Memastikan ketika unchecked checkbox nilainya tetap di kirim -->
-                                                                <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" name="verifikasi_admin" value="{{ $detail->verifikasi_admin == 'true' ? 'true' : 'false' }}" {{ $detail->verifikasi_admin == 'true' ? 'checked' : '' }} onchange="this.form.submit()">
+                                                                <input type="hidden" name="verifikasi_admin" value="false"> 
+                                                                <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" name="verifikasi_admin" value="{{ $detail->verifikasi_admin == 'true' ? 'false' : 'true' }}" {{ $detail->verifikasi_admin == 'true' ? 'checked' : '' }} onchange="this.form.submit()">
                                                                 @else
                                                                 <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" {{ $detail->verifikasi_admin == 'true' ? 'checked' : '' }} disabled>
                                                                 @endcan
@@ -238,12 +238,13 @@
                                                             <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-lg-detail-delete-{{$detail->id}}"><i class="fas fa-trash"></i></button>
                                                             @endcan
                                                             @can('ubah detail kegiatan')
-                                                            <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $detail->id]) }}" class="btn btn-sm btn-warning " style="color: #f5faff"><i class="fas fa-edit"></i></a>
+                                                            <button type="button" style="color: white;" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modal-lg-edit-detail-{{$detail->id}}"><i class="fas fa-edit"></i></button>
                                                             @endcan
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 @include('backend.kegiatan._modal_delete_detail')
+                                                @include('backend.kegiatan._modal_edit_detail')
                                                 @endforeach
                                                 @include('backend.kegiatan._modal_edit_kegiatan')
                                                 @endif
