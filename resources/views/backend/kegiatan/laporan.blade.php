@@ -48,7 +48,7 @@
                     <form action="" method="GET">
                         <div class="row">
                             <div class="col-1">
-                                <select name="bulan" id="bulan_laporan" class="form-control" required>
+                                <select name="bulan" id="bulan_laporan" class="form-control">
                                     <option value="" selected>-- Pilih Bulan --</option>
                                     <option value="januari" {{$bulan == "januari"?"selected":""}}>Januari</option>
                                     <option value="februari" {{$bulan == "februari"?"selected":""}}>Februari</option>
@@ -65,7 +65,7 @@
                                 </select>
                             </div>
                             <div class="col-3">
-                                <select name="bidang" id="bidangId" class="form-control" required>
+                                <select name="bidang" id="bidangId" class="form-control">
                                     <option value="" selected>-- Pilih Bidang --</option>
                                     @foreach ($bidang as $item)
                                     <option value="{{$item->id}}" {{Auth::user()->bidang_id == $item->id?"selected":""}}>{{$item->name}}</option>
@@ -73,7 +73,7 @@
                                 </select>
                             </div>
                             <div class="col-1">
-                                <select name="tahun" id="tahun_laporan" class="form-control" required>
+                                <select name="tahun" id="tahun_laporan" class="form-control">
                                     <option value="" selected>-- Pilih Tahun --</option>
                                     @for ($i = 0; $i < 5; $i++) <option value="{{date('Y')-$i}}" {{$tahun == (date('Y')-$i) ? "selected" : ""}}>{{((int)date('Y'))-$i}}</option>
                                         @endfor
@@ -114,7 +114,7 @@
                             @if ($bidang->count() > 0)
                             @foreach ($bidang as $item)
                             @foreach ($item->kegiatan as $kegiatan)
-                            <tr>
+                            <tr class="bg-secondary">
                                 <td>{{$loop->iteration}}</td>
                                 <td>{{\Carbon\Carbon::parse($kegiatan->created_at)->format('Y')}}</td>
                                 <td>{{$kegiatan->title}}</td>
@@ -122,7 +122,7 @@
                                 <td>Rp.{{number_format($kegiatan->alokasi)}}</td>
                                 <td>Fisik</td>
                                 <td>Keuangan</td>
-                                <td>Rp.</td>
+                                <td>Rp.{{ number_format($kegiatan->sisa)}}</td>
                             </tr>
                             @foreach ($kegiatan->detail as $detail)
                             <tr>
@@ -161,11 +161,6 @@
                                 <td colspan="16"><span>No data available in table</span></td>
                             </tr>
                             @endif
-                            <tr class="text-bold">
-                                <td>Total</td>
-                                <td>Rp.{{number_format($details->sum('alokasi'))}}</td>
-                                <td>Rp.{{number_format($details->sum(function ($detail){return (int)$detail->pagu;}))}}</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>

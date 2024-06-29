@@ -277,6 +277,19 @@ class KegiatanController extends Controller
         if ($bidang_id == null) {
             $bidang = Bidang::with('kegiatan.detail.progres')->get();
         }
+        $bidang->map(function ($bidang) {
+            $bidang->kegiatan->map(function ($kegiatan) {
+                $total_keuangan_kegiatan = 0;
+                $kegiatan->detail->map(function ($detail) use ($kegiatan, &$total_keuangan_kegiatan) {
+                    $detail->total_keuangan = $detail->progres->where('jenis_progres', 'keuangan')->sum('nilai');
+                    $detail->total_fisik = $detail->progres->where('jenis_progres', 'fisik')->sum('nilai');
+                    $total_keuangan_kegiatan += $detail->total_keuangan;
+                });
+                $kegiatan->sisa = $kegiatan->alokasi - $total_keuangan_kegiatan;
+            });
+        });
+
+
         $kegiatan = Kegiatan::whereIn('id', $kegiatan_id->toArray())->get();
         $details = $role[0] == 'Kontraktor' ? DetailKegiatan::with('progres')->where('penyedia_jasa_id', $penyedia_jasa->id)->get() : DetailKegiatan::with('progres')->whereIn('kegiatan_id', $kegiatan_id->toArray())->get();
 

@@ -98,15 +98,9 @@ class DetailKegiatanController extends Controller
             'komentar_admin',
             'verifikasi_pengawas',
             'komentar_pengawas'
-        ]), function ($value) {
-            return $value !== null;
-        });
-
-        if ($detailKegiatan->update($filteredRequest)) {
-            return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Kegiatan berhasil diubah');
-        }
-
-        return redirect()->route('backend.kegiatan.index')->with('error', 'Data Detail Kegiatan gagal diubah');
+        ]));
+        $detailKegiatan->update($filteredRequest);
+        return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Kegiatan berhasil diubah');
     }
     public function update(UpdateDetailKegiatanRequest $request, DetailKegiatan $detailKegiatan): RedirectResponse
     {
