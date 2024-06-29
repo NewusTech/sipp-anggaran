@@ -185,7 +185,7 @@
                                                             @csrf
                                                             <div class="form-check">
                                                                 @can('verifikasi admin')
-                                                                <input type="hidden" name="verifikasi_admin" value="false"> 
+                                                                <input type="hidden" name="verifikasi_admin" value="false">
                                                                 <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" name="verifikasi_admin" value="{{ $detail->verifikasi_admin == 'true' ? 'false' : 'true' }}" {{ $detail->verifikasi_admin == 'true' ? 'checked' : '' }} onchange="this.form.submit()">
                                                                 @else
                                                                 <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" {{ $detail->verifikasi_admin == 'true' ? 'checked' : '' }} disabled>
@@ -219,6 +219,7 @@
                                                             </form>
                                                         </div>
                                                     </td>
+                                                    <!-- Comment -->
                                                     <td class="text-center">
                                                         <div class="form-floating" data-toggle="modal" data-target="#modal-lg-komentar-pengawas-{{$detail->id}}">
                                                             @can('komentar pengawas')
