@@ -219,7 +219,6 @@
                                                             </form>
                                                         </div>
                                                     </td>
-                                                    <!-- Comment -->
                                                     <td class="text-center">
                                                         <div class="form-floating" data-toggle="modal" data-target="#modal-lg-komentar-pengawas-{{$detail->id}}">
                                                             @can('komentar pengawas')
