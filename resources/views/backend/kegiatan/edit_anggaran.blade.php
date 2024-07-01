@@ -94,6 +94,9 @@
                     <li class="nav-item">
                         <a class="nav-link {{session('tab') == 'kurva_s'? 'active' : ''}}" id="custom-content-below-kurva-s-tab" data-toggle="pill" href="#custom-content-below-kurva-s" role="tab" aria-controls="custom-content-below-detail" aria-selected="true">Kurva S</a>
                     </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link {{session('tab') == 'kurva_s'? 'active' : ''}}" id="custom-content-below-data-kontrak-tab" data-toggle="pill" href="#custom-content-below-data-kontrak" role="tab" aria-controls="custom-content-below-detail" aria-selected="true">Data Kontrak</a>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" id="custom-content-below-penanggung_jawab-tab" data-toggle="pill" href="#custom-content-above-penanggung_jawab" role="tab" aria-controls="custom-content-below-penanggung_jawab" aria-selected="true">Penanggung Jawab</a>
                     </li>
@@ -116,6 +119,7 @@
                 <div class="tab-content" id="custom-content-below-tabContent">
                     @include('backend.kegiatan._detail')
                     @include('backend.kegiatan._penanggung_jawab')
+                    <!-- @include('backend.kegiatan._data_kontrak') -->
                     @include('backend.kegiatan._anggaran')
                     @include('backend.kegiatan._kurva_s')
                     @include('backend.kegiatan._progres')
