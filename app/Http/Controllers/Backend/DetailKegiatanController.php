@@ -9,6 +9,7 @@ use App\Http\Requests\Backend\DetailKegiatan\UpdateDetailKegiatanRequest;
 use App\Models\DetailKegiatan;
 use App\Models\RencanaKegiatan;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -138,6 +139,30 @@ class DetailKegiatanController extends Controller
      * @param DetailKegiatan $detailKegiatan
      * @return RedirectResponse
      */
+
+    public function updateDetail(Request $request, DetailKegiatan $detailKegiatan)
+    {
+        try {
+            if ($detailKegiatan->update([
+                'title' => $request->title,
+                'no_detail_kegiatan' => $request->no_detail_kegiatan,
+                'no_kontrak' => $request->no_kontrak,
+                'jenis_pengadaan' => $request->jenis_pengadaan,
+                'target' => $request->target,
+                'awal_kontrak' => $request->awal_kontrak,
+                'akhir_kontrak' => $request->akhir_kontrak,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'penyedia_jasa_id' => $request->penyedia_jasa_id,
+                'kegiatan_id' => $request->kegiatan_id,
+            ])) {
+                return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Anggaran berhasil diubah');
+            }
+            return redirect()->route('backend.kegiatan.index')->with('error', 'Data Detail Anggaran gagal diubah');
+        } catch (Exception $exception) {
+            return redirect()->route('backend.kegiatan.index')->with('error', 'Data Detail Anggaran gagal diubah');
+        }
+    }
     public function updateAnggaran(UpdateDetailAnggaranRequest $request, DetailKegiatan $detailKegiatan): RedirectResponse
     {
         if ($detailKegiatan->update([

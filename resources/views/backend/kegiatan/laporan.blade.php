@@ -8,6 +8,8 @@
 <style>
     .table th,
     .table td {
+        text-align: center;
+        vertical-align: middle;
         padding: 8px;
     }
 </style>
@@ -67,8 +69,8 @@
                             <div class="col-3">
                                 <select name="bidang" id="bidangId" class="form-control">
                                     <option value="" selected>-- Pilih Bidang --</option>
-                                    @foreach ($bidang as $item)
-                                    <option value="{{$item->id}}" {{Auth::user()->bidang_id == $item->id?"selected":""}}>{{$item->name}}</option>
+                                    @foreach (Auth::user()->bidang_id == null ? $listBidang : $bidang as $item)
+                                    <option value="{{$item->id}}" {{$requestBidang == $item->id?"selected":""}}>{{$item->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -83,7 +85,7 @@
                                 <button type="submit" class="btn btn-primary btn-block">Filter</button>
                             </div>
                             <div class="col-2">
-                                <a href="/backend/kegiatan/laporan/download?bulan={{$bulan}}&tahun={{$tahun}}" class="btn btn-primary"> <i class="fas fa-download"></i> Download</a>
+                                <a href="/backend/kegiatan/laporan/download?bulan={{$bulan}}&tahun={{$tahun}}&requestBidang={{$requestBidang}}" class="btn btn-primary"> <i class="fas fa-download"></i> Download</a>
                             </div>
                         </div>
                     </form>
@@ -101,13 +103,17 @@
                     <table class="table table-bordered align-middle">
                         <thead class="text-bold">
                             <tr>
-                                <td>No</td>
-                                <td>Tahun / Kontrak</td>
-                                <td>Kegiatan/Sub Kegiatan</td>
-                                <td>Paket</td>
-                                <td>Pagu</td>
+                                <td rowspan="2">No</td>
+                                <td rowspan="2">Tahun / Kontrak</td>
+                                <td rowspan="2">Kegiatan/Sub Kegiatan</td>
+                                <td rowspan="2">Paket</td>
+                                <td rowspan="2">Pagu</td>
                                 <td colspan="2">Realisasi</td>
-                                <td>Sisa</td>
+                                <td rowspan="2">Sisa</td>
+                            </tr>
+                            <tr>
+                                <td>Fisik</td>
+                                <td>Keuangan</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -120,10 +126,14 @@
                                 <td>{{$kegiatan->title}}</td>
                                 <td>{{$kegiatan->jenis_paket}}</td>
                                 <td>Rp.{{number_format($kegiatan->alokasi)}}</td>
-                                <td>Fisik</td>
-                                <td>Keuangan</td>
+                                <td></td>
+                                <td></td>
                                 <td>Rp.{{ number_format($kegiatan->sisa)}}</td>
                             </tr>
+                            @php
+                            $totalRealisasi=0;
+                            $totalSisa=0;
+                            @endphp
                             @foreach ($kegiatan->detail as $detail)
                             <tr>
                                 <td></td>
@@ -135,25 +145,35 @@
                                     @if ($detail->progres->count()>0 )
                                     {{$detail->progres->where('jenis_progres','fisik')->sum('nilai')}}%
                                     @else
-                                    {{'Data Kosong'}}
+                                    {{'-'}}
                                     @endif
                                 </td>
                                 <td>
                                     @if ($detail->progres->count()>0)
                                     {{'Rp.'. number_format($detail->progres->where('jenis_progres','keuangan')->sum('nilai'))}}
                                     @else
-                                    {{'Data Kosong'}}
+                                    {{'-'}}
                                     @endif
                                 </td>
                                 <td>
                                     @if ($detail->progres->count()>0)
                                     {{'Rp.'. number_format((int)$detail->pagu - $detail->progres->where('jenis_progres','keuangan')->sum('nilai'))}}
                                     @else
-                                    {{'Invalid'}}
+                                    {{'-'}}
                                     @endif
                                 </td>
                             </tr>
+                            @php
+                            $totalRealisasi+= $detail->progres->where('jenis_progres','keuangan')->sum('nilai');
+                            $totalSisa += (int)$detail->pagu - $detail->progres->where('jenis_progres','keuangan')->sum('nilai');
+                            @endphp
                             @endforeach
+                            <tr>
+                                <td class="text-bold">Total</td>
+                                <td colspan="5"></td>
+                                <td class="text-bold">Rp.{{number_format($totalRealisasi)}}</td>
+                                <td class="text-bold">Rp.{{number_format($totalSisa)}}</td>
+                            </tr>
                             @endforeach
                             @endforeach
                             @else

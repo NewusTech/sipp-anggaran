@@ -7,7 +7,8 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('backend.detail_kegiatan.store') }}" method="POST">
+            <form action="{{ route('backend.detail_kegiatan.update.detail_kegiatan', $detail) }}" method="POST">
+                @method('PUT')
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -41,11 +42,11 @@
                             </div>
                             <div class="form-group">
                                 <label class="text-darkblue">Awal Kontrak</label>
-                                <input type="date" class="form-control" name="awal_kontrak" placeholder="Silahkan masukan awal kontrak" value="{{$detail->awal_kontrak}}" required>
+                                <input type="date" class="form-control" name="awal_kontrak" placeholder="Silahkan masukan awal kontrak" value={{\Carbon\Carbon::parse($detail->awal_kontrak)->format('Y-m-d')}} required>
                             </div>
                             <div class="form-group">
                                 <label class="text-darkblue">Akhir Kontrak</label>
-                                <input type="date" class="form-control" name="akhir_kontrak" placeholder="Silahkan masukan akhir kontrak" value="{{$detail->akhir_kontrak}}" required>
+                                <input type="date" class="form-control" name="akhir_kontrak" placeholder="Silahkan masukan akhir kontrak" value={{\Carbon\Carbon::parse($detail->akhir_kontrak)->format('Y-m-d')}} required>
                             </div>
                             <div class="form-group">
                                 <label class="text-darkblue">Target</label>

@@ -253,7 +253,7 @@ class KegiatanController extends Controller
     }
     public function laporan(Request $request)
     {
-
+        $listBidang = Bidang::all();
         $tahun = $request->tahun;
         $bulan = $request->bulan;
         $requestBidang = $request->bidang;
@@ -293,7 +293,7 @@ class KegiatanController extends Controller
         $kegiatan = Kegiatan::whereIn('id', $kegiatan_id->toArray())->get();
         $details = $role[0] == 'Kontraktor' ? DetailKegiatan::with('progres')->where('penyedia_jasa_id', $penyedia_jasa->id)->get() : DetailKegiatan::with('progres')->whereIn('kegiatan_id', $kegiatan_id->toArray())->get();
 
-        return view('backend.kegiatan.laporan', compact(['details', 'tahun', 'bulan', 'bidang']));
+        return view('backend.kegiatan.laporan', compact(['listBidang', 'tahun', 'bulan', 'bidang', 'requestBidang']));
     }
 
     public function laporanDPA(Request $request)

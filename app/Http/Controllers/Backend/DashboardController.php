@@ -21,7 +21,7 @@ class DashboardController extends Controller
     {
 				$bidang_id = null;
 				$role = Auth::user()->getRoleNames();
-				if (str_contains($role[0], "Staff")) {
+				if (str_contains($role[0], "Staff" || str_contains($role[0], "Kepala Bidang"))) {
 					$bidang_id = Auth::user()->bidang_id;
 				}
         $total_pagu = Kegiatan::where('is_arship', 0)->filter($request)->sum('alokasi');
@@ -31,9 +31,15 @@ class DashboardController extends Controller
             $query->where('bidang_id', $bidang_id);
           }
         })->filter($request)->sum('realisasi');
+        $total_realisasi = DetailKegiatan::whereHas('progres_kegiatan', function ($query) use ($bidang_id) {
+            $query->where('is_arship', 0);
+            if ($bidang_id) {
+              $query->where('bidang_id', $bidang_id);
+            }
+        });
         $total_sisa = $total_pagu - $total_realisasi;
         $fisik = DetailKegiatan::select(
-          'detail_kegiatan.id as detail_kegiatan_id', 
+          'detail_kegiatan.id as detail_kegiatan_id',
           'detail_kegiatan.title',
           'detail_kegiatan.realisasi',
           'detail_kegiatan.updated_at',
@@ -64,7 +70,7 @@ class DashboardController extends Controller
         ->filter($request)
         ->get();
         $nonfisik = DetailKegiatan::select(
-          'detail_kegiatan.id as detail_kegiatan_id', 
+          'detail_kegiatan.id as detail_kegiatan_id',
           'detail_kegiatan.title',
           'detail_kegiatan.realisasi',
           'detail_kegiatan.updated_at',
@@ -95,7 +101,7 @@ class DashboardController extends Controller
         ->filter($request)
         ->get();
         $kegiatan = DetailKegiatan::select(
-          'detail_kegiatan.id as detail_kegiatan_id', 
+          'detail_kegiatan.id as detail_kegiatan_id',
           'detail_kegiatan.title',
           'detail_kegiatan.realisasi',
           'detail_kegiatan.updated_at',
@@ -193,17 +199,17 @@ class DashboardController extends Controller
       return response()->json($resultMaps);
     }
 
-    public function downloadPaketFisik(Request $request) 
+    public function downloadPaketFisik(Request $request)
 		{
 				return Excel::download(new PaketFisikExport($request), 'paket_fisik_'.date('Y-m-d').'.xlsx');
 		}
 
-    public function downloadPaketNonFisik(Request $request) 
+    public function downloadPaketNonFisik(Request $request)
 		{
 				return Excel::download(new PaketNonFisikExport($request), 'paket_non_fisik_'.date('Y-m-d').'.xlsx');
 		}
 
-    public function downloadPaketKegiatan(Request $request) 
+    public function downloadPaketKegiatan(Request $request)
 		{
 				return Excel::download(new PaketKegiatanExport($request), 'paket_kegiatan_'.date('Y-m-d').'.xlsx');
 		}
