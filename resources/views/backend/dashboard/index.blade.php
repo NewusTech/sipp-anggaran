@@ -29,6 +29,7 @@
         </div>
     </div>
 </form>
+@can('lihat total keuangan')
 <div class="row">
     <div class="col-lg-4 col-6">
         <!-- small box -->
@@ -67,35 +68,9 @@
         </div>
     </div>
 </div>
+@endcan
 <div class="row">
-    <div class="col-lg-7">
-        <div class="card">
-            <div class="card-body">
-                <div id="mapDashboard"></div>
-                <div class="status-item">
-                    <div class="status-map">
-                        <span class="fs-10 text-darkblue"><i class="fas fa-map-marker-alt" style="width: 15pt; color:gray; "></i> Belum Mulai</span>
-                    </div>
-                    <div class="status-map">
-                        <span class="fs-10 text-darkblue"><i class="fas fa-map-marker-alt" style="width: 15pt;"></i> Baik</span>
-                    </div>
-                    <div class="status-map">
-                        <span class="fs-10 text-darkblue"><i class="fas fa-map-marker-alt" style="width: 15pt; color:green;"></i> Wajar</span>
-                    </div>
-                    <div class="status-map">
-                        <span class="fs-10 text-darkblue"><i class="fas fa-map-marker-alt" style="width: 15pt; color:rgb(255, 230, 0);"></i> Terlambat</span>
-                    </div>
-                    <div class="status-map">
-                        <span class="fs-10 text-darkblue"><i class="fas fa-map-marker-alt" style="width: 15pt; color:red;"></i> Kritis</span>
-                    </div>
-                    <div class="status-map">
-                        <span class="fs-10 text-darkblue"><i class="fas fa-info" style="width: 15pt; color:brown;"></i> Info</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-5">
+    <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
                 <div class="card-action-right">
@@ -109,6 +84,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
                 <div class="card-item">
@@ -511,36 +488,18 @@
             // Buat grafik menggunakan Chart.js
             var ctx = document.getElementById('myChart').getContext('2d');
             var myChart = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: months, // Sumbu x adalah total
                     datasets: [{
                         label: 'Total Realisasi',
                         data: total, // Sumbu y adalah bulan
-                        fill: false,
-                        borderColor: 'red',
+                        fill: true,
+                        color: '5692CE',
                         borderWidth: 1
                     }]
                 },
-                options: {
-                    scales: {
-                        y: [{
-                            ticks: {
-                                beginAtZero: true
-                            },
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0.1)",
-                                zeroLineColor: "rgba(0, 0, 0, 0.5)"
-                            }
-                        }],
-                        x: [{
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0.1)",
-                                zeroLineColor: "rgba(0, 0, 0, 0.5)"
-                            }
-                        }]
-                    }
-                }
+
             });
         })
 

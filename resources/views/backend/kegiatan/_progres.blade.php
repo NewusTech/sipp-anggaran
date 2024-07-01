@@ -42,6 +42,7 @@
                         </tbody>
                     </table>
                 </div>
+                @can('update progres')
                 <form action="{{ route('backend.detail_anggaran.tambah_progres', ['detail_kegiatan_id' => $detail->id]) }}" method="POST">
                     @csrf
                     <div class="row mx-0">
@@ -57,6 +58,7 @@
                         <button type="submit" class="btn btn-primary btn-sm text-white"><i class="fas fa-save mx-2"></i>Simpan</button>
                     </div>
                 </form>
+                @endcan
             </div>
         </div>
 
@@ -106,6 +108,7 @@
                         </tbody>
                     </table>
                 </div>
+                @can('update progres')
                 <form action="{{ route('backend.detail_anggaran.tambah_progres', ['detail_kegiatan_id' => $detail->id]) }}" method="POST">
                     @csrf
                     <div class="row mx-0">
@@ -121,6 +124,7 @@
                         <button type="submit" class="btn btn-primary btn-sm text-white"><i class="fas fa-save mx-2"></i>Simpan</button>
                     </div>
                 </form>
+                @endcan
             </div>
         </div>
     </div>

@@ -196,6 +196,7 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
     });
     Route::group(['prefix' => 'detail-anggaran', 'as' => 'detail_anggaran.'], function () {
         Route::get('detail/{detail_kegiatan_id}', [AnggaranController::class, 'show'])->name('index');
+        Route::get('detail/{detail_kegiatan_id}', [AnggaranController::class, 'show'])->name('index');
         Route::get('edit/{detail_kegiatan_id}', [AnggaranController::class, 'edit'])->name('edit');
         Route::put('update-kurva/{detail_kegiatan_id}', [AnggaranController::class, 'updateKurva'])->name('update_kurva');
         Route::post('tambah-progres/{detail_kegiatan_id}', [AnggaranController::class, 'addProgres'])->name('tambah_progres');
