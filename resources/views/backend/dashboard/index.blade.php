@@ -77,7 +77,7 @@
                     <button type="button" onclick="downloadImage()" class="btn btn-primary btn-sm rounded"><i class="fas fa-download"></i> Download</button>
                 </div>
                 <div class="row">
-                    <h4 class="text-darkblue"><strong> GRAFIK REALISAS TAHUN {{request()->get('tahun') ? request()->get('tahun') : "2024"}}</strong></h4>
+                    <h4 class="text-darkblue"><strong> Progres Keuangan {{request()->get('tahun') ? request()->get('tahun') : "2024"}}</strong></h4>
                 </div>
                 <div class="chart">
                     <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
@@ -88,21 +88,14 @@
     <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
-                <div class="card-item">
-                    <span class="fs-12 text-darkblue"><i class="fas fa-inbox" style="width: 30pt"></i> Total Paket</span>
-                    <span class="fs-12 text-darkblue float-right">{{$total_paket}}</span>
+                <div class="card-action-right">
+                    <button type="button" onclick="downloadImage()" class="btn btn-primary btn-sm rounded"><i class="fas fa-download"></i> Download</button>
                 </div>
-                <div class="card-item">
-                    <span class="fs-12 text-darkblue"><i class="fas fa-inbox" style="width: 30pt"></i> Paket Belum Mulai</span>
-                    <span class="fs-12 text-darkblue float-right">{{$total_belum_mulai}}</span>
+                <div class="row">
+                    <h4 class="text-darkblue"><strong> Progres Fisik {{request()->get('tahun') ? request()->get('tahun') : "2024"}}</strong></h4>
                 </div>
-                <div class="card-item">
-                    <span class="fs-12 text-darkblue"><i class="fas fa-inbox" style="width: 30pt"></i> Paket Sedang Dikerjakan</span>
-                    <span class="fs-12 text-darkblue float-right">{{$total_mulai}}</span>
-                </div>
-                <div class="card-item">
-                    <span class="fs-12 text-darkblue"><i class="fas fa-inbox" style="width: 30pt"></i> Paket Selesai</span>
-                    <span class="fs-12 text-darkblue float-right">{{$total_selesai}}</span>
+                <div class="chart">
+                    <canvas id="chartFisik" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                 </div>
             </div>
         </div>
@@ -475,33 +468,68 @@
     let query = Object.keys(params)
         .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
         .join('&');
+
     fetch('/chart-data?' + query)
         .then(response => response.json())
         .then(data => {
             console.log(data);
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            let total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            let totalKeuangan = Array(12).fill(0); // Inisialisasi array untuk keuangan
+            let totalFisik = Array(12).fill(0); // Inisialisasi array untuk fisik
+
             data.forEach(element => {
-                total[element.month - 1] = element.total
+                totalKeuangan[element.bulan - 1] = element.total_keuangan;
+                totalFisik[element.bulan - 1] = element.total_fisik;
             });
-            console.log(total);
-            // Buat grafik menggunakan Chart.js
+
+            console.log(totalKeuangan, totalFisik);
+
+            // Chart Keuangan
             var ctx = document.getElementById('myChart').getContext('2d');
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: months, // Sumbu x adalah total
+                    labels: months, // Sumbu x adalah bulan
                     datasets: [{
-                        label: 'Total Realisasi',
-                        data: total, // Sumbu y adalah bulan
-                        fill: true,
-                        color: '5692CE',
+                        label: 'Progres Keuangan',
+                        data: totalKeuangan, // Sumbu y adalah total keuangan
+                        backgroundColor: 'rgba(86, 146, 206, 0.2)',
+                        borderColor: 'rgba(86, 146, 206, 1)',
                         borderWidth: 1
-                    }]
+                    }, ]
                 },
-
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
             });
-        })
+
+            const ctxFisik = document.getElementById('chartFisik').getContext('2d');
+            var myChart = new Chart(ctxFisik, {
+                type: 'line',
+                data: {
+                    labels: months, // Sumbu x adalah bulan
+                    datasets: [{
+                        label: 'Progres Fisik (%)',
+                        data: totalFisik, // Sumbu y adalah total keuangan
+                        backgroundColor: 'rgba(86, 146, 206, 0.2)',
+                        borderColor: 'rgba(86, 146, 206, 1)',
+                        borderWidth: 1
+                    }, ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+        });
 
     function downloadExcel() {
         fetch('/chart-data')
