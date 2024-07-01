@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 use App\Exports\PaketFisikExport;
 use App\Exports\PaketNonFisikExport;
 use App\Exports\PaketKegiatanExport;
+use App\Models\PenyediaJasa;
 use App\Models\ProgresKegiatan;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
 class DashboardController extends Controller
@@ -30,9 +32,9 @@ class DashboardController extends Controller
         $detail_kegiatan = DetailKegiatan::whereIn('kegiatan_id', $kegiatan_id)->get();
         $total_realisasi = ProgresKegiatan::whereIn('detail_kegiatan_id', $detail_kegiatan->pluck('id'))
             ->where('jenis_progres', 'keuangan')->sum('nilai');
-            if ($bidang_id == null) {
-                $total_realisasi = ProgresKegiatan::where('jenis_progres', 'keuangan')->sum('nilai');
-            }
+        if ($bidang_id == null) {
+            $total_realisasi = ProgresKegiatan::where('jenis_progres', 'keuangan')->sum('nilai');
+        }
         // dd($total_realisasi);
         $total_sisa = $total_pagu - $total_realisasi;
         $fisik = DetailKegiatan::select(
@@ -159,18 +161,45 @@ class DashboardController extends Controller
 
     public function chartData(Request $request)
     {
-        $year = date('Y'); // Ambil tahun sekarang
-        if (request()->has('tahun')) {
+        $tahun = date('Y'); // Ambil tahun sekarang
+        if ($request->has('tahun')) {
             if (!empty($request->tahun)) {
-                $year = $request->tahun;
+                $tahun = $request->tahun;
             }
         }
-        $chartData = Anggaran::selectRaw('SUM(daya_serap_kontrak) as total, MONTH(tanggal) as month, daya_serap, keterangan')
-            ->whereYear('tanggal', $year)
-            ->groupBy(DB::raw('MONTH(tanggal)'))
-            ->get();
+        $detailKegiatanIds = 1;
+
+        // Ambil data total progres keuangan dan fisik per bulan berdasarkan tahun yang dipilih
+        $role = Auth::user()->getRoleNames();
+        $query = ProgresKegiatan::selectRaw('
+                SUM(CASE WHEN jenis_progres = "keuangan" THEN nilai ELSE 0 END) as total_keuangan,
+                SUM(CASE WHEN jenis_progres = "fisik" THEN nilai ELSE 0 END) as total_fisik,
+                MONTH(tanggal) as bulan
+            ')
+            ->whereYear('tanggal', $tahun)
+            ->groupBy(DB::raw('MONTH(tanggal)'));
+        if ($role[0] == 'Kontraktor') {
+            $penyediaJasa = $this->getIdKontraktor($role);
+            $detailKegiatanIds = DetailKegiatan::where('penyedia_jasa_id', $penyediaJasa)->pluck('id')->toArray();
+            $query->whereIn('detail_kegiatan_id', $detailKegiatanIds);
+        } elseif (str_contains($role[0], "Staff") || str_contains($role[0], "Bidang")) {
+            // Untuk pengguna dengan peran 'Staff' atau 'Bidang'
+            $kegiatan = Kegiatan::where('bidang_id', Auth::user()->bidang_id)->pluck('id')->toArray();
+            $detailKegiatanIds = DetailKegiatan::whereIn('kegiatan_id', $kegiatan)->pluck('id')->toArray();
+            $query->whereIn('detail_kegiatan_id', $detailKegiatanIds);
+        }
+
+        $chartData = $query->get();
 
         return response()->json($chartData);
+    }
+    private function getIdKontraktor($role)
+    {
+        if (str_contains($role[0], "Kontraktor")) {
+            $email = Auth::user()->email;
+            $penyedia_jasa = PenyediaJasa::where('email', $email)->first();
+            return $penyedia_jasa->id;
+        }
     }
     public function mapsData(Request $request)
     {

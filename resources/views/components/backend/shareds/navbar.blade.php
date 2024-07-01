@@ -14,14 +14,14 @@
                     <a href="/" class="nav-link text-darkblue">Dashboard</a>
                 </li>
                 @can('lihat informasi utama')
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle text-darkblue">Anggaran</a>
                     <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                         <li><a href="{{route('backend.dpa.index')}}" class="dropdown-item">DPA</a></li>
                         <li><a href="{{route('backend.rencana.program')}}" class="dropdown-item">Rencana Pengambilan</a></li>
                         <li><a href="{{route('backend.laporan')}}" class="dropdown-item">Laporan</a></li>
                     </ul>
-                </li>
+                </li> -->
                 @endcan
                 @can('lihat kegiatan')
                 <li class="nav-item dropdown">
