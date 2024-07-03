@@ -17,7 +17,7 @@ jobs:
         php-version: '8.0'
     - uses: actions/checkout@v4
     - name : pull no rebase
-    - run : git pull --no-rebase origin main
+      run : git pull --no-rebase origin main
     - name : Git pull
       run : git pull origin main
     - name: Copy .env
