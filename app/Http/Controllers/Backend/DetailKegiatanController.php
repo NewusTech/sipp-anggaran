@@ -28,6 +28,7 @@ class DetailKegiatanController extends Controller
             'title' => $request->title,
             'no_detail_kegiatan' => $request->no_detail_kegiatan,
             'no_kontrak' => $request->no_kontrak,
+            'no_spmk' => $request->no_spmk,
             'jenis_pengadaan' => $request->jenis_pengadaan,
             'nilai_kontrak' => $request->nilai_kontrak,
             'pagu' => 0,
@@ -109,6 +110,7 @@ class DetailKegiatanController extends Controller
         if ($detailKegiatan->update([
             'title' => $request->title,
             'no_kontrak' => $request->no_kontrak,
+            'no_spmk' => $request->no_spmk,
             'nilai_kontrak' => $request->nilai_kontrak,
             'jenis_pengadaan' => $request->jenis_pengadaan,
             'awal_kontrak' => $request->awal_kontrak,
@@ -149,6 +151,7 @@ class DetailKegiatanController extends Controller
                 'title' => $request->title,
                 'no_detail_kegiatan' => $request->no_detail_kegiatan,
                 'no_kontrak' => $request->no_kontrak,
+                'no_spmk' => $request->no_spmk,
                 'nilai_kontrak' => $request->nilai_kontrak,
                 'jenis_pengadaan' => $request->jenis_pengadaan,
                 'target' => $request->target,

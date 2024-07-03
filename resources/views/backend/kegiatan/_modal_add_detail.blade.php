@@ -24,6 +24,11 @@
                                     placeholder="Silahkan masukan nomor pekerjaan" required>
                             </div>
                             <div class="form-group">
+                                <label class="text-darkblue">Nomor SPMK</label>
+                                <input type="text" class="form-control" name="no_spmk"
+                                    placeholder="Silahkan masukan nomor SPMK" required>
+                            </div>
+                            <div class="form-group">
                                 <label class="text-darkblue">Penyedia Jasa</label>
                                 <input type="text" class="form-control" name="penyedia_jasa"
                                     placeholder="Silahkan masukan nama penyedia jasa" required>

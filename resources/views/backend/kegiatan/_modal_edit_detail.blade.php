@@ -23,6 +23,10 @@
                                 <input type="text" class="form-control" name="no_detail_kegiatan" placeholder="Silahkan masukan nomor pekerjaan" value="{{ $detail->no_detail_kegiatan }}" required>
                             </div>
                             <div class="form-group">
+                                <label class="text-darkblue">Nomor SPMK</label>
+                                <input type="text" class="form-control" name="no_spmk" placeholder="Silahkan masukan nomor spmk" value="{{ $detail->no_spmk }}" required>
+                            </div>
+                            <div class="form-group">
                                 <label class="text-darkblue">Penyedia Jasa</label>
                                 <input type="text" class="form-control" name="penyedia_jasa" placeholder="Silahkan masukan penyedia jasa" value="{{ $detail->penyedia_jasa }}" required>
                             </div>

@@ -18,6 +18,7 @@ class DetailKegiatan extends Model
         'title',
         'no_detail_kegiatan',
         'no_kontrak',
+        'no_spmk',
         'jenis_pengadaan',
         'nilai_kontrak',
         'pagu',
