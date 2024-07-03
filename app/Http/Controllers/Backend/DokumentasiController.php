@@ -32,7 +32,7 @@ class DokumentasiController extends Controller
             foreach ($file as $val) {
                 $filename = $val->getClientOriginalName();
                 $type = $val->getMimeType();
-                $path = 'file/dokumentasi/'.$filename;
+                $path = 'file/dokumentasi/' . $filename;
 
                 $fileDokumentasi = FileDokumentasi::create([
                     'dokumentasi_id' => $dokumentasi->id,
@@ -48,10 +48,10 @@ class DokumentasiController extends Controller
         }
 
         if ($dokumentasi) {
-            return redirect()->route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $request->detail_kegiatan_id])
+            return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $request->detail_kegiatan_id])
                 ->with('success', 'File dokumentasi berhasil disimpan')->with('tab', 'dokumentasi');
         }
-        return redirect()->route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $request->detail_kegiatan_id])
+        return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $request->detail_kegiatan_id])
             ->with('error', 'File dokumentasi gagal disimpan');
     }
 
@@ -64,7 +64,7 @@ class DokumentasiController extends Controller
      */
     public function update(UpdateDokumentasiRequest $request, Dokumentasi $dokumentasi): RedirectResponse
     {
-        if($dokumentasi->update([
+        if ($dokumentasi->update([
             'name' => $request->name,
             'keterangan' => $request->keterangan ?? null,
         ])) {
@@ -75,7 +75,7 @@ class DokumentasiController extends Controller
                 foreach ($file as $val) {
                     $filename = $val->getClientOriginalName();
                     $type = $val->getMimeType();
-                    $path = 'file/dokumentasi/'.$filename;
+                    $path = 'file/dokumentasi/' . $filename;
 
                     $check = FileDokumentasi::where('dokumentasi_id', $dokumentasi->id)->where('file_name', $filename)->get();
                     if (count($check) == 0) {
@@ -93,10 +93,10 @@ class DokumentasiController extends Controller
                 }
             }
 
-            return redirect()->route('backend.detail_anggaran.edit', ['detail_kegiatan_id'
+            return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id'
             => $request->detail_kegiatan_id])->with('success', 'Data Anggaran berhasil diubah')->with('tab', 'dokumentasi');
         }
-        return redirect()->route('backend.detail_anggaran.edit', ['detail_kegiatan_id'
+        return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id'
         => $request->detail_kegiatan_id])->with('error', 'Data Anggaran gagal diubah');
     }
 
@@ -108,7 +108,7 @@ class DokumentasiController extends Controller
      */
     public function destroy(Dokumentasi $dokumentasi): RedirectResponse
     {
-        if($dokumentasi->delete()) {
+        if ($dokumentasi->delete()) {
             $fileDokumentasi = FileDokumentasi::where('dokumentasi_id', $dokumentasi->id)->get();
 
             if (count($fileDokumentasi) > 0) {
@@ -120,10 +120,10 @@ class DokumentasiController extends Controller
                     }
                 }
             }
-            return redirect()->route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $dokumentasi->detail_kegiatan_id])
+            return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $dokumentasi->detail_kegiatan_id])
                 ->with('success', 'Data Dokumentasi berhasil dihapus')->with('tab', 'dokumentasi');
         }
-        return redirect()->route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $dokumentasi->detail_kegiatan_id])
+        return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $dokumentasi->detail_kegiatan_id])
             ->with('error', 'Data Dokumentasi gagal dihapus');
     }
 }

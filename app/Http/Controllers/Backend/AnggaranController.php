@@ -100,8 +100,20 @@ class AnggaranController extends Controller
             return Carbon::parse($bulan)->locale('id')->isoFormat('MMMM');
         })->toArray();
         $dataBulan = ['keuangan' => $kurvaS->pluck('keuangan'), 'fisik' => $kurvaS->pluck('fisik')];
-        $bulan = json_encode($bulanKurvaS);
         $dataBulan = json_encode($dataBulan);
+        $dataProgresFisik = json_encode($progresFisik->map(function ($progres) {
+            return [
+                'nilai' => $progres->nilai,
+                'tanggal' => $progres->tanggal,
+            ];
+        }));
+        $bulan = json_encode($bulanKurvaS);
+        if (count($progresFisik) > count($bulanKurvaS)) {
+            foreach (array_slice($progresFisik->toArray(), count($bulanKurvaS)) as $progres) {
+                $bulanKurvaS[] = Carbon::parse($progres['tanggal'])->locale('id')->isoFormat('MMMM');
+            }
+        }
+        $bulan = json_encode($bulanKurvaS);
         $totalbelanjaOperasi = Anggaran::where('detail_kegiatan_id', '=', $detail->id)->where('daya_serap', 'Belanja Operasi')->sum('daya_serap_kontrak');
         $totalbelanjaModal = Anggaran::where('detail_kegiatan_id', '=', $detail->id)->where('daya_serap', 'Belanja Modal')->sum('daya_serap_kontrak');
         $totalbelanjaTakTerduga = Anggaran::where('detail_kegiatan_id', '=', $detail->id)->where('daya_serap', 'Belanja Tak Terduga')->sum('daya_serap_kontrak');
@@ -125,6 +137,7 @@ class AnggaranController extends Controller
                 'dataBulan',
                 'program',
                 'progresFisik',
+                'dataProgresFisik',
                 'progresKeuangan',
                 'totalbelanjaOperasi',
                 'totalbelanjaModal',
@@ -229,10 +242,10 @@ class AnggaranController extends Controller
             'pagu' => $totalDayaSerap
         ]);
         if ($anggaran) {
-            return redirect()->route('backend.detail_anggaran.edit', ['detail_kegiatan_id'
+            return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id'
             => $request->detail_kegiatan_id])->with('success', 'Data Anggaran berhasil disimpan')->with('tab', 'anggaran');
         }
-        return redirect()->route('backend.detail_anggaran.edit', ['detail_kegiatan_id'
+        return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id'
         => $request->detail_kegiatan_id])->with('error', 'Data Anggaran gagal disimpan');
     }
 
@@ -257,10 +270,10 @@ class AnggaranController extends Controller
             $detailKegiatan->update([
                 'pagu' => $totalDayaSerap
             ]);
-            return redirect()->route('backend.detail_anggaran.edit', ['detail_kegiatan_id'
+            return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id'
             => $request->detail_kegiatan_id])->with('success', 'Data Anggaran berhasil diubah')->with('tab', 'anggaran');
         }
-        return redirect()->route('backend.detail_anggaran.edit', ['detail_kegiatan_id'
+        return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id'
         => $request->detail_kegiatan_id])->with('error', 'Data Anggaran gagal diubah');
     }
 
@@ -272,7 +285,7 @@ class AnggaranController extends Controller
         foreach ($dataBaru as $data) {
             $rencanaKegiatan = RencanaKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)
                 ->where('minggu', $data['minggu'])->where('bulan', $data['bulan'])->update([
-                    'keuangan' => $data['keuangan'],
+                    // 'keuangan' => $data['keuangan'],
                     'fisik' => $data['fisik']
                 ]);
             // dd($data['bulan'], $rencanaKegiatan->get());
@@ -334,10 +347,10 @@ class AnggaranController extends Controller
             $detailKegiatan->update([
                 'pagu' => $totalDayaSerap
             ]);
-            return redirect()->route('backend.detail_anggaran.edit', ['detail_kegiatan_id'
+            return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id'
             => $anggaran->detail_kegiatan_id])->with('success', 'Data Anggaran berhasil dihapus')->with('tab', 'anggaran');
         }
-        return redirect()->route('backend.detail_anggaran.edit', ['detail_kegiatan_id'
+        return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id'
         => $anggaran->detail_kegiatan_id])->with('error', 'Data Anggaran gagal dihapus');
     }
 }
