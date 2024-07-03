@@ -3,11 +3,11 @@
         <div class="col-12">
             <table class="table table-responsive">
                 <tr>
-                    <td class="text-bold text-darkblue">Detail Kegiatan</td>
+                    <td class="text-bold text-darkblue">Detail Kegiatan Pekerjaan</td>
                     <td>{{ $detail->title }}</td>
                 </tr>
                 <tr>
-                    <td class="text-bold text-darkblue">Kegiatan</td>
+                    <td class="text-bold text-darkblue">Kegiatan Pekerjaan</td>
                     <td>{{ $detail->kegiatan->title }}</td>
                 </tr>
                 <tr>
