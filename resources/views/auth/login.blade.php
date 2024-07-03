@@ -14,7 +14,7 @@
                         <img src="{{ asset('image/logo-pu-new.png') }}" alt="PUPR Logo" class="login-img" />
                         <div class="title-logo-pu">
                             <h2>PU-Net</h2>
-                            <p>Dinas PUPR Kabupaten Tulang Bawang Baratt</p>
+                            <p>Dinas PUPR Kabupaten Tulang Bawang Barat</p>
                         </div>
                     </div>
                     <h1 class="text-bold title-login">
