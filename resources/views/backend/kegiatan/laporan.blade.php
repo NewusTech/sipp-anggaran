@@ -134,13 +134,13 @@
                                             <td></td>
                                             <td>{{ $detail->no_kontrak }}</td>
                                             <td>{{ $detail->title }}</td>
-                                            <td>{{ $detail->penyedia->name }}</td>
+                                            <td>{{ $detail->penyedia_jasa }}</td>
                                             <td>{{ \Carbon\Carbon::parse($detail->awal_kontrak )->format('d-m-Y') }}</td>
                                             <td>{{ $detail->nilai_kontrak }}</td>
                                             <td>-</td>
                                             <td>-</td>
                                             <td>-</td>
-                                            <td>Nomor SPMK</td>
+                                            <td>{{ $detail->no_spmk }}</td>
                                             <td>{{ \Carbon\Carbon::parse($detail->akhir_kontrak )->format('d-m-Y') }}</td>
                                             <td>{{ $detail->progress }}</td>
                                         </tr>
