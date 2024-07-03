@@ -257,6 +257,7 @@ class KegiatanController extends Controller
         $tahun = $request->tahun;
         $bulan = $request->bulan;
         $requestBidang = $request->bidang;
+        $search = $request->search;
 
         $bidang_id = null;
         $role = Auth::user()->getRoleNames();
@@ -273,7 +274,14 @@ class KegiatanController extends Controller
         if ($requestBidang) {
             $bidang_id = $requestBidang;
         }
-        $bidang = Bidang::with('kegiatan.detail.progres')->where('id', $bidang_id)->get();
+        if ($search) {
+            $bidang = Bidang::with(['kegiatan' => function($query) use ($search) {
+                $query->where('title', 'LIKE', '%' . $search . '%')
+                      ->with('detail.progres');
+            }])->where('id', $bidang_id)->get();
+        }else{
+            $bidang = Bidang::with('kegiatan.detail.progres')->where('id', $bidang_id)->get();
+        }
         if ($bidang_id == null) {
             $bidang = Bidang::with('kegiatan.detail.progres')->get();
         }
@@ -289,11 +297,9 @@ class KegiatanController extends Controller
             });
         });
 
-
         $kegiatan = Kegiatan::whereIn('id', $kegiatan_id->toArray())->get();
         $details = $role[0] == 'Kontraktor' ? DetailKegiatan::with('progres')->where('penyedia_jasa_id', $penyedia_jasa->id)->get() : DetailKegiatan::with('progres')->whereIn('kegiatan_id', $kegiatan_id->toArray())->get();
-
-        return view('backend.kegiatan.laporan', compact(['listBidang', 'tahun', 'bulan', 'bidang', 'requestBidang']));
+        return view('backend.kegiatan.laporan', compact(['listBidang', 'tahun', 'bulan', 'bidang', 'requestBidang', 'search']));
     }
 
     public function laporanDPA(Request $request)
