@@ -85,7 +85,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <h4 class="text-darkblue"><a href="{{route('backend.kegiatan.index')}}" class="btn btn-default rounded"><i class="fas fa-arrow-left"></i></a><strong> PROGRES KEGIATAN </strong></h4>
+                    <h4 class="text-darkblue"><a href="{{route('backend.kegiatan.index')}}" class="btn btn-default rounded"><i class="fas fa-arrow-left"></i></a><strong> PROGRES PEKERJAAN </strong></h4>
                 </div>
                 <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
                     <li class="nav-item">

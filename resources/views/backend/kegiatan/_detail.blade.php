@@ -3,21 +3,22 @@
         <div class="col-12">
             <table class="table table-responsive">
                 <tr>
-                    <td class="text-bold text-darkblue">Detail Kegiatan Pekerjaan</td>
-                    <td>{{ $detail->title }}</td>
+                    <td class="text-bold text-darkblue">Program</td>
+                    <td>{{ $kegiatan->program }}</td>
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Kegiatan Pekerjaan</td>
                     <td>{{ $detail->kegiatan->title }}</td>
                 </tr>
                 <tr>
-                    <td class="text-bold text-darkblue">Program</td>
-                    <td>{{ $kegiatan->program }}</td>
+                    <td class="text-bold text-darkblue">Sub Kegiatan Pekerjaan</td>
+                    <td>{{ $detail->title }}</td>
                 </tr>
                 <tr>
-                    <td class="text-bold text-darkblue">Nomor Kontrak</td>
-                    <td>{{ $detail->no_kontrak }}</td>
+                    <td class="text-bold text-darkblue">Nomor Pekerjaan</td>
+                    <td>{{ $detail->no_detail_kegiatan }}</td>
                 </tr>
+
                 <tr>
                     <td class="text-bold text-darkblue">Tahun</td>
                     <td>{{ $detail->kegiatan->tahun }}</td>
@@ -27,8 +28,16 @@
                     <td>{{ $detail->jenis_pengadaan }}</td>
                 </tr>
                 <tr>
+                    <td class="text-bold text-darkblue">Nomor Kontrak</td>
+                    <td>{{ $detail->no_kontrak }}</td>
+                </tr>
+                <tr>
                     <td class="text-bold text-darkblue">Nilai Kontrak</td>
                     <td>Rp. {{ number_format($kegiatan->alokasi) }}</td>
+                </tr>
+                <tr>
+                    <td class="text-bold text-darkblue">Penyedia Jasa</td>
+                    <td>{{ $detail->penyedia_jasa }}</td>
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Realisasi</td>
@@ -41,6 +50,10 @@
                 <tr>
                     <td class="text-bold text-darkblue">Akhir Kontrak</td>
                     <td>{{ $detail->akhir_kontrak->format('d-m-Y') }}</td>
+                </tr>
+                <tr>
+                    <td class="text-bold text-darkblue">Target Pekerjaan</td>
+                    <td>{{ $detail->target }}</td>
                 </tr>
             </table>
         </div>
