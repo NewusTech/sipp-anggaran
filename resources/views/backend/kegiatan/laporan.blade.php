@@ -81,7 +81,10 @@
                                         @endfor
                                 </select>
                             </div>
-                            <div class="col-1">
+                            <div class="col-3">
+                                <input type="search" class="form-control" name="search" placeholder="Cari Kegiatan ..." value="{{ request('search') }}">
+                            </div>
+                            <div class="col-2">
                                 <button type="submit" class="btn btn-primary btn-block">Filter</button>
                             </div>
                             <div class="col-2">
@@ -104,77 +107,50 @@
                         <thead class="text-bold">
                             <tr>
                                 <td rowspan="2">No</td>
-                                <td rowspan="2">Tahun / Kontrak</td>
-                                <td rowspan="2">Kegiatan/Sub Kegiatan</td>
-                                <td rowspan="2">Paket</td>
-                                <td rowspan="2">Pagu</td>
-                                <td colspan="2">Realisasi</td>
-                                <td rowspan="2">Sisa</td>
-                            </tr>
-                            <tr>
-                                <td>Fisik</td>
-                                <td>Keuangan</td>
+                                <td rowspan="2">No Kontrak</td>
+                                <td rowspan="2">Nama Pekerjaan</td>
+                                <td rowspan="2">Perusahaan</td>
+                                <td rowspan="2">Tgl Kontrak</td>
+                                <td rowspan="2">Nilai Kontrak</td>
+                                <td rowspan="2">Panjang Penanganan(KM)</td>
+                                <td rowspan="2">Lebar Penanganan(M)</td>
+                                <td rowspan="2">Jenis Penanganan</td>
+                                <td rowspan="2">Nomor SPMK</td>
+                                <td rowspan="2">Tanggal Akhir Kontrak</td>
+                                <td rowspan="2">Progress</td>
                             </tr>
                         </thead>
                         <tbody>
                             @if ($bidang->count() > 0)
                             @foreach ($bidang as $item)
-                            @foreach ($item->kegiatan as $kegiatan)
-                            <tr class="bg-secondary">
-                                <td>{{$loop->iteration}}</td>
-                                <td>{{\Carbon\Carbon::parse($kegiatan->created_at)->format('Y')}}</td>
-                                <td>{{$kegiatan->title}}</td>
-                                <td>{{$kegiatan->jenis_paket}}</td>
-                                <td>Rp.{{number_format($kegiatan->alokasi)}}</td>
-                                <td></td>
-                                <td></td>
-                                <td>Rp.{{ number_format($kegiatan->sisa)}}</td>
-                            </tr>
-                            @php
-                            $totalRealisasi=0;
-                            $totalSisa=0;
-                            @endphp
-                            @foreach ($kegiatan->detail as $detail)
-                            <tr>
-                                <td></td>
-                                <td>{{\Carbon\Carbon::parse($detail->awal_kontrak )->format('d-m-Y') . ' - ' . \Carbon\Carbon::parse($detail->akhir_kontrak)->format('d-m-Y')}}</td>
-                                <td>{{$detail->title}}</td>
-                                <td>Fisik</td>
-                                <td>Rp.{{number_format((int)$detail->pagu)}}</td>
-                                <td>
-                                    @if ($detail->progres->count()>0 )
-                                    {{$detail->progres->where('jenis_progres','fisik')->sum('nilai')}}%
-                                    @else
-                                    {{'-'}}
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($detail->progres->count()>0)
-                                    {{'Rp.'. number_format($detail->progres->where('jenis_progres','keuangan')->sum('nilai'))}}
-                                    @else
-                                    {{'-'}}
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($detail->progres->count()>0)
-                                    {{'Rp.'. number_format((int)$detail->pagu - $detail->progres->where('jenis_progres','keuangan')->sum('nilai'))}}
-                                    @else
-                                    {{'-'}}
-                                    @endif
-                                </td>
-                            </tr>
-                            @php
-                            $totalRealisasi+= $detail->progres->where('jenis_progres','keuangan')->sum('nilai');
-                            $totalSisa += (int)$detail->pagu - $detail->progres->where('jenis_progres','keuangan')->sum('nilai');
-                            @endphp
-                            @endforeach
-                            <tr>
-                                <td class="text-bold">Total</td>
-                                <td colspan="5"></td>
-                                <td class="text-bold">Rp.{{number_format($totalRealisasi)}}</td>
-                                <td class="text-bold">Rp.{{number_format($totalSisa)}}</td>
-                            </tr>
-                            @endforeach
+                                @foreach ($item->kegiatan as $kegiatan)
+                                <tr class="bg-secondary">
+                                    <td>{{$loop->iteration}}</td>
+                                    <td colspan="11">{{$kegiatan->title}}</td>
+                                </tr>
+                                @if ( count($kegiatan->detail) > 0)
+                                    @foreach ($kegiatan->detail as $detail)
+                                        <tr>
+                                            <td></td>
+                                            <td>{{ $detail->no_kontrak }}</td>
+                                            <td>{{ $detail->title }}</td>
+                                            <td>{{ $detail->penyedia->name }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($detail->awal_kontrak )->format('d-m-Y') }}</td>
+                                            <td>{{ $detail->nilai_kontrak }}</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>Nomor SPMK</td>
+                                            <td>{{ \Carbon\Carbon::parse($detail->akhir_kontrak )->format('d-m-Y') }}</td>
+                                            <td>{{ $detail->progress }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="16"><span>Tidak Ada Data</span></td>
+                                    </tr>
+                                @endif  
+                                @endforeach
                             @endforeach
                             @else
                             <tr>

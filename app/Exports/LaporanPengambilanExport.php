@@ -66,7 +66,6 @@ class LaporanPengambilanExport implements FromView
                 $kegiatan->sisa = $kegiatan->alokasi - $total_keuangan_kegiatan;
             });
         });
-
-        return view('backend.exports.laporan', compact(['tahun', 'bulan', 'bidang']));
+        return view('backend.exports.laporan', compact(['tahun', 'bulan', 'bidang', 'bidang_id']));
     }
 }
