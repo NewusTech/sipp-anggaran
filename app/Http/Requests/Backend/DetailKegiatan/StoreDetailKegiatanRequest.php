@@ -33,7 +33,9 @@ class StoreDetailKegiatanRequest extends FormRequest
             'target' => 'required',
             'alamat' => 'required',
             'kegiatan_id' => 'required',
-            'penyedia_jasa_id' => 'required'
+            // 'penyedia_jasa_id' => 'required'
+            'penyedia_jasa' => 'required',
+            'nilai_kontrak' => 'required'
         ];
     }
 }

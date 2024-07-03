@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><strong> Edit Detail Kegiatan </strong></h5>
+                <h5 class="modal-title"><strong> Edit Detail Pekerjaan </strong></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,14 +15,18 @@
                         <div class="col-sm-12">
                             <!-- text input -->
                             <div class="form-group">
-                                <label class="text-darkblue">Judul</label>
-                                <input type="text" class="form-control" name="title" placeholder="Silahkan masukan judul" value="{{ $detail->title }}" required>
+                                <label class="text-darkblue">Judul Pekerjaan</label>
+                                <input type="text" class="form-control" name="title" placeholder="Silahkan masukan judul pekerjaan" value="{{ $detail->title }}" required>
                             </div>
                             <div class="form-group">
-                                <label class="text-darkblue">Nomor Kegiatan</label>
-                                <input type="text" class="form-control" name="no_detail_kegiatan" placeholder="Silahkan masukan nomor kegiatan" value="{{ $detail->no_detail_kegiatan }}" required>
+                                <label class="text-darkblue">Nomor Pekerjaan</label>
+                                <input type="text" class="form-control" name="no_detail_kegiatan" placeholder="Silahkan masukan nomor pekerjaan" value="{{ $detail->no_detail_kegiatan }}" required>
                             </div>
                             <div class="form-group">
+                                <label class="text-darkblue">Penyedia Jasa</label>
+                                <input type="text" class="form-control" name="penyedia_jasa" placeholder="Silahkan masukan penyedia jasa" value="{{ $detail->penyedia_jasa }}" required>
+                            </div>
+                            {{-- <div class="form-group">
                                 <label class="text-darkblue">Penyedia Jasa</label>
                                 <select class="form-control" name="penyedia_jasa_id" id="penyedia_jasa_id" required>
                                     <option value="">-- Pilih Penyedia Jasa --</option>
@@ -30,11 +34,15 @@
                                     <option value="{{ $item->id }}" {{$item->id == $detail->penyedia_jasa_id ? 'selected' : ''}}>{{ $item->name }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <label class="text-darkblue">Nomor Kontrak</label>
                                 <input type="text" hidden="true" name="kegiatan_id" value="{{ $kegiatan->id }}">
                                 <input type="text" class="form-control" name="no_kontrak" placeholder="Silahkan masukan nomor kontrak" value="{{$detail->no_kontrak}}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-darkblue">Nilai Kontrak</label>
+                                <input type="text" class="form-control" name="nilai_kontrak" placeholder="Silahkan masukan nilai kontrak" value="{{ $detail->nilai_kontrak }}" required>
                             </div>
                             <div class="form-group">
                                 <label class="text-darkblue">Jenis Pengadaan</label>

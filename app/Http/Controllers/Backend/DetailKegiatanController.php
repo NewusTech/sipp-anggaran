@@ -29,7 +29,7 @@ class DetailKegiatanController extends Controller
             'no_detail_kegiatan' => $request->no_detail_kegiatan,
             'no_kontrak' => $request->no_kontrak,
             'jenis_pengadaan' => $request->jenis_pengadaan,
-            'nilai_kontrak' => 0,
+            'nilai_kontrak' => $request->nilai_kontrak,
             'pagu' => 0,
             'awal_kontrak' => $request->awal_kontrak,
             'akhir_kontrak' => $request->akhir_kontrak,
@@ -43,8 +43,9 @@ class DetailKegiatanController extends Controller
             'daya_serap_kontrak' => $request->daya_serap_kontrak ?? 0,
             'sisa_kontrak' => $request->sisa_kontrak ?? 0,
             'sisa_anggaran' => $request->sisa_anggaran ?? 0,
-            'penyedia_jasa_id' => $request->penyedia_jasa_id,
-            'progress' => 0
+            'penyedia_jasa_id' => $request->penyedia_jasa_id ?? null,
+            'progress' => 0,
+            'penyedia_jasa' => $request->penyedia_jasa
         ]);
 
         $startDate = Carbon::parse($request->awal_kontrak);
@@ -108,6 +109,7 @@ class DetailKegiatanController extends Controller
         if ($detailKegiatan->update([
             'title' => $request->title,
             'no_kontrak' => $request->no_kontrak,
+            'nilai_kontrak' => $request->nilai_kontrak,
             'jenis_pengadaan' => $request->jenis_pengadaan,
             'awal_kontrak' => $request->awal_kontrak,
             'akhir_kontrak' => $request->akhir_kontrak,
@@ -147,13 +149,15 @@ class DetailKegiatanController extends Controller
                 'title' => $request->title,
                 'no_detail_kegiatan' => $request->no_detail_kegiatan,
                 'no_kontrak' => $request->no_kontrak,
+                'nilai_kontrak' => $request->nilai_kontrak,
                 'jenis_pengadaan' => $request->jenis_pengadaan,
                 'target' => $request->target,
                 'awal_kontrak' => $request->awal_kontrak,
                 'akhir_kontrak' => $request->akhir_kontrak,
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
-                'penyedia_jasa_id' => $request->penyedia_jasa_id,
+                'penyedia_jasa' => $request->penyedia_jasa,
+                'alamat' => $request->alamat,
                 'kegiatan_id' => $request->kegiatan_id,
             ])) {
                 return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Anggaran berhasil diubah');

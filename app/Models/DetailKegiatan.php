@@ -32,6 +32,7 @@ class DetailKegiatan extends Model
         'progress',
         'alamat',
         'kegiatan_id',
+        'penyedia_jasa',
         'penyedia_jasa_id',
         'realisasi',
         'verifikasi_admin',

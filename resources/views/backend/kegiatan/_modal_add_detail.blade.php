@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><strong> Tambah Detail Kegiatan </strong></h5>
+                <h5 class="modal-title"><strong> Tambah Detail Pekerjaan </strong></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -14,16 +14,21 @@
                         <div class="col-sm-12">
                             <!-- text input -->
                             <div class="form-group">
-                                <label class="text-darkblue">Judul</label>
+                                <label class="text-darkblue">Judul Pekerjaan</label>
                                 <input type="text" class="form-control" name="title"
-                                    placeholder="Silahkan masukan judul" required>
+                                    placeholder="Silahkan masukan judul pekerjaan" required>
                             </div>
                             <div class="form-group">
-                                <label class="text-darkblue">Nomor Kegiatan</label>
+                                <label class="text-darkblue">Nomor Pekerjaan</label>
                                 <input type="text" class="form-control" name="no_detail_kegiatan"
-                                    placeholder="Silahkan masukan nomor kegiatan" required>
+                                    placeholder="Silahkan masukan nomor pekerjaan" required>
                             </div>
                             <div class="form-group">
+                                <label class="text-darkblue">Penyedia Jasa</label>
+                                <input type="text" class="form-control" name="penyedia_jasa"
+                                    placeholder="Silahkan masukan nama penyedia jasa" required>
+                            </div>
+                            {{-- <div class="form-group">
                                 <label class="text-darkblue">Penyedia Jasa</label>
                                 <select class="form-control" name="penyedia_jasa_id" id="penyedia_jasa_id" required>
                                     <option value="">-- Pilih Penyedia Jasa --</option>
@@ -31,12 +36,17 @@
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <label class="text-darkblue">Nomor Kontrak</label>
                                 <input type="text" hidden="true" name="kegiatan_id" value="{{ $kegiatan->id }}">
                                 <input type="text" class="form-control" name="no_kontrak"
                                     placeholder="Silahkan masukan nomor kontrak" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-darkblue">Nilai Kontrak</label>
+                                <input type="text" class="form-control" name="nilai_kontrak"
+                                    placeholder="Silahkan masukan nilai kontrak" required>
                             </div>
                             <div class="form-group">
                                 <label class="text-darkblue">Jenis Pengadaan</label>
@@ -56,10 +66,10 @@
                             <div class="form-group">
                                 <label class="text-darkblue">Target</label>
                                 <input type="text" class="form-control" name="target"
-                                    placeholder="Silahkan masukan target satuan hari" required>
+                                    placeholder="Silahkan masukan target pekerjaan" required>
                             </div>
                             <div class="form-group">
-                                <label class="text-darkblue">Alamat</label>
+                                <label class="text-darkblue">Lokasi Pekerjaan</label>
                                 <textarea name="alamat" class="form-control" id="alamat" cols="30" rows="5"></textarea>
                             </div>
                             <label class="text-darkblue">Maps</label>
