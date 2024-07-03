@@ -151,7 +151,7 @@
 
 
 
-<script>
+<script text="text/javascript">
     $(function() {
         $("#table_anggran").DataTable({
             "responsive": true,
@@ -168,16 +168,6 @@
         $(".search input").before(`<span class="fa fa-search"></span>`);
         $(".search input").attr("placeholder", "Ketik Kata Kunci");
         $(".search input").attr("style", "width: 13rem;");
-
-        // $("#table_anggran_2").DataTable({
-        //     "responsive": true,
-        //     "autoWidth": false,
-        //     "paging": false,
-        //     "lengthChange": false,
-        //     "searching": false,
-        //     "ordering": false,
-        //     "collapsed": true,
-        // });
 
         $("#table_dokumentasi").DataTable({
             "responsive": true,
@@ -221,272 +211,50 @@
             .addTo(map)
             .bindPopup("{{ $detail->alamat }}");
 
-        //load data chart
-        $('#custom-content-below-grafik-tab').on('click', function() {
-            console.log('load data nih');
-
-            $.ajax({
-                url: "{{ route('backend.data_anggaran.index', ['type' => 'realisasi']) }}",
-                type: "get",
-                data: {
-
-                },
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(xhr) {
-                    //Do Something to handle error
-                    console.log(xhr);
-                }
-            });
-
-            $.ajax({
-                url: "{{ route('backend.data_anggaran.index', ['type' => 'schedule']) }}",
-                type: "get",
-                data: {
-
-                },
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(xhr) {
-                    //Do Something to handle error
-                    console.log(xhr);
-                }
-            });
-
-            $.ajax({
-                url: "{{ route('backend.data_anggaran.index', ['type' => 'keuangan']) }}",
-                type: "get",
-                data: {
-
-                },
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(xhr) {
-                    //Do Something to handle error
-                    console.log(xhr);
-                }
-            });
-
-        });
-
-
-
-        var areaChartData = {
-            labels: ['31 Mar 2020', '30 Apr 2020', '29 Mei 2020', '30 Jun 2020', '30 Jul 2020', '31 Aug 2020', '30 Sep 2020'],
-            datasets: [{
-                    label: 'Realisasi',
-                    backgroundColor: 'rgba(60,141,188,0.9)',
-                    borderColor: 'rgba(60,141,188,0.9)',
-                    pointRadius: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(60,141,188,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(60,141,188,1)',
-                    data: [0, 10, 20, 30, 40, 100, 60]
-                },
-                {
-                    label: 'Target',
-                    backgroundColor: 'rgb(184,4,4)',
-                    borderColor: 'rgb(239,0,0)',
-                    pointRadius: true,
-                    pointColor: 'rgb(239,0,0)',
-                    pointStrokeColor: '#ef0000',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgb(239,0,0)',
-                    data: [10, 10, 20, 30, 11, 20, 60]
-                },
-            ]
-        }
-
-        var areaChartOptions = {
-            maintainAspectRatio: true,
-            responsive: true,
-            legend: {
-                display: true,
-                position: 'bottom',
-                labels: {
-                    boxWidth: 25,
-                    boxHeight: 5,
-                    fontsize: 8
-                }
-            },
-            scales: {
-                xAxes: [{
-                    gridLines: {
-                        display: false,
-                    },
-                    ticks: {
-                        fontSize: 9
-                    }
-                }],
-                yAxes: [{
-                    gridLines: {
-                        display: true,
-                    },
-                    scaleLabel: {
-                        labelString: 'Progress (%)',
-                        display: true,
-                        fontSize: 9
-                    },
-                    ticks: {
-                        fontSize: 9
-                    }
-                }]
-            }
-        }
-
-        var areaChartPaguOptions = {
-            maintainAspectRatio: true,
-            responsive: true,
-            legend: {
-                display: true,
-                position: 'bottom',
-                labels: {
-                    boxWidth: 25,
-                    boxHeight: 5,
-                    fontsize: 8
-                }
-            },
-            scales: {
-                xAxes: [{
-                    gridLines: {
-                        display: false,
-                    },
-                    ticks: {
-                        fontSize: 9
-                    }
-                }],
-                yAxes: [{
-                    gridLines: {
-                        display: true,
-                    },
-                    scaleLabel: {
-                        labelString: 'Pagu (Rp.)',
-                        display: true,
-                        fontSize: 9
-                    },
-                    ticks: {
-                        fontSize: 9
-                    }
-                }]
-            }
-        }
-
-        //-------------
-        //- LINE CHART -
-        //--------------
-        var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
-        var lineChartOptions = $.extend(true, {}, areaChartOptions)
-        var lineChartData = $.extend(true, {}, areaChartData)
-        lineChartData.datasets[0].fill = false;
-        lineChartData.datasets[1].fill = false;
-        lineChartOptions.datasetFill = false
-
-        var lineChart = new Chart(lineChartCanvas, {
-            type: 'line',
-            data: lineChartData,
-            options: lineChartOptions
-        })
-
         // Kurva S
         let listBulan = <?php echo $bulan; ?>;
-        let dataBulan = <?php echo $dataBulan; ?>;
-        var kurvaSData = {
+
+        let dataRencana = <?php echo $dataBulan; ?>;
+        let dataProgresFisik = <?php echo $dataProgresFisik; ?>;
+
+        let progresFisik = [];
+        for (let key in dataProgresFisik) {
+            if (dataProgresFisik.hasOwnProperty(key)) {
+                progresFisik.push(dataProgresFisik[key]);
+            }
+        }
+        var kurvaSFisik = {
             // labels data generate from kontrak
             labels: listBulan,
             datasets: [{
-                    label: 'Keuangan',
-                    backgroundColor: 'rgba(12, 191, 218, 0.8)',
-                    borderColor: 'rgba(12, 191, 218, 0.8)',
-                    data: dataBulan.keuangan // the length of month generate from contract and end contract
-                },
-                {
-                    label: 'Fisik',
+                    label: 'Rencana Fisik',
                     backgroundColor: 'rgba(219, 31, 87, 0.8)',
                     borderColor: 'rgba(219, 31, 87, 0.8)',
-                    data: dataBulan.fisik // the length of month generate from contract and end contract
+                    data: dataRencana.fisik // the length of month generate from contract and end contract
                 },
-            ]
-        }
 
-        var lineChartCanvas = $('#kurvaS').get(0).getContext('2d')
-        var lineChartData = $.extend(true, {}, kurvaSData)
-        lineChartData.datasets[0].fill = false;
-        lineChartData.datasets[1].fill = false;
-        lineChartOptions.datasetFill = false
-
-        var lineChart = new Chart(lineChartCanvas, {
-            type: 'line',
-            data: lineChartData,
-            options: lineChartOptions
-        })
-
-        var lineChartScheduleCnvs = $('#lineChartSchedule').get(0).getContext('2d')
-        var lineChartScheduleOptions = $.extend(true, {}, areaChartOptions)
-        var lineChartScheduleData = $.extend(true, {}, areaChartData)
-        lineChartScheduleData.datasets[0].fill = false;
-        lineChartScheduleData.datasets[1].fill = false;
-        lineChartScheduleOptions.datasetFill = false
-
-        var lineChartSchedule = new Chart(lineChartScheduleCnvs, {
-            type: 'line',
-            data: lineChartScheduleData,
-            options: lineChartScheduleOptions
-        })
-
-
-        var areaChartData = {
-            labels: ['31 Mar 2020', '30 Apr 2020', '29 Mei 2020', '30 Jun 2020', '30 Jul 2020', '31 Aug 2020', '30 Sep 2020'],
-            datasets: [{
-                    label: 'Realisasi',
-                    backgroundColor: 'rgba(60,141,188,0.9)',
-                    borderColor: 'rgba(60,141,188,0.9)',
-                    pointRadius: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(60,141,188,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(60,141,188,1)',
-                    data: [1000000, 5000000, 1000000, 3000000, 6000000, 1000000, 2000000]
-                },
                 {
-                    label: 'Target',
-                    backgroundColor: 'rgb(184,4,4)',
-                    borderColor: 'rgb(239,0,0)',
-                    pointRadius: true,
-                    pointColor: 'rgb(239,0,0)',
-                    pointStrokeColor: '#ef0000',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgb(239,0,0)',
-                    data: [1000000, 2000000, 3000000, 2500000, 3500000, 5000000, 4000000]
+                    label: 'Progres Fisik',
+                    backgroundColor: '#242e7d',
+                    borderColor: '#242e7d',
+                    data: progresFisik.map(({
+                        nilai
+                    }) => nilai) // the length of month generate from contract and end contract
                 },
             ]
         }
 
-        var lineChartKeuangan = $('#lineKeuanganChart').get(0).getContext('2d')
-        var lineChartKeuanganOptions = $.extend(true, {}, areaChartPaguOptions)
-        var lineChartKeuanganData = $.extend(true, {}, areaChartData)
-        lineChartKeuanganData.datasets[0].fill = false;
-        lineChartKeuanganData.datasets[1].fill = false;
-        lineChartKeuanganOptions.datasetFill = false
+        var kurvaSFisikCanvas = $('#kurvaS').get(0).getContext('2d')
+        var kurvaSFisikData = $.extend(true, {}, kurvaSFisik)
+        // lineChartData.datasets[0].fill = false;
+        // lineChartData.datasets[1].fill = false;
 
-        var lineChartKeuangan = new Chart(lineChartKeuangan, {
+        var lineChart = new Chart(kurvaSFisikCanvas, {
             type: 'line',
-            data: lineChartKeuanganData,
-            options: lineChartKeuanganOptions
+            data: kurvaSFisikData,
         })
 
-        $('#progress').on('change', function() {
-            if (parseInt(this.value) > 0 && parseInt(this.value) <= 100) {
-                $('#progress-error').text('')
-                $('#btn-update-anggaran').attr('disabled', false);
-            } else {
-                $('#progress-error').text('Masukan progress dari 1 sampai 100 !')
-                $('#btn-update-anggaran').attr('disabled', true);
-            }
-        });
+
 
     });
 
