@@ -53,6 +53,13 @@
         top: 10px;
         right: 10px;
     }
+
+    .table-dokumentasi>.table th,
+    .table-dokumentasi>.table td {
+        vertical-align: middle;
+        padding: 0;
+        align-items: center;
+    }
 </style>
 
 {{-- <link rel="stylesheet" href="{{ asset('css/select_file.css') }}">--}}
@@ -112,9 +119,6 @@
                     <li class="nav-item">
                         <a class="nav-link {{session('tab') == 'dokumentasi'? 'active' : ''}}" id="custom-content-below-dokumentasi-tab" data-toggle="pill" href="#custom-content-above-dokumentasi" role="tab" aria-controls="custom-content-below-dokumentasi" aria-selected="true">Dokumentasi</a>
                     </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link " id="custom-content-below-grafik-tab" data-toggle="pill" href="#custom-content-above-grafik" role="tab" aria-controls="custom-content-below-grafik" aria-selected="true">Grafik</a>
-                    </li> -->
                 </ul>
                 <div class="tab-content" id="custom-content-below-tabContent">
                     @include('backend.kegiatan._detail')
@@ -125,7 +129,6 @@
                     @include('backend.kegiatan._progres')
                     {{-- @include('backend.kegiatan._pengambilan') --}}
                     @include('backend.kegiatan._dokumentasi')
-                    @include('backend.kegiatan._grafik')
                 </div>
             </div>
         </div>
@@ -179,7 +182,7 @@
             "collapsed": true,
         });
         if ($("#table_dokumentasi_filter").length) {
-            $("#table_dokumentasi_filter").append('@can("tambah dokumentasi")<button id="addDokumentasi" class="btn btn-primary btn-sm btn-add" data-toggle="modal" data-target="#modal-lg-create-dokumentasi"><i class="fas fa-plus"></i></button>@endcan');
+            $("#table_dokumentasi_filter").append('@can("tambah dokumentasi")<button id="addDokumentasi" class="btn btn-primary btn-sm btn-add" data-toggle="modal" data-target="#modal-lg-create-dokumentasi"><i class="fas fa-plus"></i> Upload Dokumentasi</button>@endcan');
             $("#table_dokumentasi_filter").addClass('btn-action-right');
             $("#table_dokumentasi_filter label").addClass('search');
             $(".search input").before(`<span class="fa fa-search"></span>`);

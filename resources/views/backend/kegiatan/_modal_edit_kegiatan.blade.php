@@ -23,7 +23,7 @@
                                 <input type="text" class="form-control" name="no_rek" value="{{$kegiatan->no_rek}}" placeholder="Silahkan masukan nomor rekening" required>
                             </div>
                             <div class="form-group">
-                                <label class="text-darkblue">Alokasi</label>
+                                <label class="text-darkblue">Pagu Anggaran</label>
                                 <input type="text" class="form-control" name="alokasi" value="{{$kegiatan->alokasi}}" placeholder="Silahkan masukan alokasi" required>
                             </div>
                             <div class="form-group">

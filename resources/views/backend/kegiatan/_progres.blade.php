@@ -1,4 +1,4 @@
-<div class="tab-pane fade show {{ session('tab') == 'kurva_s' ? 'active' : '' }}" id="custom-content-below-progres" role="tabpanel" aria-labelledby="custom-content-belowprogres-tab">
+<div class="tab-pane fade show {{ session('tab') == 'progres' ? 'active' : '' }}" id="custom-content-below-progres" role="tabpanel" aria-labelledby="custom-content-belowprogres-tab">
     <div class="row">
         <!-- Progress Fisik -->
         <div class="col-md-6">

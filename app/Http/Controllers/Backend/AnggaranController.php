@@ -294,7 +294,7 @@ class AnggaranController extends Controller
             // dd($data['keuangan'], $data['fisik'], $rencana);
         }
 
-        return redirect()->back()->with('success', 'Data kurva berhasil diperbarui.');
+        return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail_kegiatan_id])->with('success', 'Data kurva berhasil diperbarui.')->with('tab', 'kurva_s');
     }
 
 
@@ -307,7 +307,7 @@ class AnggaranController extends Controller
         $progres->jenis_progres = $request->jenis_progres;
         $progres->save();
 
-        return redirect()->back()->with('success', 'Progres kegiatan berhasil ditambahkan');
+        return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail_kegiatan_id])->with('success', 'Progres kegiatan berhasil ditambahkan')->with('tab', 'kurva_s');
     }
 
     public function updateProgres(Request $request, $id)
@@ -319,7 +319,7 @@ class AnggaranController extends Controller
             'nilai' => $request->nilai
         ]);
 
-        return redirect()->back()->with('success', 'Progres kegiatan berhasil diperbarui');
+        return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $progres->detail_kegiatan_id])->with('success', 'Progres kegiatan berhasil diperbarui')->with('tab', 'kurva_s');
     }
 
     public function deleteProgres($id)
@@ -328,7 +328,7 @@ class AnggaranController extends Controller
         $progres = ProgresKegiatan::find($id);
         $progres->delete();
 
-        return redirect()->back()->with('success', 'Progres kegiatan berhasil dihapus');
+        return redirect()->route('backend.detail_anggaran.index',  ['detail_kegiatan_id' => $progres->detail_kegiatan_id])->with('success', 'Progres kegiatan berhasil dihapus')->with('tab', 'kurva_s');
     }
 
 

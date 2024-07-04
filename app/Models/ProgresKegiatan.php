@@ -11,11 +11,10 @@ class ProgresKegiatan extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'progres_kegiatan';
-    protected $guarded = ['id'];
+    protected $fillable = ['detail_kegiatan_id', 'tanggal', 'jenis_progres', 'nilai'];
 
     public function detailKegiatan(): BelongsTo
     {
         return $this->belongsTo(DetailKegiatan::class, 'penyedia_jasa_id', 'id');
     }
-
 }
