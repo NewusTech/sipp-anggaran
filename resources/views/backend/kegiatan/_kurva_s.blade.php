@@ -1,3 +1,4 @@
+
 <div class="tab-pane fade show {{ session('tab') == 'kurva_s' ? 'active' : '' }}" id="custom-content-below-kurva-s" role="tabpanel" aria-labelledby="custom-content-below-kurva-s-tab">
     <div class="row">
         <div class="col-md-6">

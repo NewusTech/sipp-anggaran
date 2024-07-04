@@ -146,8 +146,8 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
-        if (Storage::disk('uploads')->exists($user->image)) {
-            Storage::disk('uploads')->delete($user->image);
+        if (Storage::disk('local')->exists($user->image)) {
+            Storage::disk('local')->delete($user->image);
         }
         $user->delete();
         return redirect()->route('backend.users.index')->with('success', 'Pengguna berhasil dihapus');

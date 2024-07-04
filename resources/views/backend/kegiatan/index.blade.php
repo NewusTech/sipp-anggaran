@@ -140,7 +140,7 @@
                                                 <tr>
                                                     <th class="text-center">Kegiatan</th>
                                                     <th class="text-center">Sub Kegiatan</th>
-                                                    <th class="text-center">Pagu</th>
+                                                    <th class="text-center">Pagu / Nilai Kontrak</th>
                                                     <th class="text-center">Realisasi</th>
                                                 </tr>
                                             </thead>
@@ -571,7 +571,7 @@
                                                                                     <input type="text" class="form-control" name="no_rek" value="{{$kegiatan->no_rek}}" placeholder="Silahkan masukan nomor rekening" required>
                                                                                 </div>
                                                                                 <div class="form-group">
-                                                                                    <label class="text-darkblue">Alokasi</label>
+                                                                                    <label class="text-darkblue">Pagu Anggaran</label>
                                                                                     <input type="text" class="form-control" name="alokasi" value="{{$kegiatan->alokasi}}" placeholder="Silahkan masukan alokasi" required>
                                                                                 </div>
                                                                                 <div class="form-group">
@@ -884,7 +884,7 @@
                                 <input type="text" class="form-control" name="no_rek" placeholder="Silahkan masukan nomor rekening" required>
                             </div>
                             <div class="form-group">
-                                <label class="text-darkblue">Alokasi</label>
+                                <label class="text-darkblue">Pagu Anggaran</label>
                                 <input type="text" class="form-control" name="alokasi" placeholder="Silahkan masukan alokasi" required>
                             </div>
                             <div class="form-group">

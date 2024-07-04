@@ -100,16 +100,12 @@
                         <li class="nav-item">
                             <a class="nav-link" id="custom-content-below-dokumentasi-tab" data-toggle="pill" href="#custom-content-above-dokumentasi" role="tab" aria-controls="custom-content-below-dokumentasi" aria-selected="true">Dokumentasi</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="custom-content-below-grafik-tab" data-toggle="pill" href="#custom-content-above-grafik" role="tab" aria-controls="custom-content-below-grafik" aria-selected="true">Grafik</a>
-                        </li>
                     </ul>
                     <div class="tab-content" id="custom-content-below-tabContent">
                         @include('backend.kegiatan._detail')
                         @include('backend.kegiatan._penanggung_jawab')
                         @include('backend.kegiatan._anggaran')
                         @include('backend.kegiatan._dokumentasi')
-                        @include('backend.kegiatan._grafik')
                     </div>
                 </div>
             </div>
@@ -520,3 +516,4 @@
         });
     </script>
 @endsection
+
