@@ -113,11 +113,11 @@
                     <li class="nav-item">
                         <a class="nav-link {{session('tab') == 'kurva_s'? 'active' : ''}}" id="custom-content-below-progres-tab" data-toggle="pill" href="#custom-content-below-progres" role="tab" aria-controls="custom-content-below-detail" aria-selected="true">Progres</a>
                     </li>
-                    {{-- <li class="nav-item">
-													<a class="nav-link {{session('tab') == 'pengambilan'? 'active' : ''}}" id="custom-content-below-pengembalian-tab" data-toggle="pill" href="#custom-content-above-pengembalian" role="tab" aria-controls="custom-content-below-pengembalian" aria-selected="true">Rencana Pengembalian</a>
-                    </li> --}}
                     <li class="nav-item">
                         <a class="nav-link {{session('tab') == 'dokumentasi'? 'active' : ''}}" id="custom-content-below-dokumentasi-tab" data-toggle="pill" href="#custom-content-above-dokumentasi" role="tab" aria-controls="custom-content-below-dokumentasi" aria-selected="true">Dokumentasi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{session('tab') == 'titik_lokasi'? 'active' : ''}}" id="custom-content-below-titik-lokasi-tab" data-toggle="pill" href="#custom-content-above-titik-lokasi" role="tab" aria-controls="custom-content-below-titik-lokasi" aria-selected="true">Titik Lokasi</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="custom-content-below-tabContent">
@@ -127,6 +127,7 @@
                     @include('backend.kegiatan._anggaran')
                     @include('backend.kegiatan._kurva_s')
                     @include('backend.kegiatan._progres')
+                    @include('backend.kegiatan._titik_lokasi')
                     {{-- @include('backend.kegiatan._pengambilan') --}}
                     @include('backend.kegiatan._dokumentasi')
                 </div>
@@ -198,21 +199,6 @@
             "ordering": true,
             "collapsed": true,
         });
-        const map = L.map('map', {
-            center: ["{{ $detail->latitude }}", "{{ $detail->longitude }}"],
-            zoom: 13
-        })
-        setTimeout(function() {
-            map.invalidateSize(true)
-        }, 3000);
-
-        // Tambahkan layer peta dari OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-        L.marker(["{{ $detail->latitude }}", "{{ $detail->longitude }}"])
-            .addTo(map)
-            .bindPopup("{{ $detail->alamat }}");
 
         // Kurva S
         let listBulan = <?php echo $bulan; ?>;
@@ -423,22 +409,15 @@
 
 <script type="text/javascript">
     // Tulang Bawang, Lampung
-    var startlat = "{{ $detail->latitude }}";
-    var startlon = "{{ $detail->longitude }}";
-    var map = L.map('updateMap', {
-        center: ["{{ $detail->latitude }}", "{{ $detail->longitude }}"],
-        zoom: 13
-    })
-    L.marker(["{{ $detail->latitude }}", "{{ $detail->longitude }}"])
-        .addTo(map)
-        .bindPopup("{{ $detail->alamat }}");
+    var startlat = -4.460336085286047;
+    var startlon = 105.13984680175783;
+    var map = L.map('mapDetail').setView([startlat, startlon], 10);
     setTimeout(function() {
         map.invalidateSize(true)
     }, 3000);
     // Tambahkan layer peta dari OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    L.marker(["{{ $detail->latitude }}", "{{ $detail->longitude }}"]).addTo(map);
     setTimeout(function() {
         map.invalidateSize(true)
     }, 5000);
@@ -451,8 +430,10 @@
         var layer = L.marker(event.latlng).addTo(map);
         var lat = event.latlng.lat;
         var lng = event.latlng.lng;
-        $("#latitude").val(lat);
-        $("#longitude").val(lng);
+        $("#inputLatitude").val(lat);
+        $("#inputLongitude").val(lng);
     });
+
+    console.log("{{$detail->latitude}}", "{{$detail->longitude}}")
 </script>
 @endsection
