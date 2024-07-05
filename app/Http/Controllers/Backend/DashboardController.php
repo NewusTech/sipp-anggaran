@@ -44,6 +44,8 @@ class DashboardController extends Controller
             'detail_kegiatan.updated_at',
             'detail_kegiatan.progress',
             'detail_kegiatan.akhir_kontrak',
+            'detail_kegiatan.latitude',
+            'detail_kegiatan.longitude',
             'bidang.name as bidang_name',
             'penanggung_jawab.pptk_name',
             'penyedia_jasa.name as penyedia_jasa'
@@ -75,6 +77,8 @@ class DashboardController extends Controller
             'detail_kegiatan.updated_at',
             'detail_kegiatan.progress',
             'detail_kegiatan.akhir_kontrak',
+            'detail_kegiatan.latitude',
+            'detail_kegiatan.longitude',
             'bidang.name as bidang_name',
             'penanggung_jawab.pptk_name',
             'penyedia_jasa.name as penyedia_jasa'
@@ -106,6 +110,8 @@ class DashboardController extends Controller
             'detail_kegiatan.updated_at',
             'detail_kegiatan.progress',
             'detail_kegiatan.akhir_kontrak',
+            'detail_kegiatan.latitude',
+            'detail_kegiatan.longitude',
             'bidang.name as bidang_name',
             'penanggung_jawab.pptk_name',
             'penyedia_jasa.name as penyedia_jasa'
