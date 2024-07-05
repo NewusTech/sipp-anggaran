@@ -415,8 +415,7 @@
                                     "Awal Kontrak : " + "<?= $item->awal_kontrak ?>" + "<br>" +
                                     "Akhir Kontrak : " + "<?= $item->akhir_kontrak ?>" + "<br>" +
                                     "Penyedia Jasa : " + "<?= $item->penyedia_jasa ?>" + "<br>" +
-                                    "No SPMK : " + "<?= $item->no_spmk ?>" + "<br>" +
-                                    "Alamat : " + "<?= $item->alamat ?>"
+                                    "No SPMK : " + "<?= $item->no_spmk ?>" + "<br>"
                                 )
             @endforeach
             // end add point on maps
