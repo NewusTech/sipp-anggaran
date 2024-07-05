@@ -192,6 +192,7 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
         Route::put('/verifikasi/{detail_kegiatan}', [DetailKegiatanController::class, 'updateVerifikasi'])->name('verifikasi');
         Route::put('detail/{detail_kegiatan}', [DetailKegiatanController::class, 'updateAnggaran'])->name('update.detail');
         Route::put('update/{detail_kegiatan}', [DetailKegiatanController::class, 'updateDetail'])->name('update.detail_kegiatan');
+        Route::put('update-map/{detail_kegiatan}', [DetailKegiatanController::class, 'updateMapPoint'])->name('update.map_point');
         Route::delete('/{detail_kegiatan}', [DetailKegiatanController::class, 'destroy'])->name('destroy');
     });
     Route::group(['prefix' => 'detail-anggaran', 'as' => 'detail_anggaran.'], function () {

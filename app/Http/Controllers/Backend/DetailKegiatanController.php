@@ -144,6 +144,22 @@ class DetailKegiatanController extends Controller
      * @return RedirectResponse
      */
 
+    public function updateMapPoint(Request $request, $detail)
+    {
+        try {
+            $detail = DetailKegiatan::where('id', $detail)->first();
+            if ($detail->update([
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+            ])) {
+                return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail])->with('success', 'Data kurva berhasil diperbarui.')->with('tab', 'titik_lokasi');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail])->with('error', $th->getMessage())->with('tab', 'titik_lokasi');
+        }
+        return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail])->with('error', 'Data lokasi gagal diperbarui.')->with('tab', 'titik_lokasi');
+    }
+
     public function updateDetail(Request $request, DetailKegiatan $detailKegiatan)
     {
         try {
