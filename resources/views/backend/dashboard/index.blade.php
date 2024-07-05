@@ -153,6 +153,7 @@
                                             <th style="text-align: center">Masa Kerja</th>
                                             <th style="text-align: center">Status</th>
                                             <th style="text-align: center">Kontraktor</th>
+                                            <th style="text-align: center">Lokasi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -182,6 +183,11 @@
                                                                 @endif
                                             </td>
                                             <td>{{$itemA->penyedia_jasa ?? '-'}}</td>
+                                            <td>
+                                                <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $itemA->latitude }}+{{ $itemA->longitude }}">
+                                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                </a> 
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -211,6 +217,7 @@
                                             <th style="text-align: center">Masa Kerja</th>
                                             <th style="text-align: center">Status</th>
                                             <th style="text-align: center">Kontraktor</th>
+                                            <th style="text-align: center">Lokasi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -240,6 +247,11 @@
                                                                 @endif
                                             </td>
                                             <td>{{$itemB->penyedia_jasa ?? '-'}}</td>
+                                            <td>
+                                                <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $itemA->latitude }}+{{ $itemA->longitude }}">
+                                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                </a> 
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -269,6 +281,7 @@
                                             <th style="text-align: center">Masa Kerja</th>
                                             <th style="text-align: center">Status</th>
                                             <th style="text-align: center">Kontraktor</th>
+                                            <th style="text-align: center">Lokasi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -298,6 +311,11 @@
                                                                 @endif
                                             </td>
                                             <td>{{$itemC->penyedia_jasa ?? '-'}}</td>
+                                            <td>
+                                                <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $itemA->latitude }}+{{ $itemA->longitude }}">
+                                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                </a> 
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
