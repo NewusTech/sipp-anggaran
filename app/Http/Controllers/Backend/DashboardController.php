@@ -29,7 +29,7 @@ class DashboardController extends Controller
         }
         $total_pagu = $bidang_id == null ? Kegiatan::all()->sum('alokasi') : Kegiatan::where('bidang_id', $bidang_id)->filter($request)->sum('alokasi');
         $kegiatan_id = Kegiatan::where('bidang_id', $bidang_id)->pluck('id');
-        $detail_kegiatan = DetailKegiatan::whereIn('kegiatan_id', $kegiatan_id)->get();
+        $detail_kegiatan = DetailKegiatan::get();
         $total_realisasi = ProgresKegiatan::whereIn('detail_kegiatan_id', $detail_kegiatan->pluck('id'))
             ->where('jenis_progres', 'keuangan')->sum('nilai');
         if ($bidang_id == null) {
@@ -156,7 +156,7 @@ class DashboardController extends Controller
                 $query->where('bidang_id', $bidang_id);
             }
         })->where('progress', '>=', 100)->filter($request)->get()->count();
-        return view('backend.dashboard.index', compact(['total_pagu', 'total_realisasi', 'total_sisa', 'fisik', 'nonfisik', 'kegiatan', 'total_paket', 'total_belum_mulai', 'total_mulai', 'total_selesai']));
+        return view('backend.dashboard.index', compact(['total_pagu', 'total_realisasi', 'total_sisa', 'fisik', 'nonfisik', 'kegiatan', 'total_paket', 'total_belum_mulai', 'total_mulai', 'total_selesai', 'detail_kegiatan']));
     }
 
     public function chartData(Request $request)

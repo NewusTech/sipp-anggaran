@@ -101,6 +101,17 @@
         </div>
     </div>
 </div>
+<div class="row sm">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="mapDashboard">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -359,20 +370,39 @@
 					<span class="fa fa-search"></span>
 			`);
         $(".search input").attr("placeholder", "Ketik Kata Kunci");
-        // $(".search input").attr("style", "width: 20rem;");
-        // var map = L.map('mapDashboard').setView([-6.797599081997735, 107.20964190166815], 13);
 
-        // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        // 		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        // }).addTo(map);
+        //start display maps
+        $(".search input").attr("style", "width: 20rem;");
+        var map = L.map('mapDashboard').setView([-4.475296, 105.077107], 9);
 
-        // L.marker([-6.797599081997735, 107.20964190166815]).addTo(map)
-
-
-        // Inisialisasi peta Tulang Bawang, Lampung
-        var startlat = -4.3975495;
-        var startlon = 105.3726319;
-        var map = L.map('mapDashboard').setView([startlat, startlon], 10);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        		attribution: '&copy;'
+        }).addTo(map);
+            // add point on maps
+            var greenIcon = L.icon({
+                iconUrl: "{{ asset('image/marker-kuning.png') }}",
+                iconSize: [32, 32],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+            @foreach ($detail_kegiatan as $item)
+               var thisPoint = L.marker([<?= $item->latitude ?>, <?= $item->longitude ?>], {icon: greenIcon}).addTo(map)
+                                .bindPopup("Data Infromasi " + "<br>" + "<br>" + 
+                                    "Nama Pekerjaan : " + "<?= $item->title ?>" + "<br>" +
+                                    "No Kontrak : " + "<?= $item->no_kontrak ?>" + "<br>" +
+                                    "Jenis Pengadaan : " + "<?= $item->jenis_pengadaan ?>" + "<br>" +
+                                    "Nilai Kontrak : " + "<?= $item->nilai_kontrak ?>" + "<br>" +
+                                    "Progress : " + "<?= $item->progress ?>" + "<br>" +
+                                    "Awal Kontrak : " + "<?= $item->awal_kontrak ?>" + "<br>" +
+                                    "Akhir Kontrak : " + "<?= $item->akhir_kontrak ?>" + "<br>" +
+                                    "Penyedia Jasa : " + "<?= $item->penyedia_jasa ?>" + "<br>" +
+                                    "No SPMK : " + "<?= $item->no_spmk ?>" + "<br>" +
+                                    "Alamat : " + "<?= $item->alamat ?>"
+                                )
+            @endforeach
+            // end add point on maps
+        //end display maps 
 
         // Tambahkan layer peta dari OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
