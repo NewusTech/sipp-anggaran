@@ -404,20 +404,36 @@
                 popupAnchor: [1, -34],
                 shadowSize: [41, 41]
             });
+            var allPoints = [];
             @foreach ($detail_kegiatan as $item)
-               var thisPoint = L.marker([<?= $item->latitude ?>, <?= $item->longitude ?>], {icon: greenIcon}).addTo(map)
-                                .bindPopup("Data Infromasi " + "<br>" + "<br>" + 
-                                    "Nama Pekerjaan : " + "<?= $item->title ?>" + "<br>" +
-                                    "No Kontrak : " + "<?= $item->no_kontrak ?>" + "<br>" +
-                                    "Jenis Pengadaan : " + "<?= $item->jenis_pengadaan ?>" + "<br>" +
-                                    "Nilai Kontrak : " + "<?= $item->nilai_kontrak ?>" + "<br>" +
-                                    "Progress : " + "<?= $item->progress ?>" + "<br>" +
-                                    "Awal Kontrak : " + "<?= $item->awal_kontrak ?>" + "<br>" +
-                                    "Akhir Kontrak : " + "<?= $item->akhir_kontrak ?>" + "<br>" +
-                                    "Penyedia Jasa : " + "<?= $item->penyedia_jasa ?>" + "<br>" +
-                                    "No SPMK : " + "<?= $item->no_spmk ?>" + "<br>"
-                                )
+                var title = "<?= $item->title ?? '-' ?>";
+                var noKontrak = "<?= $item->no_kontrak ?? '-' ?>";
+                var jenisPengadaan = "<?= $item->jenis_pengadaan ?? '-' ?>";
+                var nilaiKontrak = "<?= $item->nilai_kontrak ?? '-' ?>";
+                var progress = "<?= $item->progress ?? '-' ?>";
+                var awalKontrak = "<?= $item->awal_kontrak ?? '-' ?>";
+                var akhirKontrak = "<?= $item->akhir_kontrak ?? '-' ?>";
+                var penyediaJasa = "<?= $item->penyedia_jasa ?? '-' ?>";
+                var noSpmk = "<?= $item->no_spmk ?? '-' ?>";
+
+                var thisPoint = L.marker([<?= $item->latitude ?>, <?= $item->longitude ?>], {icon: greenIcon}).addTo(map)
+                                .bindPopup("Data Informasi " + "<br>" + "<br>" + 
+                                    "Nama Pekerjaan : " + title + "<br>" +
+                                    "No Kontrak : " + noKontrak + "<br>" +
+                                    "Jenis Pengadaan : " + jenisPengadaan + "<br>" +
+                                    "Nilai Kontrak : " + nilaiKontrak + "<br>" +
+                                    "Progress : " + progress + "<br>" +
+                                    "Awal Kontrak : " + awalKontrak + "<br>" +
+                                    "Akhir Kontrak : " + akhirKontrak + "<br>" +
+                                    "Penyedia Jasa : " + penyediaJasa + "<br>" +
+                                    "No SPMK : " + noSpmk + "<br>"
+                                );
+                allPoints.push([<?= $item->latitude ?>, <?= $item->longitude ?>]);
             @endforeach
+            if (allPoints.length > 0) {
+                var bounds = L.latLngBounds(allPoints); // Membuat batas dari semua koordinat
+                map.fitBounds(bounds); // Menyesuaikan tampilan peta agar mencakup semua poin
+            }
             // end add point on maps
         //end display maps 
 

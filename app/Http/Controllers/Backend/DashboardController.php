@@ -29,7 +29,19 @@ class DashboardController extends Controller
         }
         $total_pagu = $bidang_id == null ? Kegiatan::all()->sum('alokasi') : Kegiatan::where('bidang_id', $bidang_id)->filter($request)->sum('alokasi');
         $kegiatan_id = Kegiatan::where('bidang_id', $bidang_id)->pluck('id');
-        $detail_kegiatan = DetailKegiatan::get();
+        $detail_kegiatan = DetailKegiatan::select(
+            'title',
+            'no_kontrak',
+            'jenis_pengadaan',
+            'nilai_kontrak',
+            'progress',
+            'awal_kontrak',
+            'akhir_kontrak',
+            'penyedia_jasa',
+            'no_spmk',
+            'latitude',
+            'longitude'
+        )->where('latitude','!=', null)->where('longitude','!=', null)->get();
         $total_realisasi = ProgresKegiatan::whereIn('detail_kegiatan_id', $detail_kegiatan->pluck('id'))
             ->where('jenis_progres', 'keuangan')->sum('nilai');
         if ($bidang_id == null) {
