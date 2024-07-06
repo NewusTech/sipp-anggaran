@@ -8,8 +8,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse order-3  text-bold menu-center" id="navbarCollapse">
-            <ul class="navbar-nav">
+        <div class="collapse navbar-collapse order-3 justify-content-end text-bold menu-center" id="navbarCollapse">
+            <ul class="navbar-nav align-items-end pr-2">
                 <li class="nav-item {{ Request::segment(2)=='dashboard'?'active':'' }}">
                     <a href="/" class="nav-link text-darkblue">Dashboard</a>
                 </li>
@@ -82,31 +82,29 @@
                 </li>
                 @endcan
 
+                <!-- Right navbar links -->
+                <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+
+                    <!-- Messages Dropdown Menu -->
+                    <li class="nav-item dropdown">
+                        <div class="image px-0 pr-2 nav-link mb-1" data-toggle="dropdown">
+                            <span class="ml-2">{{ auth()->user()->name }}</span>
+                            <img src="{{ Storage::disk('local')->exists(auth()->user()->image) ? asset('uploads/' . auth()->user()->image) : asset('image/default-profile.png') }}" height="37px" width="40px" class="img-circle elevation-1" alt="User Image">
+                        </div>
+                        <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                            <a href="{{ route('backend.profile.index') }}" class="dropdown-item">
+                                <i class="nav-icon fas fa-user text-black-50"></i> Profile
+                            </a>
+                            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item">
+                                <i class="nav-icon fas fa-sign-out-alt text-black-50"></i> Logout
+                            </a>
+                        </div>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </li>
+                </ul>
             </ul>
         </div>
-
-        <!-- Right navbar links -->
-        <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-
-            <!-- Messages Dropdown Menu -->
-            <li class="nav-item dropdown">
-                <div class="image nav-link mb-1" data-toggle="dropdown">
-                    <img src="{{ auth()->user()->image ? asset('uploads/' . auth()->user()->image) : asset('image/profile.png') }}" height="37px" width="40px" class="img-circle elevation-1" alt="User Image">
-                    <span class="ml-2">{{ auth()->user()->name }}</span>
-                </div>
-                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                    <a href="{{ route('backend.profile.index') }}" class="dropdown-item">
-                        <i class="nav-icon fas fa-user text-black-50"></i> Profile
-                    </a>
-                    <a href="{{ route('logout') }}" onclick="event.preventDefault();
-               document.getElementById('logout-form').submit();" class="dropdown-item">
-                        <i class="nav-icon fas fa-sign-out-alt text-black-50"></i> Logout
-                    </a>
-                </div>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
-            </li>
-        </ul>
     </div>
 </nav>

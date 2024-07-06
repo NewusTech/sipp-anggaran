@@ -1,14 +1,14 @@
 <div class="tab-pane fade show" id="custom-content-above-penanggung_jawab" role="tabpanel" aria-labelledby="custom-content-below-penanggung_jawab-tab">
-    <div class="d-flex align-items-center justify-content-end">
+    <div class="mt-3 ml-4">
         @can('ubah detail kegiatan')
-        <button type="button" style="color: white; max-width: 15%" class="btn btn-block btn-warning btn-sm " data-toggle="modal" data-target="#modal-lg-edit-pptk-pr-{{$detail->id}}"><i class="fas fa-edit"></i>Penanggung Jawab</button>
+        <button type="button" style="color: white; width: 200px;" class="btn btn-block btn-warning btn-sm " data-toggle="modal" data-target="#modal-lg-edit-pptk-pr-{{$detail->id}}"><i class="fas fa-edit"></i>Penanggung Jawab</button>
         @endcan
     </div>
     <div class="row overflow-auto">
         <div class="col-md-6">
             <table class="table">
-                <tr>
-                    <td class="text-bold text-darkblue">PENGAWAS</td>
+                <tr class="bg-secondary">
+                    <td class="text-bold text-white">PENGAWAS</td>
                     <td></td>
                 </tr>
                 <tr>
@@ -36,8 +36,8 @@
 
         <div class="col-md-6">
             <table class="table">
-                <tr>
-                    <td class="text-bold text-darkblue">ADMIN</td>
+                <tr class="bg-secondary">
+                    <td class="text-bold text-white">ADMIN</td>
                     <td></td>
                 </tr>
                 <tr>
@@ -63,15 +63,15 @@
             </table>
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-12 mt-2">
             <table class="table">
-                <tr>
-                    <td class="text-bold text-darkblue">KONTRAKTOR</td>
+                <tr class="bg-secondary">
+                    <td class="text-bold text-white">PENYEDIA JASA</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Nama</td>
-                    <td>{{$detail->penyedia->name ?? '-'}}</td>
+                    <td>{{$detail->penyedia_jasa ?? '-'}}</td>
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Telepon</td>
