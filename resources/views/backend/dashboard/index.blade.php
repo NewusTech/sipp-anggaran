@@ -12,6 +12,14 @@
         max-width: 100%;
         border-radius: 15px;
     }
+
+    .bg-paket {
+        background-color: #5792ce;
+    }
+
+    .total-paket {
+        color: #5792ce;
+    }
 </style>
 @endsection
 @section('main')
@@ -31,7 +39,7 @@
 </form>
 @can('lihat total keuangan')
 <div class="row">
-    <div class="col-lg-4 col-6">
+    <div class="col-lg-4 col-md-12">
         <!-- small box -->
         <div class="small-box bg-info pattern rounded">
             <div class="inner">
@@ -43,7 +51,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4 col-6">
+    <div class="col-lg-4 col-md-12">
         <!-- small box -->
         <div class="small-box bg-danger rounded">
             <div class="inner">
@@ -55,7 +63,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4 col-6">
+    <div class="col-lg-4 col-md-12">
         <!-- small box -->
         <div class="small-box bg-success rounded">
             <div class="inner">
@@ -101,12 +109,54 @@
         </div>
     </div>
 </div>
+<div class="row justify-content-center">
+    <div class="col-md-3 col-sm-12">
+        <div class="card row flex-row bg-paket justify-content-between align-items-center p-3">
+            <div>
+                <h5 class="text-center text-bold text-white">Total Paket</h5>
+            </div>
+            <div class="rounded-circle bg-white d-flex justify-content-center align-items-center" style="width: 60px; height: 60px">
+                <span class="text-bold total-paket" style="font-size: 18px">{{$total_paket ?? 0}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-12">
+        <div class="card row flex-row bg-paket justify-content-between align-items-center p-3">
+            <div>
+                <h5 class="text-center text-bold text-white">Paket Belum Mulai</h5>
+            </div>
+            <div class="rounded-circle bg-white d-flex justify-content-center align-items-center" style="width: 60px; height: 60px">
+                <span class="text-bold total-paket" style="font-size: 18px">{{$total_paket_belum_mulai ?? 0}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-12">
+        <div class="card row flex-row bg-paket justify-content-between align-items-center p-3">
+            <div>
+                <h5 class="text-center text-bold text-white">Paket Sedang <br>Dikerjakan</h5>
+            </div>
+            <div class="rounded-circle bg-white d-flex justify-content-center align-items-center" style="width: 60px; height: 60px">
+                <span class="text-bold total-paket" style="font-size: 18px">{{$total_paket_dikerjakan ?? 0}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-12">
+        <div class="card row flex-row bg-paket justify-content-between align-items-center p-3">
+            <div>
+                <h5 class="text-center text-bold text-white">Paket Selesai</h5>
+            </div>
+            <div class="rounded-circle bg-white d-flex justify-content-center align-items-center" style="width: 60px; height: 60px">
+                <span class="text-bold total-paket" style="font-size: 18px">{{$total_paket_selesai ?? 0}}</span>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row sm">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
                 <div id="mapDashboard">
-                    
+
                 </div>
             </div>
         </div>
@@ -141,7 +191,7 @@
                         </div>
                         <div class="row overflow-auto">
                             <div class="col-12">
-                                <table id="progress" class="table ">
+                                <table id="progress" class="table table-responsive">
                                     <thead>
                                         <tr>
                                             <th style="padding:1rem 2.25rem;">Nama Paket</th>
@@ -163,30 +213,34 @@
                                             <td style="text-align: center">{{$itemA->bidang_name ?? '-'}}</td>
                                             <td style="text-align: center">{{$itemA->pptk_name ?? '-'}}</td>
                                             <td style="text-align: center">Rp.{{number_format($itemA->realisasi)}}</td>
-                                            <td style="color: red;">{{$itemA->updated_at ? $itemA->updated_at->format('d-m-Y') : '-'}}</td>
-                                            <td style="text-align: center">
-                                                @if ((int)$itemA->progress > 0 && $itemA->progress < 100) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$itemA->progress}}% ({{'Sedang Dikerjakan'}})</a>
-                                                    @elseif ((int)$itemA->progress == 100)
-                                                    <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$itemA->progress}}% ({{'Sudah Selesai'}})</a>
-                                                    @else
-                                                    <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{0}}% ({{'Belum Mulai'}})</a>
-                                                    @endif
+
+                                            @if ($itemA->progress->count() > 0)
+                                            <td style="color: red;">{{$itemA->progress->first()->updated_at}}</td>
+                                            @else
+                                            <td style="color: red;">{{'-'}}</td>
+                                            @endif
+                                            @if ($itemA->progress[0]->nilai ?? 0 >= 100)
+                                            <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Selesai'}})</a>
+                                                @else
+                                            <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Sedang Dikerjakan'}})</a>
+                                                @endif
                                             </td>
                                             <td style="text-align: center">{{(strtotime($itemA->akhir_kontrak->format('Y-m-d')) - strtotime(now()->format('Y-m-d'))) / 60 / 60 / 24 }} Hari</td>
                                             <td style="text-align: center">
-                                                @if ((int)$itemA->progress >= 1 && $itemA->progress < 40) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-danger rounded btn-block">{{'Kritis'}}</a>
-                                                    @elseif ((int)$itemA->progress >= 40 && $itemA->progress < 60) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-warning text-white rounded btn-block">{{'Terlambat'}}</a>
-                                                        @elseif ((int)$itemA->progress >= 60 && $itemA->progress < 80) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{'Wajar'}}</a>
-                                                            @elseif ((int)$itemA->progress >= 80 && $itemA->progress <= 100) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{'Baik'}}</a>
-                                                                @else
-                                                                <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
-                                                                @endif
+                                                @if ($itemA->progreess != null)
+                                                @if (($itemA->progress->first()->nilai - $itemA->rencana[$itemA->progress->count() -1]->fisik ) <= 10) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-info rounded btn-block">{{'Wajar'}}</a>
+                                                    @else
+                                                    <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-danger rounded btn-block">{{'Kritis'}}</a>
+                                                    @endif
+                                                    @else
+                                                    <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
+                                                    @endif
                                             </td>
                                             <td>{{$itemA->penyedia_jasa ?? '-'}}</td>
                                             <td>
                                                 <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $itemA->latitude }}+{{ $itemA->longitude }}">
                                                     <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                                </a> 
+                                                </a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -229,28 +283,28 @@
                                             <td style="text-align: center">Rp.{{number_format($itemB->realisasi)}}</td>
                                             <td style="color: red;">{{$itemB->updated_at ? $itemB->updated_at->format('d-m-Y') : '-'}}</td>
                                             <td style="text-align: center">
-                                                @if ((int)$itemB->progress > 0 && $itemB->progress < 100) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$itemB->progress}}% ({{'Sedang Dikerjakan'}})</a>
+                                                @if ((int)$itemB->progress > 0 && $itemB->progress < 100) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$itemB->progress}}% ({{'Sedang Dikerjakan'}})</a>
                                                     @elseif ((int)$itemB->progress == 100)
-                                                    <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$itemB->progress}}% ({{'Sudah Selesai'}})</a>
+                                                    <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$itemB->progress}}% ({{'Sudah Selesai'}})</a>
                                                     @else
-                                                    <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{0}}% ({{'Belum Mulai'}})</a>
+                                                    <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{0}}% ({{'Belum Mulai'}})</a>
                                                     @endif
                                             </td>
                                             <td style="text-align: center">{{(strtotime($itemB->akhir_kontrak->format('Y-m-d')) - strtotime(now()->format('Y-m-d'))) / 60 / 60 / 24 }} Hari</td>
                                             <td style="text-align: center">
-                                                @if ((int)$itemB->progress >= 1 && $itemB->progress < 40) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-danger rounded btn-block">{{'Kritis'}}</a>
-                                                    @elseif ((int)$itemB->progress >= 40 && $itemB->progress < 60) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-warning text-white rounded btn-block">{{'Terlambat'}}</a>
-                                                        @elseif ((int)$itemB->progress >= 60 && $itemB->progress < 80) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{'Wajar'}}</a>
-                                                            @elseif ((int)$itemB->progress >= 80 && $itemB->progress <= 100) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{'Baik'}}</a>
+                                                @if ((int)$itemB->progress >= 1 && $itemB->progress < 40) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-danger rounded btn-block">{{'Kritis'}}</a>
+                                                    @elseif ((int)$itemB->progress >= 40 && $itemB->progress < 60) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-warning text-white rounded btn-block">{{'Terlambat'}}</a>
+                                                        @elseif ((int)$itemB->progress >= 60 && $itemB->progress < 80) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{'Wajar'}}</a>
+                                                            @elseif ((int)$itemB->progress >= 80 && $itemB->progress <= 100) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{'Baik'}}</a>
                                                                 @else
-                                                                <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
+                                                                <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
                                                                 @endif
                                             </td>
                                             <td>{{$itemB->penyedia_jasa ?? '-'}}</td>
                                             <td>
                                                 <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $itemA->latitude }}+{{ $itemA->longitude }}">
                                                     <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                                </a> 
+                                                </a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -293,28 +347,28 @@
                                             <td style="text-align: center">Rp.{{number_format($itemC->realisasi)}}</td>
                                             <td style="color: red;">{{$itemC->updated_at ? $itemC->updated_at->format('d-m-Y') : '-'}}</td>
                                             <td style="text-align: center">
-                                                @if ((int)$itemC->progress > 0 && $itemC->progress < 100) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$itemC->progress}}% ({{'Sedang Dikerjakan'}})</a>
+                                                @if ((int)$itemC->progress > 0 && $itemC->progress < 100) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$itemC->progress}}% ({{'Sedang Dikerjakan'}})</a>
                                                     @elseif ((int)$itemC->progress == 100)
-                                                    <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$itemC->progress}}% ({{'Sudah Selesai'}})</a>
+                                                    <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$itemC->progress}}% ({{'Sudah Selesai'}})</a>
                                                     @else
-                                                    <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{0}}% ({{'Belum Mulai'}})</a>
+                                                    <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{0}}% ({{'Belum Mulai'}})</a>
                                                     @endif
                                             </td>
                                             <td style="text-align: center">{{(strtotime($itemC->akhir_kontrak->format('Y-m-d')) - strtotime(now()->format('Y-m-d'))) / 60 / 60 / 24 }} Hari</td>
                                             <td style="text-align: center">
-                                                @if ((int)$itemC->progress >= 1 && $itemC->progress < 40) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-danger rounded btn-block">{{'Kritis'}}</a>
-                                                    @elseif ((int)$itemC->progress >= 40 && $itemC->progress < 60) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-warning text-white rounded btn-block">{{'Terlambat'}}</a>
-                                                        @elseif ((int)$itemC->progress >= 60 && $itemC->progress < 80) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{'Wajar'}}</a>
-                                                            @elseif ((int)$itemC->progress >= 80 && $itemC->progress <= 100) <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{'Baik'}}</a>
+                                                @if ((int)$itemC->progress >= 1 && $itemC->progress < 40) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-danger rounded btn-block">{{'Kritis'}}</a>
+                                                    @elseif ((int)$itemC->progress >= 40 && $itemC->progress < 60) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-warning text-white rounded btn-block">{{'Terlambat'}}</a>
+                                                        @elseif ((int)$itemC->progress >= 60 && $itemC->progress < 80) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{'Wajar'}}</a>
+                                                            @elseif ((int)$itemC->progress >= 80 && $itemC->progress <= 100) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{'Baik'}}</a>
                                                                 @else
-                                                                <a href="{{ route('backend.detail_anggaran.edit', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
+                                                                <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
                                                                 @endif
                                             </td>
                                             <td>{{$itemC->penyedia_jasa ?? '-'}}</td>
                                             <td>
                                                 <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $itemA->latitude }}+{{ $itemA->longitude }}">
                                                     <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                                </a> 
+                                                </a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -394,32 +448,34 @@
         var map = L.map('mapDashboard').setView([-4.475296, 105.077107], 9);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        		attribution: '&copy;'
+            attribution: '&copy;'
         }).addTo(map);
-            // add point on maps
-            var greenIcon = L.icon({
-                iconUrl: "{{ asset('image/marker-kuning.png') }}",
-                iconSize: [32, 32],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
-            @foreach ($detail_kegiatan as $item)
-               var thisPoint = L.marker([<?= $item->latitude ?>, <?= $item->longitude ?>], {icon: greenIcon}).addTo(map)
-                                .bindPopup("Data Infromasi " + "<br>" + "<br>" + 
-                                    "Nama Pekerjaan : " + "<?= $item->title ?>" + "<br>" +
-                                    "No Kontrak : " + "<?= $item->no_kontrak ?>" + "<br>" +
-                                    "Jenis Pengadaan : " + "<?= $item->jenis_pengadaan ?>" + "<br>" +
-                                    "Nilai Kontrak : " + "<?= $item->nilai_kontrak ?>" + "<br>" +
-                                    "Progress : " + "<?= $item->progress ?>" + "<br>" +
-                                    "Awal Kontrak : " + "<?= $item->awal_kontrak ?>" + "<br>" +
-                                    "Akhir Kontrak : " + "<?= $item->akhir_kontrak ?>" + "<br>" +
-                                    "Penyedia Jasa : " + "<?= $item->penyedia_jasa ?>" + "<br>" +
-                                    "No SPMK : " + "<?= $item->no_spmk ?>" + "<br>"
-                                )
-            @endforeach
-            // end add point on maps
-        //end display maps 
+        // add point on maps
+        var greenIcon = L.icon({
+            iconUrl: "{{ asset('image/marker-kuning.png') }}",
+            iconSize: [32, 32],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+        @foreach($detail_kegiatan as $item)
+        var thisPoint = L.marker([<?= $item->latitude ?>, <?= $item->longitude ?>], {
+                icon: greenIcon
+            }).addTo(map)
+            .bindPopup("Data Infromasi " + "<br>" + "<br>" +
+                "Nama Pekerjaan : " + "<?= $item->title ?>" + "<br>" +
+                "No Kontrak : " + "<?= $item->no_kontrak ?>" + "<br>" +
+                "Jenis Pengadaan : " + "<?= $item->jenis_pengadaan ?>" + "<br>" +
+                "Nilai Kontrak : " + "<?= $item->nilai_kontrak ?>" + "<br>" +
+                "Progress : " + "<?= $item->progress ?>" + "<br>" +
+                "Awal Kontrak : " + "<?= $item->awal_kontrak ?>" + "<br>" +
+                "Akhir Kontrak : " + "<?= $item->akhir_kontrak ?>" + "<br>" +
+                "Penyedia Jasa : " + "<?= $item->penyedia_jasa ?>" + "<br>" +
+                "No SPMK : " + "<?= $item->no_spmk ?>" + "<br>"
+            )
+        @endforeach
+        // end add point on maps
+        //end display maps
 
         // Tambahkan layer peta dari OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

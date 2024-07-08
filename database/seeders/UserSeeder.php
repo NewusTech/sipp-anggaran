@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
         $saveImage = "profile_images/" . $image;
         $user = User::create([
             'name' => 'Super Admin',
-            'email' => 'superadmin@example.com',
+            'email' => 'newustechnology@gmail.com',
             'password' => Hash::make('password'),
             'image' => $saveImage,
             'username' => 'SuperAdmin'

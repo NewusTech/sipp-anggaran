@@ -54,8 +54,8 @@
         right: 10px;
     }
 
-    .table-dokumentasi>.table th,
-    .table-dokumentasi>.table td {
+    .table-dokumentasi>th,
+    .table-dokumentasi>td {
         vertical-align: middle;
         padding: 0;
         align-items: center;
@@ -185,6 +185,7 @@
         if ($("#table_dokumentasi_filter").length) {
             $("#table_dokumentasi_filter").append('@can("tambah dokumentasi")<button id="addDokumentasi" class="btn btn-primary btn-sm btn-add" data-toggle="modal" data-target="#modal-lg-create-dokumentasi"><i class="fas fa-plus"></i> Upload Dokumentasi</button>@endcan');
             $("#table_dokumentasi_filter").addClass('btn-action-right');
+            $("#table_dokumentasi_filter").addClass('flex-wrap');
             $("#table_dokumentasi_filter label").addClass('search');
             $(".search input").before(`<span class="fa fa-search"></span>`);
             $(".search input").attr("placeholder", "Ketik Kata Kunci");

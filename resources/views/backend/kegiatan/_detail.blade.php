@@ -40,6 +40,10 @@
                     <td>{{ $detail->penyedia_jasa }}</td>
                 </tr>
                 <tr>
+                    <td class="text-bold text-darkblue">Nomor SPMK</td>
+                    <td>{{ $detail->no_spmk }}</td>
+                </tr>
+                <tr>
                     <td class="text-bold text-darkblue">Realisasi</td>
                     <td>Rp. {{ number_format($detail->realisasi) }}</td>
                 </tr>
