@@ -450,116 +450,47 @@
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy;'
         }).addTo(map);
-        // add point on maps
-        var greenIcon = L.icon({
-            iconUrl: "{{ asset('image/marker-kuning.png') }}",
-            iconSize: [32, 32],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        });
-        @foreach($detail_kegiatan as $item)
-        var thisPoint = L.marker([<?= $item->latitude ?>, <?= $item->longitude ?>], {
-                icon: greenIcon
-            }).addTo(map)
-            .bindPopup("Data Infromasi " + "<br>" + "<br>" +
-                "Nama Pekerjaan : " + "<?= $item->title ?>" + "<br>" +
-                "No Kontrak : " + "<?= $item->no_kontrak ?>" + "<br>" +
-                "Jenis Pengadaan : " + "<?= $item->jenis_pengadaan ?>" + "<br>" +
-                "Nilai Kontrak : " + "<?= $item->nilai_kontrak ?>" + "<br>" +
-                "Progress : " + "<?= $item->progress ?>" + "<br>" +
-                "Awal Kontrak : " + "<?= $item->awal_kontrak ?>" + "<br>" +
-                "Akhir Kontrak : " + "<?= $item->akhir_kontrak ?>" + "<br>" +
-                "Penyedia Jasa : " + "<?= $item->penyedia_jasa ?>" + "<br>" +
-                "No SPMK : " + "<?= $item->no_spmk ?>" + "<br>"
-            )
-        @endforeach
-        // end add point on maps
-        //end display maps
+            // add point on maps
+            var greenIcon = L.icon({
+                iconUrl: "{{ asset('image/marker-kuning.png') }}",
+                iconSize: [32, 32],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+            var allPoints = [];
+            @foreach ($detail_kegiatan as $item)
+                var title = "<?= $item->title ?? '-' ?>";
+                var noKontrak = "<?= $item->no_kontrak ?? '-' ?>";
+                var jenisPengadaan = "<?= $item->jenis_pengadaan ?? '-' ?>";
+                var nilaiKontrak = "<?= $item->nilai_kontrak ?? '-' ?>";
+                var progress = "<?= $item->progress ?? '-' ?>";
+                var awalKontrak = "<?= $item->awal_kontrak ?? '-' ?>";
+                var akhirKontrak = "<?= $item->akhir_kontrak ?? '-' ?>";
+                var penyediaJasa = "<?= $item->penyedia_jasa ?? '-' ?>";
+                var noSpmk = "<?= $item->no_spmk ?? '-' ?>";
 
-        // Tambahkan layer peta dari OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-        map.on("contextmenu", function(event) {
-            console.log("user right-clicked on map coordinates: " + event.latlng.toString());
-            L.marker(event.latlng).addTo(map);
-        });
-        let params = {
-            "tahun": "{{request()->get('tahun')}}"
-        };
+                var thisPoint = L.marker([<?= $item->latitude ?>, <?= $item->longitude ?>], {icon: greenIcon}).addTo(map)
+                                .bindPopup("Data Informasi " + "<br>" + "<br>" + 
+                                    "Nama Pekerjaan : " + title + "<br>" +
+                                    "No Kontrak : " + noKontrak + "<br>" +
+                                    "Jenis Pengadaan : " + jenisPengadaan + "<br>" +
+                                    "Nilai Kontrak : " + nilaiKontrak + "<br>" +
+                                    "Progress : " + progress + "<br>" +
+                                    "Awal Kontrak : " + awalKontrak + "<br>" +
+                                    "Akhir Kontrak : " + akhirKontrak + "<br>" +
+                                    "Penyedia Jasa : " + penyediaJasa + "<br>" +
+                                    "No SPMK : " + noSpmk + "<br>"
+                                );
+                allPoints.push([<?= $item->latitude ?>, <?= $item->longitude ?>]);
+            @endforeach
+            if (allPoints.length > 0) {
+                var bounds = L.latLngBounds(allPoints); // Membuat batas dari semua koordinat
+                map.fitBounds(bounds); // Menyesuaikan tampilan peta agar mencakup semua poin
+            }
+            // end add point on maps
+        //end display maps 
 
-        let query = Object.keys(params)
-            .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-            .join('&');
-        fetch('/maps-data?' + query)
-            .then(response => response.json())
-            .then(pins => {
-                console.log(pins);
-
-                // Membuat ikon dengan warna merah
-                var redIcon = L.icon({
-                    iconUrl: "{{ asset('image/marker-merah.png') }}",
-                    iconSize: [32, 32],
-                    iconAnchor: [12, 41],
-                    popupAnchor: [1, -34],
-                    shadowSize: [41, 41]
-                });
-
-                // Membuat ikon dengan warna biru
-                var blueIcon = L.icon({
-                    iconUrl: "{{ asset('image/marker-biru.png') }}",
-                    iconSize: [32, 32],
-                    iconAnchor: [12, 41],
-                    popupAnchor: [1, -34],
-                    shadowSize: [41, 41]
-                });
-
-                // Membuat ikon dengan warna abu
-                var grayIcon = L.icon({
-                    iconUrl: "{{ asset('image/marker-abu.png') }}",
-                    iconSize: [32, 32],
-                    iconAnchor: [12, 41],
-                    popupAnchor: [1, -34],
-                    shadowSize: [41, 41]
-                });
-
-                // Membuat ikon dengan warna kuning
-                var yellowIcon = L.icon({
-                    iconUrl: "{{ asset('image/marker-kuning.png') }}",
-                    iconSize: [32, 32],
-                    iconAnchor: [12, 41],
-                    popupAnchor: [1, -34],
-                    shadowSize: [41, 41]
-                });
-
-                // Membuat ikon dengan warna hijau
-                var greenIcon = L.icon({
-                    iconUrl: "{{ asset('image/marker-hijau.png') }}",
-                    iconSize: [32, 32],
-                    iconAnchor: [12, 41],
-                    popupAnchor: [1, -34],
-                    shadowSize: [41, 41]
-                });
-
-                pins.forEach(function(pin) {
-                    let icon = grayIcon;
-                    if (pin.progress >= 1 && pin.progress < 40) {
-                        icon = redIcon;
-                    } else if (pin.progress >= 40 && pin.progress < 60) {
-                        icon = yellowIcon;
-                    } else if (pin.progress >= 60 && pin.progress < 80) {
-                        icon = greenIcon;
-                    } else if (pin.progress >= 80 && pin.progress <= 100) {
-                        icon = blueIcon;
-                    }
-                    L.marker(pin.location, {
-                            icon: icon
-                        })
-                        .addTo(map)
-                        .bindPopup(pin.name);
-                });
-            })
     });
 </script>
 <script>
