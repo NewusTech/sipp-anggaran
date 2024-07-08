@@ -51,7 +51,7 @@
 </div>
 @endif
 <div class="row">
-    <div class="card">
+    <div class="card w-100">
         <div class="card-body p-0 m-0">
             <div class="flex justify-content-between">
                 <div class="container p-0 m-0">
@@ -110,7 +110,7 @@
                     <div class="col-12">
                         <div id="accordion">
                             @foreach ($bidang as $item)
-                            <div class="card">
+                            <div class="card w-100">
                                 <div class="p-3">
                                     <div id="heading-{{$item->id}}" onclick="getKegiatan({{$item->id}})" class="p-2 mb-2" data-toggle="collapse" data-target="#collapse-{{$item->id}}" aria-expanded="true" aria-controls="collapseOne">
                                         <div class="card-table">
@@ -138,7 +138,7 @@
                                             </tr>
                                             <tr>
                                                 <th class="text-center">Kegiatan</th>
-                                                <th class="text-center">Sub Kegiatan</th>
+                                                <th class="text-center">Pekerjaan</th>
                                                 <th class="text-center">Pagu / Nilai Kontrak</th>
                                                 <th class="text-center">Realisasi</th>
                                             </tr>
@@ -160,13 +160,17 @@
                                                             @can('tambah detail kegiatan')
                                                             <button type="button" style="color: white;" class="btn btn-block btn-primary btn-sm" data-toggle="modal" data-target="#modal-lg-tambah-detail-{{$kegiatan->id}}"><i class="fas fa-plus"></i></button>
                                                             @endcan
-                                                            @can('ubah detail kegiatan')
+                                                            @can('ubah kegiatan')
                                                             <button type="button" style="color: white;" class="btn btn-block btn-warning btn-sm" data-toggle="modal" data-target="#modal-lg-edit-{{$kegiatan->id}}"><i class="fas fa-edit"></i></button>
+                                                            @endcan
+                                                            @can('hapus kegiatan')
+                                                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-delete-kegiatan-{{$kegiatan->id}}"><i class="fas fa-trash"></i></button>
                                                             @endcan
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
+                                            @include('backend.kegiatan._modal_delete_kegiatan')
                                             @include('backend.kegiatan._modal_update_pptk')
                                             @include('backend.kegiatan._modal_add_detail')
 

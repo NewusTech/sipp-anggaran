@@ -136,13 +136,21 @@ class DetailKegiatanController extends Controller
         return redirect()->route('backend.kegiatan.index')->with('error', 'Data Detail Kegiatan gagal diubah');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateDetailAnggaranRequest $request
-     * @param DetailKegiatan $detailKegiatan
-     * @return RedirectResponse
-     */
+    public function updatePengawas(Request $request, $detail_kegiatan_id)
+    {
+        // dd($request->all, $detail_kegiatan_id);
+        $detail_kegiatan = DetailKegiatan::where('id', $detail_kegiatan_id);
+
+        $detail_kegiatan->update([
+            'penanggung_jawab_id' => $request->penanggung_jawab_id
+        ]);
+
+        if ($detail_kegiatan) {
+            return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail_kegiatan_id])->with('success', 'Data Detail Kegiatan berhasil diubah')->with('tab', 'penanggung_jawab');
+        }
+
+        return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail_kegiatan_id])->with('error', 'Data Detail Kegiatan gagal diubah')->with('tab', 'penanggung_jawab');
+    }
 
     public function updateMapPoint(Request $request, $detail)
     {

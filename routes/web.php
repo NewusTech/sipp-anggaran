@@ -27,6 +27,7 @@ use App\Http\Controllers\Backend\OrganisasiController;
 use App\Http\Controllers\Backend\UnitController;
 use App\Http\Controllers\Backend\SumberDanaController;
 use App\Http\Controllers\Backend\DpaController;
+use App\Http\Controllers\Backend\PenanggungJawabController;
 use App\Http\Controllers\Backend\SubKegiatanController;
 use App\Http\Controllers\Backend\PenggunaAnggaranController;
 use App\Http\Controllers\Backend\TandaTanganController;
@@ -179,6 +180,9 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
     Route::group(['prefix' => 'arsip'], function () {
         Route::get('/', [ArsipController::class, 'arsip'])->name('arsip.index');
     });
+    Route::group(['prefix' => 'penanggung-jawab'], function () {
+        Route::get('/', [PenanggungJawabController::class, 'index'])->name('penanggung_jawab.index');
+    });
     Route::group(['prefix' => 'petunjuk', 'as' => 'petunjuk.'], function () {
         Route::get('/', [PetunjukController::class, 'index'])->name('index');
         Route::post('/', [PetunjukController::class, 'store'])->name('store');
@@ -194,6 +198,7 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
         Route::put('update/{detail_kegiatan}', [DetailKegiatanController::class, 'updateDetail'])->name('update.detail_kegiatan');
         Route::put('update-map/{detail_kegiatan}', [DetailKegiatanController::class, 'updateMapPoint'])->name('update.map_point');
         Route::delete('/{detail_kegiatan}', [DetailKegiatanController::class, 'destroy'])->name('destroy');
+        Route::put('update-pengawas/{detail_kegiatan_id}',[DetailKegiatanController::class, 'updatePengawas'])->name('update.pengawas');
     });
     Route::group(['prefix' => 'detail-anggaran', 'as' => 'detail_anggaran.'], function () {
         Route::get('detail/{detail_kegiatan_id}', [AnggaranController::class, 'show'])->name('index');
