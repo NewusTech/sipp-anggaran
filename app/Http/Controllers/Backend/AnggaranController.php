@@ -88,7 +88,9 @@ class AnggaranController extends Controller
         $dokumentasi = Dokumentasi::where('detail_kegiatan_id', $detail_kegiatan_id)->with('files')->get();
         $isEdit = true;
         $kegiatan = Kegiatan::where('id', $detail->kegiatan_id)->orderBy('created_at', 'desc')->first();
-        $penanggung = PenanggungJawab::where('detail_kegiatan_id', $detail_kegiatan_id)->first();
+        $penanggung = PenanggungJawab::where('id', $detail->penanggung_jawab_id)->first();
+        $listPJ = PenanggungJawab::select('id', 'pptk_name')->get();
+        // dd($listPJ);
         $program = Program::where('id', $kegiatan->program)->first();
         $progres = ProgresKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
         $progresFisik = $progres->where('jenis_progres', 'fisik');
@@ -114,15 +116,6 @@ class AnggaranController extends Controller
             }
         }
         $bulan = json_encode($bulanKurvaS);
-        $totalbelanjaOperasi = Anggaran::where('detail_kegiatan_id', '=', $detail->id)->where('daya_serap', 'Belanja Operasi')->sum('daya_serap_kontrak');
-        $totalbelanjaModal = Anggaran::where('detail_kegiatan_id', '=', $detail->id)->where('daya_serap', 'Belanja Modal')->sum('daya_serap_kontrak');
-        $totalbelanjaTakTerduga = Anggaran::where('detail_kegiatan_id', '=', $detail->id)->where('daya_serap', 'Belanja Tak Terduga')->sum('daya_serap_kontrak');
-        $totalbelanjaTransfer = Anggaran::where('detail_kegiatan_id', '=', $detail->id)->where('daya_serap', 'Belanja Transfer')->sum('daya_serap_kontrak');
-        $totalOperasi = Pengambilan::where('detail_kegiatan_id', '=', $detail->id)->sum('belanja_operasi');
-        $totalModal = Pengambilan::where('detail_kegiatan_id', '=', $detail->id)->sum('belanja_modal');
-        $totalTakTerduga = Pengambilan::where('detail_kegiatan_id', '=', $detail->id)->sum('belanja_tak_terduga');
-        $totalTransfer = Pengambilan::where('detail_kegiatan_id', '=', $detail->id)->sum('belanja_transfer');
-        $pengambilan = Pengambilan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
         return view(
             'backend.kegiatan.edit_anggaran',
             compact(
@@ -139,15 +132,7 @@ class AnggaranController extends Controller
                 'progresFisik',
                 'dataProgresFisik',
                 'progresKeuangan',
-                'totalbelanjaOperasi',
-                'totalbelanjaModal',
-                'totalbelanjaTakTerduga',
-                'totalbelanjaTransfer',
-                'totalOperasi',
-                'totalModal',
-                'totalTakTerduga',
-                'totalTransfer',
-                'pengambilan'
+                'listPJ'
             )
         );
     }

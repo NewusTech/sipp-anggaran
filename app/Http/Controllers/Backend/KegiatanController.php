@@ -44,12 +44,26 @@ class KegiatanController extends Controller
             $this->kontraktorId = $idKontraktor;
         }
 
+        if ($role[0] == 'Pengawas') {
+            $idPengawas = PenanggungJawab::where('pptk_email', Auth::user()->email)->first()->pluck('id');
+            $kegiatanIds = DetailKegiatan::whereIn('penanggung_jawab_id', $idPengawas)->pluck('kegiatan_id');
+            // dd($idPengawas, $kegiatanIds);
+            $this->bidangId = Kegiatan::whereIn('id', $kegiatanIds)->pluck('bidang_id');
+            $this->kegiatan_id = Kegiatan::whereIn('id', $kegiatanIds)->pluck('id');
+        }
+        // dd($idPengawas, $kegiatanIds, $this->bidangId, $this->kegiatan_id);
         if (str_contains($role[0], "Staff") || str_contains($role[0], "Kepala Bidang") || str_contains($role[0], "Kontraktor") || str_contains($role[0], "Konsultan")) {
             $bidang = Bidang::where('id', $this->bidang_id)->orderBy('created_at', 'desc')->get();
             if ($role[0] == "Kontraktor") {
                 if ($this->bidang_id == null) {
                     $bidang = Bidang::whereIn('id', $this->bidangId)->orderBy('created_at', 'desc')->get();
                 }
+            }
+            $kegiatanProgram = Kegiatan::where('bidang_id', $this->bidang_id)->pluck('program')->first();
+            $program = Program::where('id', $kegiatanProgram)->get();
+        } else if ($role[0] == "Pengawas") {
+            if ($this->bidang_id == null) {
+                $bidang = Bidang::whereIn('id', $this->bidangId)->orderBy('created_at', 'desc')->get();
             }
             $kegiatanProgram = Kegiatan::where('bidang_id', $this->bidang_id)->pluck('program')->first();
             $program = Program::where('id', $kegiatanProgram)->get();
@@ -275,11 +289,11 @@ class KegiatanController extends Controller
             $bidang_id = $requestBidang;
         }
         if ($search) {
-            $bidang = Bidang::with(['kegiatan' => function($query) use ($search) {
+            $bidang = Bidang::with(['kegiatan' => function ($query) use ($search) {
                 $query->where('title', 'LIKE', '%' . $search . '%')
-                      ->with('detail.progres');
+                    ->with('detail.progres');
             }])->where('id', $bidang_id)->get();
-        }else{
+        } else {
             $bidang = Bidang::with('kegiatan.detail.progres')->where('id', $bidang_id)->get();
         }
         if ($bidang_id == null) {
@@ -363,21 +377,45 @@ class KegiatanController extends Controller
 
     public function updatePptk(Request $request, $detail_kegiatan_id)
     {
-        $kegiatan = PenanggungJawab::updateOrCreate([
-            'detail_kegiatan_id' => $detail_kegiatan_id,
-        ], [
-            'pptk_name' => $request->pptk_name,
-            'pptk_nip' => $request->pptk_nip,
-            'pptk_email' => $request->pptk_email,
-            'pptk_telpon' => $request->pptk_telpon,
-            'pptk_bidang_id' => $request->pptk_bidang_id,
-            'ppk_name' => $request->ppk_name,
-            'ppk_nip' => $request->ppk_nip,
-            'ppk_email' => $request->ppk_email,
-            'ppk_telpon' => $request->ppk_telpon,
-            'ppk_bidang_id' => $request->ppk_bidang_id,
-            'detail_kegiatan_id' => $detail_kegiatan_id,
-        ]);
+        // $kegiatan = PenanggungJawab::updateOrCreate([
+        //     'detail_kegiatan_id' => $detail_kegiatan_id,
+        // ], [
+        //     'pptk_name' => $request->pptk_name,
+        //     'pptk_nip' => $request->pptk_nip,
+        //     'pptk_email' => $request->pptk_email,
+        //     'pptk_telpon' => $request->pptk_telpon,
+        //     'pptk_bidang_id' => $request->pptk_bidang_id,
+        //     'ppk_name' => $request->ppk_name,
+        //     'ppk_nip' => $request->ppk_nip,
+        //     'ppk_email' => $request->ppk_email,
+        //     'ppk_telpon' => $request->ppk_telpon,
+        //     'ppk_bidang_id' => $request->ppk_bidang_id,
+        //     'detail_kegiatan_id' => $detail_kegiatan_id,
+        // ]);
+
+        $updatePJ = PenanggungJawab::updateOrCreate(
+            ['detail_kegiatan_id' => $detail_kegiatan_id],
+            [
+                'pptk_name' => $request->pptk_name,
+                'pptk_nip' => $request->pptk_nip,
+                'pptk_email' => $request->pptk_email,
+                'pptk_telpon' => $request->pptk_telpon,
+                'pptk_bidang_id' => $request->pptk_bidang_id,
+                'ppk_name' => $request->ppk_name,
+                'ppk_nip' => $request->ppk_nip,
+                'ppk_email' => $request->ppk_email,
+                'ppk_telpon' => $request->ppk_telpon,
+                'ppk_bidang_id' => $request->ppk_bidang_id,
+                'detail_kegiatan_id' => $detail_kegiatan_id,
+            ]
+        );
+        if ($updatePJ) {
+            $detail = DetailKegiatan::where('id', $detail_kegiatan_id)->first();
+            $detail->update(
+                ['penanggung_jawab_id' => $updatePJ->id],
+            );
+        }
+
         return redirect()->route('backend.detail_anggaran.index', $detail_kegiatan_id)->with('success', 'PPTK/Pimpinan teknis berhasil diubah');
     }
 

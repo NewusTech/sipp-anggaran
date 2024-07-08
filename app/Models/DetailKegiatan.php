@@ -40,6 +40,7 @@ class DetailKegiatan extends Model
         'komentar_admin',
         'verifikasi_pengawas',
         'komentar_pengawas',
+        'penanggung_jawab_id'
     ];
 
     protected $casts = [

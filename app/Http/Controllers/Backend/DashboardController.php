@@ -15,6 +15,7 @@ use App\Exports\PaketNonFisikExport;
 use App\Exports\PaketKegiatanExport;
 use App\Models\PenyediaJasa;
 use App\Models\ProgresKegiatan;
+use App\Models\PenanggungJawab;
 use App\Models\RencanaKegiatan;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,13 +24,18 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $bidang_id = null;
+        $bidang_id = [];
         $role = Auth::user()->getRoleNames();
         if (str_contains($role[0], "Staff") || str_contains($role[0], "Kepala Bidang")) {
             $bidang_id = Auth::user()->bidang_id;
+        } elseif (str_contains($role[0], "Pengawas")) {
+            $idPengawas = PenanggungJawab::where('pptk_email', Auth::user()->email)->first()->pluck('id');
+            $kegiatanIds = DetailKegiatan::whereIn('penanggung_jawab_id', $idPengawas)->pluck('kegiatan_id');
+            // dd($idPengawas, $kegiatanIds);
+            $bidang_id = Kegiatan::whereIn('id', $kegiatanIds)->pluck('bidang_id');
         }
-        $total_pagu = $bidang_id == null ? Kegiatan::all()->sum('alokasi') : Kegiatan::where('bidang_id', $bidang_id)->filter($request)->sum('alokasi');
-        $kegiatan_id = Kegiatan::where('bidang_id', $bidang_id)->pluck('id');
+        $total_pagu = $bidang_id == null ? Kegiatan::all()->sum('alokasi') : Kegiatan::whereIn('bidang_id', $bidang_id)->filter($request)->sum('alokasi');
+        $kegiatan_id = Kegiatan::whereIn('bidang_id', $bidang_id)->pluck('id');
         $detail_kegiatan = DetailKegiatan::select(
             'title',
             'no_kontrak',
@@ -42,7 +48,7 @@ class DashboardController extends Controller
             'no_spmk',
             'latitude',
             'longitude'
-        )->where('latitude','!=', null)->where('longitude','!=', null)->get();
+        )->where('latitude', '!=', null)->where('longitude', '!=', null)->get();
         $total_realisasi = ProgresKegiatan::whereIn('detail_kegiatan_id', $detail_kegiatan->pluck('id'))
             ->where('jenis_progres', 'keuangan')->sum('nilai');
         if ($bidang_id == null) {
@@ -63,8 +69,8 @@ class DashboardController extends Controller
         )
             ->whereHas('kegiatan', function ($query) use ($bidang_id) {
                 $query->where('jenis_paket', '1')->where('is_arship', 0);
-                if ($bidang_id) {
-                    $query->where('bidang_id', $bidang_id);
+                if ($bidang_id != null) {
+                    $query->whereIn('bidang_id', $bidang_id);
                 }
             })
             ->leftJoin('penanggung_jawab', function ($join) {
@@ -106,7 +112,7 @@ class DashboardController extends Controller
             ->whereHas('kegiatan', function ($query) use ($bidang_id) {
                 $query->where('jenis_paket', '2')->where('is_arship', 0);
                 if ($bidang_id) {
-                    $query->where('bidang_id', $bidang_id);
+                    $query->whereIn('bidang_id', $bidang_id);
                 }
             })
             ->leftJoin('penanggung_jawab', function ($join) {
@@ -139,7 +145,7 @@ class DashboardController extends Controller
             ->whereHas('kegiatan', function ($query) use ($bidang_id) {
                 $query->where('is_arship', 0);
                 if ($bidang_id) {
-                    $query->where('bidang_id', $bidang_id);
+                    $query->whereIn('bidang_id', $bidang_id);
                 }
             })
             ->leftJoin('penanggung_jawab', function ($join) {
@@ -159,7 +165,7 @@ class DashboardController extends Controller
         $total_paket = DetailKegiatan::whereHas('kegiatan', function ($query) use ($bidang_id) {
             $query->where('is_arship', 0);
             if ($bidang_id) {
-                $query->where('bidang_id', $bidang_id);
+                $query->whereIn('bidang_id', $bidang_id);
             }
         })
             ->filter($request)
@@ -167,7 +173,7 @@ class DashboardController extends Controller
 
         $total_paket_belum_mulai =  DetailKegiatan::whereDoesntHave('progres')->whereHas('kegiatan', function ($query) use ($bidang_id) {
             if ($bidang_id) {
-                $query->where('bidang_id', $bidang_id);
+                $query->whereIn('bidang_id', $bidang_id);
             }
         })
             ->filter($request)
@@ -178,7 +184,7 @@ class DashboardController extends Controller
             $query->where('nilai', '>=', 100);
         })->whereHas('kegiatan', function ($query) use ($bidang_id) {
             if ($bidang_id) {
-                $query->where('bidang_id', $bidang_id);
+                $query->whereIn('bidang_id', $bidang_id);
             }
         })->filter($request)
             ->get()
@@ -188,7 +194,7 @@ class DashboardController extends Controller
             $query->where('nilai', 100);
         })->whereHas('kegiatan', function ($query) use ($bidang_id) {
             if ($bidang_id) {
-                $query->where('bidang_id', $bidang_id);
+                $query->whereIn('bidang_id', $bidang_id);
             }
         })->filter($request)
             ->with(['progres' => function ($query) {
