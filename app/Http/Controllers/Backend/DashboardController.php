@@ -15,6 +15,7 @@ use App\Exports\PaketNonFisikExport;
 use App\Exports\PaketKegiatanExport;
 use App\Models\PenyediaJasa;
 use App\Models\ProgresKegiatan;
+use App\Models\RencanaKegiatan;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -52,8 +53,6 @@ class DashboardController extends Controller
         $fisik = DetailKegiatan::select(
             'detail_kegiatan.id as detail_kegiatan_id',
             'detail_kegiatan.title',
-            'detail_kegiatan.realisasi',
-            'detail_kegiatan.updated_at',
             'detail_kegiatan.progress',
             'detail_kegiatan.akhir_kontrak',
             'detail_kegiatan.latitude',
@@ -82,6 +81,15 @@ class DashboardController extends Controller
             })
             ->filter($request)
             ->get();
+
+        $progresFisik = ProgresKegiatan::where('jenis_progres', 'fisik')->whereIn('detail_kegiatan_id', $fisik->pluck('detail_kegiatan_id'))->orderBy('nilai', 'desc')->get();
+        $rencanaFisik = RencanaKegiatan::whereIn('detail_kegiatan_id', $fisik->pluck('detail_kegiatan_id'))->get();
+        $fisik->map(function ($item) use ($progresFisik, $rencanaFisik) {
+            $item->progress = $progresFisik->where('detail_kegiatan_id', $item->detail_kegiatan_id) ?? 0;
+            $item->rencana = $rencanaFisik->where('detail_kegiatan_id', $item->detail_kegiatan_id) ?? 0;
+        });
+        // $fisik = $progresFisik->first()->nilai ?? 0;
+        // dd($progresFisik);
         $nonfisik = DetailKegiatan::select(
             'detail_kegiatan.id as detail_kegiatan_id',
             'detail_kegiatan.title',
@@ -156,25 +164,38 @@ class DashboardController extends Controller
         })
             ->filter($request)
             ->get()->count();
-        $total_belum_mulai = DetailKegiatan::whereHas('kegiatan', function ($query) use ($bidang_id) {
-            $query->where('is_arship', 0);
+
+        $total_paket_belum_mulai =  DetailKegiatan::whereDoesntHave('progres')->whereHas('kegiatan', function ($query) use ($bidang_id) {
             if ($bidang_id) {
                 $query->where('bidang_id', $bidang_id);
             }
-        })->where('progress', '<=', 0)->filter($request)->get()->count();
-        $total_mulai = DetailKegiatan::whereHas('kegiatan', function ($query) use ($bidang_id) {
-            $query->where('is_arship', 0);
+        })
+            ->filter($request)
+            ->get()
+            ->count();
+
+        $total_paket_dikerjakan = DetailKegiatan::whereHas('progres', function ($query) {
+            $query->where('nilai', '>=', 100);
+        })->whereHas('kegiatan', function ($query) use ($bidang_id) {
             if ($bidang_id) {
                 $query->where('bidang_id', $bidang_id);
             }
-        })->where('progress', '>', 0)->where('progress', '<', 100)->filter($request)->get()->count();
-        $total_selesai = DetailKegiatan::whereHas('kegiatan', function ($query) use ($bidang_id) {
-            $query->where('is_arship', 0);
+        })->filter($request)
+            ->get()
+            ->count();
+
+        $total_paket_selesai = DetailKegiatan::whereHas('progres', function ($query) {
+            $query->where('nilai', 100);
+        })->whereHas('kegiatan', function ($query) use ($bidang_id) {
             if ($bidang_id) {
                 $query->where('bidang_id', $bidang_id);
             }
-        })->where('progress', '>=', 100)->filter($request)->get()->count();
-        return view('backend.dashboard.index', compact(['total_pagu', 'total_realisasi', 'total_sisa', 'fisik', 'nonfisik', 'kegiatan', 'total_paket', 'total_belum_mulai', 'total_mulai', 'total_selesai', 'detail_kegiatan']));
+        })->filter($request)
+            ->with(['progres' => function ($query) {
+                $query->select('id', 'detail_kegiatan_id', 'jenis_progres', 'nilai');
+            }])
+            ->get()->count();
+        return view('backend.dashboard.index', compact(['total_pagu', 'total_realisasi', 'total_sisa', 'fisik', 'nonfisik', 'kegiatan', 'total_paket', 'total_paket_belum_mulai', 'total_paket_dikerjakan', 'total_paket_selesai', 'detail_kegiatan']));
     }
 
     public function chartData(Request $request)

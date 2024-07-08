@@ -1,6 +1,6 @@
 <div class="tab-pane fade show {{session('tab') == 'dokumentasi'? 'active' : ''}}" id="custom-content-above-dokumentasi" role="tabpanel" aria-labelledby="custom-content-below-dokumentasi-tab">
     <div class="col-12">
-        <table class="table " id="table_dokumentasi">
+        <table class="table table-responsive" id="table_dokumentasi">
             <thead>
                 <tr>
                     <th class="text-darkblue">No.</th>
@@ -110,7 +110,7 @@
             <div class="card-action-right mt-1">
                 <button class="btn btn-primary btn-sm rounded" id="downloadFiles"><i class="fas fa-download"></i> Download</button>
             </div>
-            <table class="table table-striped table-dokumentasi">
+            <table class="table table-striped table-dokumentasi table-responsive">
                 <div class="card-body d-flex">
                     <tr>
                         <th scope="row">Progres</th>
