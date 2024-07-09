@@ -182,6 +182,9 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
     });
     Route::group(['prefix' => 'penanggung-jawab'], function () {
         Route::get('/', [PenanggungJawabController::class, 'index'])->name('penanggung_jawab.index');
+        Route::post('/', [PenanggungJawabController::class, 'store'])->name('penanggung_jawab.store');
+        Route::put('/{id}', [PenanggungJawabController::class, 'update'])->name('penanggung_jawab.update');
+        Route::delete('/{id}', [PenanggungJawabController::class, 'destroy'])->name('penanggung_jawab.delete');
     });
     Route::group(['prefix' => 'petunjuk', 'as' => 'petunjuk.'], function () {
         Route::get('/', [PetunjukController::class, 'index'])->name('index');
@@ -198,7 +201,7 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
         Route::put('update/{detail_kegiatan}', [DetailKegiatanController::class, 'updateDetail'])->name('update.detail_kegiatan');
         Route::put('update-map/{detail_kegiatan}', [DetailKegiatanController::class, 'updateMapPoint'])->name('update.map_point');
         Route::delete('/{detail_kegiatan}', [DetailKegiatanController::class, 'destroy'])->name('destroy');
-        Route::put('update-pengawas/{detail_kegiatan_id}',[DetailKegiatanController::class, 'updatePengawas'])->name('update.pengawas');
+        Route::put('update-pengawas/{detail_kegiatan_id}', [DetailKegiatanController::class, 'updatePengawas'])->name('update.pengawas');
     });
     Route::group(['prefix' => 'detail-anggaran', 'as' => 'detail_anggaran.'], function () {
         Route::get('detail/{detail_kegiatan_id}', [AnggaranController::class, 'show'])->name('index');

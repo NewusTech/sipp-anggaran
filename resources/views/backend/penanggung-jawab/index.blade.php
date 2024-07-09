@@ -26,6 +26,15 @@
         </div>
     </div>
 </div>
+@elseif (session()->has('error'))
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{ session('error') }}
+        </div>
+    </div>
+</div>
 @endif
 <div class="row">
     <div class="col-12">
@@ -68,70 +77,8 @@
                                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$item->id}}"><i class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-lg-edit-{{$item->id}}" style="padding-right: 17px; ">
-                                            <form action="{{ route('backend.bidang.update', $item->id) }}" method="POST" id="update_bidang">
-                                                @method('PUT')
-                                                @csrf
-                                                <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title"><strong> Data Penanggung Jawab </strong></h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <!-- text input -->
-                                                                    <div class="form-group">
-                                                                        <label class="text-darkblue">Nama Bidang</label>
-                                                                        <input type="text" class="form-control" name="name" value="{{$item->_pptk_name}}" placeholder="Silahkan masukan nama bidang" required>
-                                                                    </div>
-                                                                    <span class="text-gray">*Tidak boleh mengandung karakter khusus</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer justify-content-end">
-                                                            <button type="submit" id="btn_update" class="btn btn-primary">Simpan</button>
-                                                        </div>
-                                                    </div>
-                                                    <!-- /.modal-content -->
-                                                </div>
-                                            </form>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-                                        <div class="modal fade" id="modal-delete-{{$item->id}}" style="padding-right: 17px; ">
-                                            <form action="{{ route('backend.bidang.destroy', $item->id) }}" method="POST" id="delete_bidang">
-                                                @method('DELETE')
-                                                @csrf
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title"><strong> Hapus Bidang </strong></h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <span class="text-gray">Anda yakin Hapus data?</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer justify-content-between">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                            <button type="submit" id="btn_update" class="btn btn-danger"><i class="fas fa-trash"></i> Hapus</button>
-                                                        </div>
-                                                    </div>
-                                                    <!-- /.modal-content -->
-                                                </div>
-                                            </form>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-
-                                        @include('backend.penanggung-jawab._modal_add_penanggung_jawab')
+                                        @include('backend.penanggung-jawab._modal_penanggung_jawab',['action' => 'edit'])
+                                        @include('backend.penanggung-jawab._modal_penanggung_jawab',['action' => 'delete'])
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -144,43 +91,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modal-lg-create" style="padding-right: 17px; ">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><strong> Data Penanggung Jawab </strong></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('backend.bidang.store') }}" method="POST" id="submit_bidang">
-                    @csrf
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <!-- text input -->
-                            <div class="form-group">
-                                <label class="text-darkblue">Kode</label>
-                                <input type="text" class="form-control" name="kode" placeholder="Silahkan masukan Kode" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="text-darkblue">Nama Penanggung Jawab</label>
-                                <input type="text" class="form-control" name="name" placeholder="Silahkan masukan nama bidang" required>
-                            </div>
-                            <span class="text-gray">*Tidak boleh mengandung karakter khusus</span>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer justify-content-end">
-                <button type="button" id="btn_submit" class="btn btn-primary">Simpan</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
 
+@include('backend.penanggung-jawab._modal_penanggung_jawab',['action' => 'add'])
 @endsection
 
 @section('js')
