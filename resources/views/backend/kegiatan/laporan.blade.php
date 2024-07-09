@@ -103,7 +103,7 @@
                     <h4><strong>KABUPATEN TULANG BAWANG BARAT </strong></h4>
                 </div>
                 <div class="col mt-3">
-                    <table class="table table-bordered align-middle">
+                    <table class="table table-bordered table-responsive align-middle">
                         <thead class="text-bold">
                             <tr>
                                 <td rowspan="2">No</td>
@@ -112,22 +112,25 @@
                                 <td rowspan="2">Perusahaan</td>
                                 <td rowspan="2">Tgl Kontrak</td>
                                 <td rowspan="2">Nilai Kontrak</td>
-                                <td rowspan="2">Panjang Penanganan(KM)</td>
-                                <td rowspan="2">Lebar Penanganan(M)</td>
-                                <td rowspan="2">Jenis Penanganan</td>
                                 <td rowspan="2">Nomor SPMK</td>
                                 <td rowspan="2">Tanggal Akhir Kontrak</td>
                                 <td rowspan="2">Progress</td>
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $index=1;
+                            @endphp
                             @if ($bidang->count() > 0)
                             @foreach ($bidang as $item)
                                 @foreach ($item->kegiatan as $kegiatan)
                                 <tr class="bg-secondary">
-                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$index}}</td>
                                     <td colspan="11">{{$kegiatan->title}}</td>
                                 </tr>
+                                @php
+                                    $index++;
+                                @endphp
                                 @if ( count($kegiatan->detail) > 0)
                                     @foreach ($kegiatan->detail as $detail)
                                         <tr>
@@ -136,20 +139,17 @@
                                             <td>{{ $detail->title }}</td>
                                             <td>{{ $detail->penyedia_jasa }}</td>
                                             <td>{{ \Carbon\Carbon::parse($detail->awal_kontrak )->format('d-m-Y') }}</td>
-                                            <td>{{ $detail->nilai_kontrak }}</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
+                                            <td>{{ 'Rp.'. number_format($detail->nilai_kontrak) }}</td>
                                             <td>{{ $detail->no_spmk }}</td>
                                             <td>{{ \Carbon\Carbon::parse($detail->akhir_kontrak )->format('d-m-Y') }}</td>
-                                            <td>{{ $detail->progress }}</td>
+                                            <td>{{ $detail->progress }}%</td>
                                         </tr>
                                     @endforeach
                                 @else
                                     <tr>
                                         <td colspan="16"><span>Tidak Ada Data</span></td>
                                     </tr>
-                                @endif  
+                                @endif
                                 @endforeach
                             @endforeach
                             @else
