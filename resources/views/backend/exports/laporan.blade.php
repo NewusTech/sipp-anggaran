@@ -27,9 +27,6 @@
                     <td rowspan="2" style="font-weight: bold; text-align: center;">Perusahaan</td>
                     <td rowspan="2" style="font-weight: bold; text-align: center;">Tgl Kontrak</td>
                     <td rowspan="2" style="font-weight: bold; text-align: center;">Nilai Kontrak</td>
-                    <td rowspan="2" style="font-weight: bold; text-align: center;">Panjang Penanganan(KM)</td>
-                    <td rowspan="2" style="font-weight: bold; text-align: center;">Lebar Penanganan(M)</td>
-                    <td rowspan="2" style="font-weight: bold; text-align: center;">Jenis Penanganan</td>
                     <td rowspan="2" style="font-weight: bold; text-align: center;">Nomor SPMK</td>
                     <td rowspan="2" style="font-weight: bold; text-align: center;">Tanggal Akhir Kontrak</td>
                     <td rowspan="2" style="font-weight: bold; text-align: center;">Progress</td>
@@ -37,13 +34,19 @@
                 <tr></tr>
             </thead>
             <tbody>
+                @php
+                    $index=1;
+                @endphp
                 @if ($bidang->count() > 0)
                 @foreach ($bidang as $item)
                     @foreach ($item->kegiatan as $kegiatan)
                     <tr class="bg-secondary">
-                        <td>{{$loop->iteration}}</td>
+                        <td>{{$index}}</td>
                         <td colspan="11">{{$kegiatan->title}}</td>
                     </tr>
+                    @php
+                        $index++;
+                    @endphp
                     @if ( count($kegiatan->detail) > 0)
                         @foreach ($kegiatan->detail as $detail)
                             <tr>
@@ -52,13 +55,10 @@
                                 <td>{{ $detail->title }}</td>
                                 <td>{{ $detail->penyedia_jasa }}</td>
                                 <td>{{ \Carbon\Carbon::parse($detail->awal_kontrak )->format('d-m-Y') }}</td>
-                                <td>{{ $detail->nilai_kontrak }}</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
+                                <td>{{ 'Rp.'. number_format($detail->nilai_kontrak) }}</td>
                                 <td>{{ $detail->no_spmk }}</td>
                                 <td>{{ \Carbon\Carbon::parse($detail->akhir_kontrak )->format('d-m-Y') }}</td>
-                                <td>{{ $detail->progress }}</td>
+                                <td>{{ $detail->progress }}%</td>
                             </tr>
                         @endforeach
                     @else

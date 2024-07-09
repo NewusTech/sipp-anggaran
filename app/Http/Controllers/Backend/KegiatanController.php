@@ -306,6 +306,9 @@ class KegiatanController extends Controller
                     $detail->total_keuangan = $detail->progres->where('jenis_progres', 'keuangan')->sum('nilai');
                     $detail->total_fisik = $detail->progres->where('jenis_progres', 'fisik')->sum('nilai');
                     $total_keuangan_kegiatan += $detail->total_keuangan;
+                    $detail->progres->map(function ($progres) use ($detail) {
+                        $detail->progress = $progres->orderBy('nilai', 'desc')->first()->nilai;
+                    });
                 });
                 $kegiatan->sisa = $kegiatan->alokasi - $total_keuangan_kegiatan;
             });
@@ -421,6 +424,6 @@ class KegiatanController extends Controller
 
     public function downloadLaporan(Request $request)
     {
-        return Excel::download(new LaporanPengambilanExport($request), 'laporan_pengambilan.xlsx');
+        return Excel::download(new LaporanPengambilanExport($request), 'laporan_kegiatan.xlsx');
     }
 }
