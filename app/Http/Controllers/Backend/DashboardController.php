@@ -27,7 +27,7 @@ class DashboardController extends Controller
         $bidang_id = [];
         $role = Auth::user()->getRoleNames();
         if (str_contains($role[0], "Staff") || str_contains($role[0], "Kepala Bidang")) {
-            $bidang_id = Auth::user()->bidang_id;
+            array_push($bidang_id, Auth::user()->bidang_id);
         } elseif (str_contains($role[0], "Pengawas")) {
             $idPengawas = PenanggungJawab::where('pptk_email', Auth::user()->email)->first()->pluck('id');
             $kegiatanIds = DetailKegiatan::whereIn('penanggung_jawab_id', $idPengawas)->pluck('kegiatan_id');
