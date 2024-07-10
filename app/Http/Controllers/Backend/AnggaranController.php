@@ -21,6 +21,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Exception;
 use Illuminate\Http\Response;
 
 class AnggaranController extends Controller
@@ -80,61 +81,64 @@ class AnggaranController extends Controller
      * @param $detail_kegiatan_id
      * @return Application|Factory|View
      */
-    public function show($detail_kegiatan_id): View|Factory|Application
+    public function show($detail_kegiatan_id): View|Factory|Application|RedirectResponse
     {
-        $bidang = Bidang::all();
-        $detail = DetailKegiatan::with('penyedia')->where('id', $detail_kegiatan_id)->first();
-        $anggaran = Anggaran::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
-        $dokumentasi = Dokumentasi::where('detail_kegiatan_id', $detail_kegiatan_id)->with('files')->get();
-        $isEdit = true;
-        $kegiatan = Kegiatan::where('id', $detail->kegiatan_id)->orderBy('created_at', 'desc')->first();
-        $penanggung = PenanggungJawab::where('id', $detail->penanggung_jawab_id)->first();
-        $listPJ = PenanggungJawab::select('id', 'pptk_name')->get();
-        // dd($listPJ);
-        $program = Program::where('id', $kegiatan->program)->first();
-        $progres = ProgresKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
-        $progresFisik = $progres->where('jenis_progres', 'fisik');
-        $progresKeuangan = $progres->where('jenis_progres', 'keuangan');
-        $kegiatan->penanggung = $penanggung;
-        $kegiatan->program = $program->name;
-        $kurvaS = RencanaKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
-        $bulanKurvaS = $kurvaS->pluck('bulan')->map(function ($bulan) {
-            return Carbon::parse($bulan)->locale('id')->isoFormat('MMMM');
-        })->toArray();
-        $dataBulan = ['keuangan' => $kurvaS->pluck('keuangan'), 'fisik' => $kurvaS->pluck('fisik')];
-        $dataBulan = json_encode($dataBulan);
-        $dataProgresFisik = json_encode($progresFisik->map(function ($progres) {
-            return [
-                'nilai' => $progres->nilai,
-                'tanggal' => $progres->tanggal,
-            ];
-        }));
-        $bulan = json_encode($bulanKurvaS);
-        if (count($progresFisik) > count($bulanKurvaS)) {
-            foreach (array_slice($progresFisik->toArray(), count($bulanKurvaS)) as $progres) {
-                $bulanKurvaS[] = Carbon::parse($progres['tanggal'])->locale('id')->isoFormat('MMMM');
+        try {
+            $bidang = Bidang::all();
+            $detail = DetailKegiatan::with('penyedia')->where('id', $detail_kegiatan_id)->first();
+            $anggaran = Anggaran::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
+            $dokumentasi = Dokumentasi::where('detail_kegiatan_id', $detail_kegiatan_id)->with('files')->get();
+            $isEdit = true;
+            $kegiatan = Kegiatan::where('id', $detail->kegiatan_id)->orderBy('created_at', 'desc')->first();
+            $penanggung = PenanggungJawab::where('id', $detail->penanggung_jawab_id)->first();
+            $listPJ = PenanggungJawab::select('id', 'pptk_name')->get();
+            $program = Program::where('id', $kegiatan->program)->first();
+            $progres = ProgresKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
+            $progresFisik = $progres->where('jenis_progres', 'fisik');
+            $progresKeuangan = $progres->where('jenis_progres', 'keuangan');
+            $kegiatan->penanggung = $penanggung;
+            $kegiatan->program = $program->name;
+            $kurvaS = RencanaKegiatan::where('detail_kegiatan_id', $detail_kegiatan_id)->get();
+            $bulanKurvaS = $kurvaS->pluck('bulan')->map(function ($bulan) {
+                return Carbon::parse($bulan)->locale('id')->isoFormat('MMMM');
+            })->toArray();
+            $dataBulan = ['keuangan' => $kurvaS->pluck('keuangan'), 'fisik' => $kurvaS->pluck('fisik')];
+            $dataBulan = json_encode($dataBulan);
+            $dataProgresFisik = json_encode($progresFisik->map(function ($progres) {
+                return [
+                    'nilai' => $progres->nilai,
+                    'tanggal' => $progres->tanggal,
+                ];
+            }));
+            $bulan = json_encode($bulanKurvaS);
+            if (count($progresFisik) > count($bulanKurvaS)) {
+                foreach (array_slice($progresFisik->toArray(), count($bulanKurvaS)) as $progres) {
+                    $bulanKurvaS[] = Carbon::parse($progres['tanggal'])->locale('id')->isoFormat('MMMM');
+                }
             }
+            $bulan = json_encode($bulanKurvaS);
+            return view(
+                'backend.kegiatan.edit_anggaran',
+                compact(
+                    'bidang',
+                    'detail',
+                    'anggaran',
+                    'dokumentasi',
+                    'isEdit',
+                    'kegiatan',
+                    'kurvaS',
+                    'bulan',
+                    'dataBulan',
+                    'program',
+                    'progresFisik',
+                    'dataProgresFisik',
+                    'progresKeuangan',
+                    'listPJ'
+                )
+            );
+        } catch (Exception $exception) {
+            return redirect()->route('backend.kegiatan.index')->with('error', "Data tidak ditemukan");
         }
-        $bulan = json_encode($bulanKurvaS);
-        return view(
-            'backend.kegiatan.edit_anggaran',
-            compact(
-                'bidang',
-                'detail',
-                'anggaran',
-                'dokumentasi',
-                'isEdit',
-                'kegiatan',
-                'kurvaS',
-                'bulan',
-                'dataBulan',
-                'program',
-                'progresFisik',
-                'dataProgresFisik',
-                'progresKeuangan',
-                'listPJ'
-            )
-        );
     }
 
     public function edit($detail_kegiatan_id): View|Factory|Application

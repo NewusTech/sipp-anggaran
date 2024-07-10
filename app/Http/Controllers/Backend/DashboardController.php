@@ -68,7 +68,7 @@ class DashboardController extends Controller
             'penyedia_jasa.name as penyedia_jasa'
         )
             ->whereHas('kegiatan', function ($query) use ($bidang_id) {
-                $query->where('jenis_paket', '1')->where('is_arship', 0);
+                $query->where('is_arship', 0);
                 if ($bidang_id != null) {
                     $query->whereIn('bidang_id', $bidang_id);
                 }
@@ -91,11 +91,14 @@ class DashboardController extends Controller
         $progresFisik = ProgresKegiatan::where('jenis_progres', 'fisik')->whereIn('detail_kegiatan_id', $fisik->pluck('detail_kegiatan_id'))->orderBy('nilai', 'desc')->get();
         $rencanaFisik = RencanaKegiatan::whereIn('detail_kegiatan_id', $fisik->pluck('detail_kegiatan_id'))->get();
         $fisik->map(function ($item) use ($progresFisik, $rencanaFisik) {
-            $item->progress = $progresFisik->where('detail_kegiatan_id', $item->detail_kegiatan_id) ?? 0;
-            $item->rencana = $rencanaFisik->where('detail_kegiatan_id', $item->detail_kegiatan_id) ?? 0;
+            $progres = $progresFisik->where('detail_kegiatan_id', $item->detail_kegiatan_id);
+            $rencana = $rencanaFisik->where('detail_kegiatan_id', $item->detail_kegiatan_id);
+            $deviasi = ($rencana[$progres->count() - 1]->fisik ?? 0)-($progres->first()->nilai ?? 0);
+            $item->progress = $progres ?? 0;
+            $item->rencana = $rencana ?? 0;
+            $item->status_deviasi = $deviasi;
         });
-        // $fisik = $progresFisik->first()->nilai ?? 0;
-        // dd($progresFisik);
+        // dd($fisik);
         $nonfisik = DetailKegiatan::select(
             'detail_kegiatan.id as detail_kegiatan_id',
             'detail_kegiatan.title',
@@ -181,7 +184,7 @@ class DashboardController extends Controller
             ->count();
 
         $total_paket_dikerjakan = DetailKegiatan::whereHas('progres', function ($query) {
-            $query->where('nilai', '>=', 100);
+            $query->where('nilai', '>', 0);
         })->whereHas('kegiatan', function ($query) use ($bidang_id) {
             if ($bidang_id) {
                 $query->whereIn('bidang_id', $bidang_id);
@@ -191,7 +194,7 @@ class DashboardController extends Controller
             ->count();
 
         $total_paket_selesai = DetailKegiatan::whereHas('progres', function ($query) {
-            $query->where('nilai', 100);
+            $query->where('nilai', '>=', 100);
         })->whereHas('kegiatan', function ($query) use ($bidang_id) {
             if ($bidang_id) {
                 $query->whereIn('bidang_id', $bidang_id);

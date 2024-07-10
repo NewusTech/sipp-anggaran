@@ -43,8 +43,8 @@
 @if (session()->has('error'))
 <div class="row">
     <div class="col-md-12">
-        <div class="alert alert-error alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close text-white" data-dismiss="alert" aria-hidden="true">×</button>
             {{ session('error') }}
         </div>
     </div>
@@ -138,6 +138,7 @@
                                             </tr>
                                             <tr>
                                                 <th class="text-center">Kegiatan</th>
+                                                <th class="text-center">Pekerjaan</th>
                                                 <th class="text-center">Pekerjaan</th>
                                                 <th class="text-center">Pagu / Nilai Kontrak</th>
                                                 <th class="text-center">Realisasi</th>

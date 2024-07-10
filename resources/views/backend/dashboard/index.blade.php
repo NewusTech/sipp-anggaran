@@ -78,6 +78,7 @@
 </div>
 @endcan
 <div class="row">
+    @can('lihat progres keuangan')
     <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
@@ -93,7 +94,8 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-6">
+    @endcan
+    <div class="col-lg-6" id="section-chart-fisik">
         <div class="card">
             <div class="card-body">
                 <div class="card-action-right">
@@ -162,218 +164,80 @@
         </div>
     </div>
 </div>
+
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="row">
+                <div class="row m-0 p-2">
                     <h4 class="text-darkblue"><strong> PROGRESS PEKERJAAN TAHUN {{request()->get('tahun') ? request()->get('tahun') : "2024"}}</strong></h4>
-                </div>
-                <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill" href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home" aria-selected="true">Paket Fisik ({{$fisik->count()}})</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="non-fisik-tab" data-toggle="pill" href="#non-fisik" role="tab" aria-controls="non-fisik" aria-selected="true">Paket Non-Fisik ({{$nonfisik->count()}})</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="kegiatan-tab" data-toggle="pill" href="#kegiatan" role="tab" aria-controls="kegiatan" aria-selected="true">Kegiatan ({{$kegiatan->count()}})</a>
-                    </li>
-                </ul>
-                <div class="tab-content" id="custom-content-below-tabContent">
-                    <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card-action-right">
-                                    <a href="{{route('backend.download.fisik')}}" class="btn btn-primary btn-sm rounded"><i class="fas fa-download"></i> Download</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row overflow-auto">
-                            <div class="col-12">
-                                <table id="progress" class="table table-responsive">
-                                    <thead>
-                                        <tr>
-                                            <th style="padding:1rem 2.25rem;">Nama Paket</th>
-                                            <th style="text-align: center">Bidang</th>
-                                            <th style="text-align: center">PPTK</th>
-                                            <th style="text-align: center">Realisasi (Rp.)</th>
-                                            <th style="text-align: center">Update</th>
-                                            <th style="text-align: center">Progress</th>
-                                            <th style="text-align: center">Masa Kerja</th>
-                                            <th style="text-align: center">Status</th>
-                                            <th style="text-align: center">Kontraktor</th>
-                                            <th style="text-align: center">Lokasi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($fisik as $itemA)
-                                        <tr>
-                                            <td>{{$itemA->title ?? '-'}}</td>
-                                            <td style="text-align: center">{{$itemA->bidang_name ?? '-'}}</td>
-                                            <td style="text-align: center">{{$itemA->pptk_name ?? '-'}}</td>
-                                            <td style="text-align: center">Rp.{{number_format($itemA->realisasi)}}</td>
-
-                                            @if ($itemA->progress->count() > 0)
-                                            <td style="color: red;">{{$itemA->progress->first()->updated_at}}</td>
-                                            @else
-                                            <td style="color: red;">{{'-'}}</td>
-                                            @endif
-                                            @if ($itemA->progress[0]->nilai ?? 0 >= 100)
-                                            <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Selesai'}})</a>
-                                                @else
-                                            <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Sedang Dikerjakan'}})</a>
-                                                @endif
-                                            </td>
-                                            <td style="text-align: center">{{(strtotime($itemA->akhir_kontrak->format('Y-m-d')) - strtotime(now()->format('Y-m-d'))) / 60 / 60 / 24 }} Hari</td>
-                                            <td style="text-align: center">
-                                                @if ($itemA->progreess != null)
-                                                @if (($itemA->progress->first()->nilai - $itemA->rencana[$itemA->progress->count() -1]->fisik ) <= 10) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-info rounded btn-block">{{'Wajar'}}</a>
-                                                    @else
-                                                    <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-danger rounded btn-block">{{'Kritis'}}</a>
-                                                    @endif
-                                                    @else
-                                                    <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
-                                                    @endif
-                                            </td>
-                                            <td>{{$itemA->penyedia_jasa ?? '-'}}</td>
-                                            <td>
-                                                <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $itemA->latitude }}+{{ $itemA->longitude }}">
-                                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade show" id="non-fisik" role="tabpanel" aria-labelledby="non-fisik-tab">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card-action-right">
-                                    <a href="{{route('backend.download.nonfisik')}}" class="btn btn-primary btn-sm rounded"><i class="fas fa-download"></i> Download</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row overflow-auto">
-                            <div class="col-12">
-                                <table id="progress-non-fisik" class="table " style="width: 100% !important">
-                                    <thead>
-                                        <tr>
-                                            <th style="padding:1rem 2.25rem;">Nama Paket</th>
-                                            <th style="text-align: center">Bidang</th>
-                                            <th style="text-align: center">PPTK</th>
-                                            <th style="text-align: center">Realisasi (Rp.)</th>
-                                            <th style="text-align: center">Update</th>
-                                            <th style="text-align: center">Progress</th>
-                                            <th style="text-align: center">Masa Kerja</th>
-                                            <th style="text-align: center">Status</th>
-                                            <th style="text-align: center">Kontraktor</th>
-                                            <th style="text-align: center">Lokasi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($nonfisik as $itemB)
-                                        <tr>
-                                            <td>{{$itemB->title ?? '-'}}</td>
-                                            <td style="text-align: center">{{$itemB->bidang_name ?? '-'}}</td>
-                                            <td style="text-align: center">{{$itemB->pptk_name ?? '-'}}</td>
-                                            <td style="text-align: center">Rp.{{number_format($itemB->realisasi)}}</td>
-                                            <td style="color: red;">{{$itemB->updated_at ? $itemB->updated_at->format('d-m-Y') : '-'}}</td>
-                                            <td style="text-align: center">
-                                                @if ((int)$itemB->progress > 0 && $itemB->progress < 100) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$itemB->progress}}% ({{'Sedang Dikerjakan'}})</a>
-                                                    @elseif ((int)$itemB->progress == 100)
-                                                    <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$itemB->progress}}% ({{'Sudah Selesai'}})</a>
-                                                    @else
-                                                    <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{0}}% ({{'Belum Mulai'}})</a>
-                                                    @endif
-                                            </td>
-                                            <td style="text-align: center">{{(strtotime($itemB->akhir_kontrak->format('Y-m-d')) - strtotime(now()->format('Y-m-d'))) / 60 / 60 / 24 }} Hari</td>
-                                            <td style="text-align: center">
-                                                @if ((int)$itemB->progress >= 1 && $itemB->progress < 40) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-danger rounded btn-block">{{'Kritis'}}</a>
-                                                    @elseif ((int)$itemB->progress >= 40 && $itemB->progress < 60) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-warning text-white rounded btn-block">{{'Terlambat'}}</a>
-                                                        @elseif ((int)$itemB->progress >= 60 && $itemB->progress < 80) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{'Wajar'}}</a>
-                                                            @elseif ((int)$itemB->progress >= 80 && $itemB->progress <= 100) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{'Baik'}}</a>
-                                                                @else
-                                                                <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemB->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
-                                                                @endif
-                                            </td>
-                                            <td>{{$itemB->penyedia_jasa ?? '-'}}</td>
-                                            <td>
-                                                <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $itemA->latitude }}+{{ $itemA->longitude }}">
-                                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade show" id="kegiatan" role="tabpanel" aria-labelledby="kegiatan-tab">
-                        <div class="row">
+                    <div class="col p-0">
+                        <div class="row m-0">
                             <div class="col-12">
                                 <div class="card-action-right">
                                     <a href="{{route('backend.download.kegiatan')}}" class="btn btn-primary btn-sm rounded"><i class="fas fa-download"></i> Download</a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row overflow-auto">
-                            <div class="col-12">
-                                <table id="progress-kegiatan" class="table " style="width: 100% !important">
-                                    <thead>
-                                        <tr>
-                                            <th style="padding:1rem 2.25rem;">Nama Paket</th>
-                                            <th style="text-align: center">Bidang</th>
-                                            <th style="text-align: center">PPTK</th>
-                                            <th style="text-align: center">Realisasi (Rp.)</th>
-                                            <th style="text-align: center">Update</th>
-                                            <th style="text-align: center">Progress</th>
-                                            <th style="text-align: center">Masa Kerja</th>
-                                            <th style="text-align: center">Status</th>
-                                            <th style="text-align: center">Kontraktor</th>
-                                            <th style="text-align: center">Lokasi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($kegiatan as $itemC)
-                                        <tr>
-                                            <td>{{$itemC->title ?? '-'}}</td>
-                                            <td style="text-align: center">{{$itemC->bidang_name ?? '-'}}</td>
-                                            <td style="text-align: center">{{$itemC->pptk_name ?? '-'}}</td>
-                                            <td style="text-align: center">Rp.{{number_format($itemC->realisasi)}}</td>
-                                            <td style="color: red;">{{$itemC->updated_at ? $itemC->updated_at->format('d-m-Y') : '-'}}</td>
-                                            <td style="text-align: center">
-                                                @if ((int)$itemC->progress > 0 && $itemC->progress < 100) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$itemC->progress}}% ({{'Sedang Dikerjakan'}})</a>
-                                                    @elseif ((int)$itemC->progress == 100)
-                                                    <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$itemC->progress}}% ({{'Sudah Selesai'}})</a>
-                                                    @else
-                                                    <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{0}}% ({{'Belum Mulai'}})</a>
-                                                    @endif
-                                            </td>
-                                            <td style="text-align: center">{{(strtotime($itemC->akhir_kontrak->format('Y-m-d')) - strtotime(now()->format('Y-m-d'))) / 60 / 60 / 24 }} Hari</td>
-                                            <td style="text-align: center">
-                                                @if ((int)$itemC->progress >= 1 && $itemC->progress < 40) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-danger rounded btn-block">{{'Kritis'}}</a>
-                                                    @elseif ((int)$itemC->progress >= 40 && $itemC->progress < 60) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-warning text-white rounded btn-block">{{'Terlambat'}}</a>
-                                                        @elseif ((int)$itemC->progress >= 60 && $itemC->progress < 80) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{'Wajar'}}</a>
-                                                            @elseif ((int)$itemC->progress >= 80 && $itemC->progress <= 100) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{'Baik'}}</a>
-                                                                @else
-                                                                <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemC->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
-                                                                @endif
-                                            </td>
-                                            <td>{{$itemC->penyedia_jasa ?? '-'}}</td>
-                                            <td>
-                                                <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $itemA->latitude }}+{{ $itemA->longitude }}">
-                                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                            <div class="row overflow-auto">
+                                <div class="col-12">
+                                    <table id="progress" class="table table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th style="padding:1rem 2.25rem;">Nama Pekerjaan</th>
+                                                <th style="text-align: center">Bidang</th>
+                                                <th style="text-align: center">PPTK</th>
+                                                <th style="text-align: center">Realisasi (Rp.)</th>
+                                                <th style="text-align: center">Update</th>
+                                                <th style="text-align: center">Progress</th>
+                                                <th style="text-align: center">Masa Kerja</th>
+                                                <th style="text-align: center">Status</th>
+                                                <th style="text-align: center">Kontraktor</th>
+                                                <th style="text-align: center">Lokasi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($fisik as $itemA)
+                                            <tr>
+                                                <td>{{$itemA->title ?? '-'}}</td>
+                                                <td style="text-align: center">{{$itemA->bidang_name ?? '-'}}</td>
+                                                <td style="text-align: center">{{$itemA->pptk_name ?? '-'}}</td>
+                                                <td style="text-align: center">Rp.{{number_format($itemA->realisasi)}}</td>
+
+                                                @if ($itemA->progress->count() > 0)
+                                                <td style="color: red;">{{$itemA->progress->first()->updated_at}}</td>
+                                                @else
+                                                <td style="color: red;">{{'-'}}</td>
+                                                @endif
+                                                @if (($itemA->progress[0]->nilai ?? 0 )>= 100)
+                                                <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Selesai'}})</a>
+                                                </td>
+                                                @elseif (($itemA->progress[0]->nilai ?? 0)>0)
+                                                <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Sedang Dikerjakan'}})</a>
+                                                </td>
+                                                @else
+                                                <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Belum Mulai'}})</a>
+                                                </td>
+                                                @endif
+                                                <td style="text-align: center">{{(strtotime($itemA->akhir_kontrak->format('Y-m-d')) - strtotime(now()->format('Y-m-d'))) / 60 / 60 / 24 }} Hari</td>
+                                                <td style="text-align: center">
+                                                    @if (($itemA->status_deviasi > 0 && $itemA->status_deviasi <= 10 )||$itemA->status_deviasi < 0 ) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{'Aman'}}</a>
+                                                            @elseif ($itemA->status_deviasi > 10)
+                                                            <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-warning rounded btn-block">{{'Peringatan'}}</a>
+                                                            @else
+                                                            <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
+                                                            @endif
+                                                </td>
+                                                <td>{{$itemA->penyedia_jasa ?? '-'}}</td>
+                                                <td>
+                                                    <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $itemA->latitude }}+{{ $itemA->longitude }}">
+                                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -383,6 +247,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('js')
@@ -450,46 +315,48 @@
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy;'
         }).addTo(map);
-            // add point on maps
-            var greenIcon = L.icon({
-                iconUrl: "{{ asset('image/marker-kuning.png') }}",
-                iconSize: [32, 32],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
-            var allPoints = [];
-            @foreach ($detail_kegiatan as $item)
-                var title = "<?= $item->title ?? '-' ?>";
-                var noKontrak = "<?= $item->no_kontrak ?? '-' ?>";
-                var jenisPengadaan = "<?= $item->jenis_pengadaan ?? '-' ?>";
-                var nilaiKontrak = "<?= $item->nilai_kontrak ?? '-' ?>";
-                var progress = "<?= $item->progress ?? '-' ?>";
-                var awalKontrak = "<?= $item->awal_kontrak ?? '-' ?>";
-                var akhirKontrak = "<?= $item->akhir_kontrak ?? '-' ?>";
-                var penyediaJasa = "<?= $item->penyedia_jasa ?? '-' ?>";
-                var noSpmk = "<?= $item->no_spmk ?? '-' ?>";
+        // add point on maps
+        var greenIcon = L.icon({
+            iconUrl: "{{ asset('image/marker-kuning.png') }}",
+            iconSize: [32, 32],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+        var allPoints = [];
+        @foreach($detail_kegiatan as $item)
+        var title = "<?= $item->title ?? '-' ?>";
+        var noKontrak = "<?= $item->no_kontrak ?? '-' ?>";
+        var jenisPengadaan = "<?= $item->jenis_pengadaan ?? '-' ?>";
+        var nilaiKontrak = "<?= $item->nilai_kontrak ?? '-' ?>";
+        var progress = "<?= $item->progress ?? '-' ?>";
+        var awalKontrak = "<?= $item->awal_kontrak ?? '-' ?>";
+        var akhirKontrak = "<?= $item->akhir_kontrak ?? '-' ?>";
+        var penyediaJasa = "<?= $item->penyedia_jasa ?? '-' ?>";
+        var noSpmk = "<?= $item->no_spmk ?? '-' ?>";
 
-                var thisPoint = L.marker([<?= $item->latitude ?>, <?= $item->longitude ?>], {icon: greenIcon}).addTo(map)
-                                .bindPopup("Data Informasi " + "<br>" + "<br>" + 
-                                    "Nama Pekerjaan : " + title + "<br>" +
-                                    "No Kontrak : " + noKontrak + "<br>" +
-                                    "Jenis Pengadaan : " + jenisPengadaan + "<br>" +
-                                    "Nilai Kontrak : " + nilaiKontrak + "<br>" +
-                                    "Progress : " + progress + "<br>" +
-                                    "Awal Kontrak : " + awalKontrak + "<br>" +
-                                    "Akhir Kontrak : " + akhirKontrak + "<br>" +
-                                    "Penyedia Jasa : " + penyediaJasa + "<br>" +
-                                    "No SPMK : " + noSpmk + "<br>"
-                                );
-                allPoints.push([<?= $item->latitude ?>, <?= $item->longitude ?>]);
-            @endforeach
-            if (allPoints.length > 0) {
-                var bounds = L.latLngBounds(allPoints); // Membuat batas dari semua koordinat
-                map.fitBounds(bounds); // Menyesuaikan tampilan peta agar mencakup semua poin
-            }
-            // end add point on maps
-        //end display maps 
+        var thisPoint = L.marker([<?= $item->latitude ?>, <?= $item->longitude ?>], {
+                icon: greenIcon
+            }).addTo(map)
+            .bindPopup("Data Informasi " + "<br>" + "<br>" +
+                "Nama Pekerjaan : " + title + "<br>" +
+                "No Kontrak : " + noKontrak + "<br>" +
+                "Jenis Pengadaan : " + jenisPengadaan + "<br>" +
+                "Nilai Kontrak : " + nilaiKontrak + "<br>" +
+                "Progress : " + progress + "<br>" +
+                "Awal Kontrak : " + awalKontrak + "<br>" +
+                "Akhir Kontrak : " + akhirKontrak + "<br>" +
+                "Penyedia Jasa : " + penyediaJasa + "<br>" +
+                "No SPMK : " + noSpmk + "<br>"
+            );
+        allPoints.push([<?= $item->latitude ?>, <?= $item->longitude ?>]);
+        @endforeach
+        if (allPoints.length > 0) {
+            var bounds = L.latLngBounds(allPoints); // Membuat batas dari semua koordinat
+            map.fitBounds(bounds); // Menyesuaikan tampilan peta agar mencakup semua poin
+        }
+        // end add point on maps
+        //end display maps
 
     });
 </script>
@@ -519,6 +386,8 @@
             console.log(totalKeuangan, totalFisik);
 
             // Chart Keuangan
+            @can('lihat progres keuangan')
+
             var ctx = document.getElementById('myChart').getContext('2d');
             var myChart = new Chart(ctx, {
                 type: 'bar',
@@ -540,7 +409,12 @@
                     }
                 }
             });
+            @endcan
 
+            @if (Auth::user()->cannot('lihat progres keuangan'))
+            $('#section-chart-fisik').removeClass('col-lg-6');
+            $('#section-chart-fisik').addClass('col-lg-12');
+            @endif
             const ctxFisik = document.getElementById('chartFisik').getContext('2d');
             var myChart = new Chart(ctxFisik, {
                 type: 'line',
