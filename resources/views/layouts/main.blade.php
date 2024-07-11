@@ -7,6 +7,10 @@
     <title>@yield('title') | {{ __('Admin area') }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <x-shared.ico />
+    <!-- PWA  -->
+    <meta name="theme-color" content="#6777ef" />
+    <link rel="apple-touch-icon" href="{{ asset('image/logo.jpg') }}">
+    <link rel="manifest" href="{{ asset('/manifest.json') }}">
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -113,6 +117,24 @@
         }
     </script>
     @yield('js')
+    <script src="{{ asset('/sw.js') }}"></script>
+    <!-- Laravel PWA -->
+    <script>
+        if ("serviceWorker" in navigator) {
+            // Register a service worker hosted at the root of the
+            // site using the default scope.
+            navigator.serviceWorker.register("/sw.js").then(
+                (registration) => {
+                    console.log("Service worker registration succeeded:", registration);
+                },
+                (error) => {
+                    console.error(`Service worker registration failed: ${error}`);
+                },
+            );
+        } else {
+            console.error("Service workers are not supported.");
+        }
+    </script>
 </body>
 
 </html>

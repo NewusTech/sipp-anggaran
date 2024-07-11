@@ -60,6 +60,17 @@
         padding: 0;
         align-items: center;
     }
+
+    .nav-link,
+    .nav-link.active {
+        width: max-content;
+        border-radius: 25px;
+    }
+
+    .nav-link.active {
+        background-color: #2196f3 !important;
+        color: white !important;
+    }
 </style>
 
 {{-- <link rel="stylesheet" href="{{ asset('css/select_file.css') }}">--}}
@@ -94,24 +105,24 @@
                 <div class="row">
                     <h4 class="text-darkblue"><a href="{{route('backend.kegiatan.index')}}" class="btn btn-default rounded"><i class="fas fa-arrow-left"></i></a><strong> PROGRES PEKERJAAN </strong></h4>
                 </div>
-                <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                <ul class="nav nav-tabs flex-nowrap overflow-auto pb-3" id="custom-content-below-tab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link {{session('tab') == ''? 'active' : ''}}" id="custom-content-below-detail-tab" data-toggle="pill" href="#custom-content-above-detail" role="tab" aria-controls="custom-content-below-detail" aria-selected="true">Detail</a>
+                        <a class="nav-link py-1 {{session('tab') == ''? 'active' : ''}}" id="custom-content-below-detail-tab" data-toggle="pill" href="#custom-content-above-detail" role="tab" aria-controls="custom-content-below-detail" aria-selected="true">Detail</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{session('tab') == 'kurva_s'? 'active' : ''}}" id="custom-content-below-kurva-s-tab" data-toggle="pill" href="#custom-content-below-kurva-s" role="tab" aria-controls="custom-content-below-detail" aria-selected="true">Kurva S</a>
+                        <a class="nav-link py-1 {{session('tab') == 'kurva_s'? 'active' : ''}}" id="custom-content-below-kurva-s-tab" data-toggle="pill" href="#custom-content-below-kurva-s" role="tab" aria-controls="custom-content-below-detail" aria-selected="true">Kurva S</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{session('tab') == 'penanggung_jawab'? 'active' : ''}}" id="custom-content-below-penanggung_jawab-tab" data-toggle="pill" href="#custom-content-above-penanggung_jawab" role="tab" aria-controls="custom-content-below-penanggung_jawab" aria-selected="true">Penanggung Jawab</a>
+                        <a class="nav-link py-1{{session('tab') == 'penanggung_jawab'? 'active' : ''}}" id="custom-content-below-penanggung_jawab-tab" data-toggle="pill" href="#custom-content-above-penanggung_jawab" role="tab" aria-controls="custom-content-below-penanggung_jawab" aria-selected="true">Penanggung Jawab</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{session('tab') == 'progres'? 'active' : ''}}" id="custom-content-below-progres-tab" data-toggle="pill" href="#custom-content-below-progres" role="tab" aria-controls="custom-content-below-detail" aria-selected="true">Progres</a>
+                        <a class="nav-link py-1 {{session('tab') == 'progres'? 'active' : ''}}" id="custom-content-below-progres-tab" data-toggle="pill" href="#custom-content-below-progres" role="tab" aria-controls="custom-content-below-detail" aria-selected="true">Progres</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{session('tab') == 'dokumentasi'? 'active' : ''}}" id="custom-content-below-dokumentasi-tab" data-toggle="pill" href="#custom-content-above-dokumentasi" role="tab" aria-controls="custom-content-below-dokumentasi" aria-selected="true">Dokumentasi</a>
+                        <a class="nav-link py-1 {{session('tab') == 'dokumentasi'? 'active' : ''}}" id="custom-content-below-dokumentasi-tab" data-toggle="pill" href="#custom-content-above-dokumentasi" role="tab" aria-controls="custom-content-below-dokumentasi" aria-selected="true">Dokumentasi</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{session('tab') == 'titik_lokasi'? 'active' : ''}}" id="custom-content-below-titik-lokasi-tab" data-toggle="pill" href="#custom-content-above-titik-lokasi" role="tab" aria-controls="custom-content-below-titik-lokasi" aria-selected="true">Titik Lokasi</a>
+                        <a class="nav-link py-1 {{session('tab') == 'titik_lokasi'? 'active' : ''}}" id="custom-content-below-titik-lokasi-tab" data-toggle="pill" href="#custom-content-above-titik-lokasi" role="tab" aria-controls="custom-content-below-titik-lokasi" aria-selected="true">Titik Lokasi</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="custom-content-below-tabContent">
