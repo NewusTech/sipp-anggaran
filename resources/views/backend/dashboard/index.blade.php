@@ -20,15 +20,27 @@
     .total-paket {
         color: #5792ce;
     }
+    @media (max-width: 575.98px) {
+        #progress {
+            display: none;
+        }
+        #progress_wrapper{
+            display:none;
+        }
+
+        #card-progres{
+            display: inherit !important;
+        }
+    }
 </style>
 @endsection
 @section('main')
 <form action="{{route('backend.dashboard.index')}}" method="GET">
-    <div class="row">
-        <div class=" mx-3 col-2 col-md-1 col-lg-1">
+    <div class="row justify-content-start">
+        <div class="ml-3 col-4 col-lg-1 d-flex align-items-center">
             <label for="filter">Filter Tahun</label>
         </div>
-        <div class="col-3">
+        <div class="col-6 col-lg-3">
             <select name="tahun" id="tahun" class="form-control" onchange="this.form.submit()" required>
                 <option value="" selected>-- Pilih Tahun --</option>
                 @for ($i = 0; $i < 5; $i++) <option value="{{date('Y')-$i}}" {{request()->get('tahun') == date('Y')-$i ? 'selected' : ''}}>{{((int)date('Y'))-$i}}</option>
@@ -82,9 +94,6 @@
     <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
-                <div class="card-action-right">
-                    <button type="button" onclick="downloadImage()" class="btn btn-primary btn-sm rounded"><i class="fas fa-download"></i> Download</button>
-                </div>
                 <div class="row">
                     <h4 class="text-darkblue"><strong> Progres Keuangan {{request()->get('tahun') ? request()->get('tahun') : "2024"}}</strong></h4>
                 </div>
@@ -98,9 +107,6 @@
     <div class="col-lg-6" id="section-chart-fisik">
         <div class="card">
             <div class="card-body">
-                <div class="card-action-right">
-                    <button type="button" onclick="downloadImage()" class="btn btn-primary btn-sm rounded"><i class="fas fa-download"></i> Download</button>
-                </div>
                 <div class="row">
                     <h4 class="text-darkblue"><strong> Progres Fisik {{request()->get('tahun') ? request()->get('tahun') : "2024"}}</strong></h4>
                 </div>
@@ -172,72 +178,123 @@
                 <div class="row m-0 p-2">
                     <h4 class="text-darkblue"><strong> PROGRESS PEKERJAAN TAHUN {{request()->get('tahun') ? request()->get('tahun') : "2024"}}</strong></h4>
                     <div class="col p-0">
-                        <div class="row m-0">
-                            <div class="col-12">
-                                <div class="card-action-right">
-                                    <a href="{{route('backend.download.kegiatan')}}" class="btn btn-primary btn-sm rounded"><i class="fas fa-download"></i> Download</a>
-                                </div>
-                            </div>
-                            <div class="row overflow-auto">
-                                <div class="col-12">
-                                    <table id="progress" class="table table-responsive">
-                                        <thead>
-                                            <tr>
-                                                <th style="padding:1rem 2.25rem;">Nama Pekerjaan</th>
-                                                <th style="text-align: center">Bidang</th>
-                                                <th style="text-align: center">PPTK</th>
-                                                <th style="text-align: center">Realisasi (Rp.)</th>
-                                                <th style="text-align: center">Update</th>
-                                                <th style="text-align: center">Progress</th>
-                                                <th style="text-align: center">Masa Kerja</th>
-                                                <th style="text-align: center">Status</th>
-                                                <th style="text-align: center">Kontraktor</th>
-                                                <th style="text-align: center">Lokasi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($fisik as $itemA)
-                                            <tr>
-                                                <td>{{$itemA->title ?? '-'}}</td>
-                                                <td style="text-align: center">{{$itemA->bidang_name ?? '-'}}</td>
-                                                <td style="text-align: center">{{$itemA->pptk_name ?? '-'}}</td>
-                                                <td style="text-align: center">Rp.{{number_format($itemA->realisasi)}}</td>
+                        <div class="row m-0 overflow-auto">
+                            <div class="col-12 px-0">
+                                <table id="progress" class="table table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th style="padding:1rem 2.25rem;">Nama Pekerjaan</th>
+                                            <th style="text-align: center">Bidang</th>
+                                            <th style="text-align: center">PPTK</th>
+                                            <th style="text-align: center">Realisasi (Rp.)</th>
+                                            <th style="text-align: center">Update</th>
+                                            <th style="text-align: center">Progress</th>
+                                            <th style="text-align: center">Masa Kerja</th>
+                                            <th style="text-align: center">Status</th>
+                                            <th style="text-align: center">Kontraktor</th>
+                                            <th style="text-align: center">Lokasi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($fisik as $itemA)
+                                        <tr>
+                                            <td>{{$itemA->title ?? '-'}}</td>
+                                            <td style="text-align: center">{{$itemA->bidang_name ?? '-'}}</td>
+                                            <td style="text-align: center">{{$itemA->pptk_name ?? '-'}}</td>
+                                            <td style="text-align: center">Rp.{{number_format($itemA->realisasi)}}</td>
 
-                                                @if ($itemA->progress->count() > 0)
-                                                <td style="color: red;">{{$itemA->progress->first()->updated_at}}</td>
-                                                @else
-                                                <td style="color: red;">{{'-'}}</td>
-                                                @endif
-                                                @if (($itemA->progress[0]->nilai ?? 0 )>= 100)
-                                                <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Selesai'}})</a>
-                                                </td>
-                                                @elseif (($itemA->progress[0]->nilai ?? 0)>0)
-                                                <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Sedang Dikerjakan'}})</a>
-                                                </td>
-                                                @else
-                                                <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Belum Mulai'}})</a>
-                                                </td>
-                                                @endif
-                                                <td style="text-align: center">{{(strtotime($itemA->akhir_kontrak->format('Y-m-d')) - strtotime(now()->format('Y-m-d'))) / 60 / 60 / 24 }} Hari</td>
-                                                <td style="text-align: center">
-                                                    @if (($itemA->status_deviasi > 0 && $itemA->status_deviasi <= 10 )||$itemA->status_deviasi < 0 ) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{'Aman'}}</a>
-                                                            @elseif ($itemA->status_deviasi > 10)
-                                                            <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-warning rounded btn-block">{{'Peringatan'}}</a>
-                                                            @else
-                                                            <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
-                                                            @endif
-                                                </td>
-                                                <td>{{$itemA->penyedia_jasa ?? '-'}}</td>
-                                                <td>
-                                                    <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $itemA->latitude }}+{{ $itemA->longitude }}">
-                                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            @if ($itemA->progress->count() > 0)
+                                            <td style="color: red;">{{$itemA->progress->first()->updated_at}}</td>
+                                            @else
+                                            <td style="color: red;">{{'-'}}</td>
+                                            @endif
+                                            @if (($itemA->progress[0]->nilai ?? 0 )>= 100)
+                                            <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Selesai'}})</a>
+                                            </td>
+                                            @elseif (($itemA->progress[0]->nilai ?? 0)>0)
+                                            <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Sedang Dikerjakan'}})</a>
+                                            </td>
+                                            @else
+                                            <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{$itemA->progress[0]->nilai ?? 0}}% ({{'Belum Mulai'}})</a>
+                                            </td>
+                                            @endif
+                                            <td style="text-align: center">{{(strtotime($itemA->akhir_kontrak->format('Y-m-d')) - strtotime(now()->format('Y-m-d'))) / 60 / 60 / 24 }} Hari</td>
+                                            <td style="text-align: center">
+                                                @if (($itemA->status_deviasi > 0 && $itemA->status_deviasi <= 10 )||$itemA->status_deviasi < 0 ) <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{'Aman'}}</a>
+                                                        @elseif ($itemA->status_deviasi > 10)
+                                                        <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-warning rounded btn-block">{{'Peringatan'}}</a>
+                                                        @else
+                                                        <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $itemA->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{'Belum Mulai'}}</a>
+                                                        @endif
+                                            </td>
+                                            <td>{{$itemA->penyedia_jasa ?? '-'}}</td>
+                                            <td>
+                                                <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $itemA->latitude }}+{{ $itemA->longitude }}">
+                                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+
+                                @foreach ($fisik as $item)
+                                <div id="card-progres" class="card mx-0 d-none">
+                                    <div class="card-body p-0 p-1">
+                                        <div class="row m-0 my-1 justify-content-between">
+                                            <div class="col-5 d-flex align-items-center">
+                                                <p class="text-darkblue" style="font-size: 14px; font-weight:bold; margin:0;">Nama Pekerjaan</p>
+                                            </div>
+                                            <div class="col-6 pl-0">
+                                                <p style="font-size: 14px;" class="m-0">{{$item->title}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row m-0 my-1 justify-content-between">
+                                            <div class="col-5 d-flex align-items-center">
+                                                <p class="text-darkblue" style="font-size: 14px; font-weight:bold; margin:0;">Bidang</p>
+                                            </div>
+                                            <div class="col-6 pl-0">
+                                                <p style="font-size: 14px;" class="m-0">{{$item->bidang_name}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row m-0 my-1 justify-content-between">
+                                            <div class="col-5 d-flex align-items-center">
+                                                <p class="text-darkblue" style="font-size: 14px; font-weight:bold; margin:0;">Realisasi</p>
+                                            </div>
+                                            <div class="col-6 pl-0">
+                                                <p style="font-size: 14px;" class="m-0">Rp.{{number_format($item->realisasi)}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row m-0 my-1 justify-content-between">
+                                            <div class="col-5 d-flex align-items-center">
+                                                <p class="text-darkblue" style="font-size: 14px; font-weight:bold; margin:0;">Progress</p>
+                                            </div>
+                                            <div class="col-6 pl-0">
+                                            @if (($item->progress[0]->nilai ?? 0 )>= 100)
+                                            <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $item->detail_kegiatan_id]) }}" class="btn btn-sm btn-success rounded btn-block">{{$item->progress[0]->nilai ?? 0}}% ({{'Selesai'}})</a>
+                                            </td>
+                                            @elseif (($item->progress[0]->nilai ?? 0)>0)
+                                            <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $item->detail_kegiatan_id]) }}" class="btn btn-sm btn-primary rounded btn-block">{{$item->progress[0]->nilai ?? 0}}% ({{'Sedang Dikerjakan'}})</a>
+                                            </td>
+                                            @else
+                                            <td style="text-align: center"><a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $item->detail_kegiatan_id]) }}" class="btn btn-sm btn-default rounded btn-block">{{$item->progress[0]->nilai ?? 0}}% ({{'Belum Mulai'}})</a>
+                                            </td>
+                                            @endif
+                                            </div>
+                                        </div>
+                                        <div class="row m-0 my-1 justify-content-between">
+                                            <div class="col-5 d-flex align-items-center">
+                                                <p class="text-darkblue" style="font-size: 14px; font-weight:bold; margin:0;">Lokasi</p>
+                                            </div>
+                                            <div class="col-6 pl-0">
+                                            <a target="_blank" href="https://maps.google.com/maps?&z=13&mrt=yp&t=m&q={{ $item->latitude }}+{{ $item->longitude }}">
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            </a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -411,7 +468,7 @@
             });
             @endcan
 
-            @if (Auth::user()->cannot('lihat progres keuangan'))
+            @if(Auth::user()->cannot('lihat progres keuangan'))
             $('#section-chart-fisik').removeClass('col-lg-6');
             $('#section-chart-fisik').addClass('col-lg-12');
             @endif

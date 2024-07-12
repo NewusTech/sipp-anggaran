@@ -1,11 +1,11 @@
 {
     "name": "SIPPP PUPR Tubaba",
-    "short_name": "SIPPP",
+    "short_name": "SIPPP PUPR TUBABA",
     "start_url": "/index.php",
     "background_color": "#6777ef",
     "description": "Sistem Informasi Pengawasan, Pelaksanaan, dan Pelaporan Pekerjaan Lapangan Dinas PUPR Kabupaten Tulang Bawang Barat",
     "display": "fullscreen",
-    "theme_color": "#6777ef",
+    "theme_color": "#FFFFFF",
     "icons": [
         {
             "src": "image/logo.jpg",
