@@ -117,8 +117,8 @@
         }
     </script>
     @yield('js')
-    <script src="{{ asset('/sw.js') }}"></script>
     <!-- Laravel PWA -->
+    <script src="{{ asset('/sw.js') }}"></script>
     <script>
         if ("serviceWorker" in navigator) {
             // Register a service worker hosted at the root of the
