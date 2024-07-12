@@ -63,10 +63,11 @@ class DashboardController extends Controller
             'detail_kegiatan.akhir_kontrak',
             'detail_kegiatan.latitude',
             'detail_kegiatan.longitude',
+            'detail_kegiatan.kegiatan_id',
             'bidang.name as bidang_name',
             'penanggung_jawab.pptk_name',
             'penyedia_jasa.name as penyedia_jasa'
-        )
+        )->with('kegiatan')
             ->whereHas('kegiatan', function ($query) use ($bidang_id) {
                 $query->where('is_arship', 0);
                 if ($bidang_id != null) {
