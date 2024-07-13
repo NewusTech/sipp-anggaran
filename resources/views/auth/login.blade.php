@@ -24,7 +24,7 @@
 
                 </div>
             </div>
-            <form class="form-login" action="{{ route('login') }}" method="post">
+            <form id="form-login" class="form-login" action="{{ route('login') }}" method="post">
                 @csrf
                 <div class="input-group mb-3">
                     <input type="email" name="email" class="form-control rounded login-input @error('email') is-invalid @enderror" placeholder="Email" value="{{ old('email') }}" autofocus required autocomplete="false">
@@ -48,7 +48,9 @@
                     </div>
                 </div>
                 <div class="btn-login mb-5">
-                    <button type="submit" class="btn btn-warning btn-block rounded text-white text-bold">{{ __('Login') }}</button>
+                    <button type="submit" id="button-login" class="btn btn-warning btn-block rounded text-white text-bold d-flex justify-content-center">
+                        <p id="text-login" class="p-0 m-0">{{ __('Login') }}</p>
+                    </button>
                 </div>
             </form>
         </div>

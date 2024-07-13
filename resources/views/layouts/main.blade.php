@@ -27,10 +27,36 @@
     <!-- jQuery -->
     <script src="{{ asset('admin') }}/plugins/jquery/jquery.min.js"></script>
     @yield('css')
+    <style>
+        #loading-screen {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
 <body class="layout-top-nav">
-    <div class="wrapper">
+    <div id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <div id="content" style="display: none;" class="wrapper">
         <!-- Navbar -->
         <x-backend.shareds.navbar />
         <!-- /.navbar -->
@@ -77,6 +103,7 @@
             <x-backend.shareds.bottom-bar />
         </div>
     </div>
+
     <!-- ./wrapper -->
 
     <!-- jQuery UI 1.11.4 -->
@@ -117,6 +144,17 @@
         }
     </script>
     @yield('js')
+    // loader script
+    <script>
+        window.addEventListener('load', function() {
+            const loadingScreen = document.getElementById('loading-screen');
+            const content = document.getElementById('content');
+
+            loadingScreen.style.display = 'none';
+            content.style.display = 'block';
+        });
+    </script>
+
     <!-- Laravel PWA -->
     <script src="{{ asset('/sw.js') }}"></script>
     <script>
