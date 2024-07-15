@@ -37683,6 +37683,10 @@ a.disabled.mailbox-attachment-close {
     text-align: center;
 }
 
+.bg-dropdown{
+    background-color: #F5FAFF;
+}
+
 .login-img {
     width: 50px;
 }

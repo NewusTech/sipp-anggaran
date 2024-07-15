@@ -17,6 +17,20 @@
     .table td {
         padding: 8px;
     }
+
+    @media(max-width: 576px) {
+        #tableKegiatanPekerjaan {
+            display: none;
+        }
+        #accordionKegiatan{
+            display: inherit;
+        }
+    }
+    @media (min-width: 576px) {
+        #accordionKegiatan{
+            display: none;
+        }
+    }
 </style>
 @endsection
 @section('breadcump')
@@ -112,7 +126,7 @@
                             @foreach ($bidang as $item)
                             <div class="card w-100">
                                 <div class="p-3">
-                                    <div id="heading-{{$item->id}}" onclick="getKegiatan({{$item->id}})" class="p-2 mb-2" data-toggle="collapse" data-target="#collapse-{{$item->id}}" aria-expanded="true" aria-controls="collapseOne">
+                                    <div id="heading-{{$item->id}}" onclick="getKegiatan({{$item->id}})" class="p-2" data-toggle="collapse" data-target="#collapse-{{$item->id}}" aria-expanded="true" aria-controls="collapseOne">
                                         <div class="card-table">
                                             <p class="taf text-darkblue">
                                                 <strong>{{$item->name}}</strong>
@@ -123,7 +137,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <table class="table table-responsive table-bordered align-middle">
+                                    @include('backend.kegiatan._collapse_kegiatan')
+                                    <table id="tableKegiatanPekerjaan" class="table table-responsive table-bordered align-middle">
                                         <thead>
                                             <tr>
                                                 <th class="text-center" colspan="2">Kode</th>
