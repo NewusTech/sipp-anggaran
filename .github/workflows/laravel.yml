@@ -17,7 +17,7 @@ jobs:
     - name : git pull
       run : git pull
     - name: Install Composer
-      run: composer install
+      run: composer update
     - name : run migration
       run : php artisan migrate
     - name : run seeder
