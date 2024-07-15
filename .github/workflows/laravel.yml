@@ -19,9 +19,9 @@ jobs:
     - name: Install Composer
       run: composer update
     - name : run migration
-      run : php artisan migrate
+      run : yes | php artisan migrate
     - name : run seeder
-      run : php artisan db:seed
+      run : yes | php artisan db:seed
     - name: Generate key
       run: php artisan key:generate
     - name: Directory Permissions
