@@ -126,9 +126,9 @@
                             @foreach ($bidang as $item)
                             <div class="card w-100">
                                 <div class="p-3">
-                                    <div id="heading-{{$item->id}}" onclick="getKegiatan({{$item->id}})" class="p-2" data-toggle="collapse" data-target="#collapse-{{$item->id}}" aria-expanded="true" aria-controls="collapseOne">
+                                    <div id="heading-{{$item->id}}" onclick="getKegiatan({{$item->id}})" class="p-2 rounded heading-kegiatan" data-toggle="collapse" data-target="#collapse-{{$item->id}}" aria-expanded="true" aria-controls="collapseOne">
                                         <div class="card-table">
-                                            <p class="taf text-darkblue">
+                                            <p class="taf text-white">
                                                 <strong>{{$item->name}}</strong>
                                             </p>
                                             <div class="card-table-cell tar">
@@ -156,7 +156,6 @@
                                                 <th class="text-center">Pekerjaan</th>
                                                 <th class="text-center">Pekerjaan</th>
                                                 <th class="text-center">Pagu / Nilai Kontrak</th>
-                                                <th class="text-center">Realisasi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1091,7 +1090,13 @@
 </script>
 
 <script>
-    function postVerifikasi() {
+     let idBidang = @json($bidang->map(function($item){ return $item->id; }));
+     let headingColors = ["#6097d3", "#dc6789","#df8d72" , "#afc28a" ,"#49c3a3", "#715fa5"]
+    console.log(idBidang[0]);
+    for (let index = 0; index < idBidang.length; index++) {
+        let idHeadings = document.getElementById(`heading-${idBidang[index]}`);
+        console.log(idHeadings)
+        idHeadings.style.backgroundColor = headingColors[index];
 
     }
 </script>

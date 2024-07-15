@@ -6,7 +6,8 @@
                 <div class="col-8">
                     <strong>{{$kegiatan->title}}</strong>
                 </div>
-                <div class="col-2 d-flex justify-content-end align-items-center">
+                <div class="col-4 d-flex justify-content-between align-items-center">
+                    <strong>Total: {{$kegiatan->detail_kegiatan->count()}}</strong>
                     <img src="{{asset('image/chevron-down.svg')}}" style="width: 25px; height: 25px;" alt="">
                 </div>
             </div>
@@ -34,14 +35,14 @@
                                     <div>{{$detail->no_detail_kegiatan}}</div>
                                 </div>
                                 <div class="row flex-column m-0 mb-1">
-                                    <strong>Output</strong>
+                                    <strong>Jenis Pekerjaan</strong>
                                     <div>Fisik</div>
                                 </div>
                                 <div class="row flex-column m-0 mb-1">
                                     <strong>Alokasi</strong>
                                     <div class="row m-0 justify-content-between">
                                         <div class="col-6 pl-0 pr-2">
-                                            <div>Pekerjaan</div>
+                                            <div>Realisasi Pekerjaan</div>
                                             <div>Pagu / Nilai Kontrak</div>
                                         </div>
                                         <div class="col-6 p-0">
