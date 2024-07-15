@@ -180,7 +180,7 @@
                     <div class="col p-0">
                         <div class="row m-0 overflow-auto">
                             <div class="col-12 px-0">
-                                <table id="progress" class="table table-responsive">
+                                <table id="progress" class="table table-responsive" style="width: 100% !important;">
                                     <thead>
                                         <tr>
                                             <th style="padding:1rem 2.25rem;">Nama Pekerjaan</th>

@@ -46,7 +46,7 @@
     <div id="loading-screen">
         <div class="loader"></div>
     </div>
-    <div class="loader-btn"></div>
+    <!-- <div class="loader-btn"></div> -->
     <div id="content" style="display: none;">
         @yield('main')
     </div>
@@ -71,14 +71,15 @@
     const form = document.getElementById('form-login');
     let textLogin = document.getElementById('text-login');
     let btnLogin = document.getElementById('button-login')
-    const loader = document.getElementsByClassName('loader-btn');
+    const loader = document.createElement('div');
+    loader.classList.add('loader-btn');
 
-    console.log(form);
-    console.log(loader[0]);
+    console.log(loader);
        form.addEventListener('submit', function(e) {
             console.log('submit event on login')
             btnLogin.removeChild(textLogin);
-            btnLogin.append(loader[0]);
+            btnLogin.append(loader);
+            btnLogin.setAttribute('disabled', 'true');
        })
     </script>
     <script>
