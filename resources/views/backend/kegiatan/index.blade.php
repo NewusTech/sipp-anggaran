@@ -126,14 +126,14 @@
                             @foreach ($bidang as $item)
                             <div class="card w-100">
                                 <div class="p-3">
-                                    <div id="heading-{{$item->id}}" onclick="getKegiatan({{$item->id}})" class="p-2 rounded heading-kegiatan" data-toggle="collapse" data-target="#collapse-{{$item->id}}" aria-expanded="true" aria-controls="collapseOne">
+                                    <div id="heading-{{$item->id}}" onclick="getKegiatan({{$item->id}})" class="card-header p-2 rounded heading-kegiatan" data-toggle="collapse" data-target="#collapse-{{$item->id}}" aria-expanded="true" aria-controls="collapseOne">
                                         <div class="card-table">
-                                            <p class="taf text-white">
+                                            <div class="taf text-white">
                                                 <strong>{{$item->name}}</strong>
-                                            </p>
+                                            </div>
                                             <div class="card-table-cell tar">
-                                                <button type="button" class=" btn btn-sm btn-secondary rounded" style="width: 120pt"><strong>Total Kegiatan : {{$item->kegiatan->count()}}</strong></button>
-                                                <button type="button" class="btn btn-sm btn-secondary rounded" style="width: 200pt"><strong>Total Pagu : Rp {{number_format($item->kegiatan->sum('alokasi'))}}</strong></button>
+                                                <button type="button" class=" btn btn-sm btn-light rounded text-darkblue" style="width: 120pt"><strong>Total Kegiatan : {{$item->kegiatan->count()}}</strong></button>
+                                                <button type="button" class="btn btn-sm btn-light rounded text-darkblue" style="width: 200pt"><strong>Total Pagu : Rp {{number_format($item->kegiatan->sum('alokasi'))}}</strong></button>
                                             </div>
                                         </div>
                                     </div>

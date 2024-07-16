@@ -77,5 +77,5 @@
     </div>
 </div>
 @empty
-<div class="text-center">Tidak ada data</div>
+<div id="accordionKegiatan" class="text-center">Tidak ada data</div>
 @endforelse
