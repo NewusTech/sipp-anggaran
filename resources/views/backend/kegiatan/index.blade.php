@@ -17,6 +17,20 @@
     .table td {
         padding: 8px;
     }
+
+    @media(max-width: 576px) {
+        #tableKegiatanPekerjaan {
+            display: none;
+        }
+        #accordionKegiatan{
+            display: inherit;
+        }
+    }
+    @media (min-width: 576px) {
+        #accordionKegiatan{
+            display: none;
+        }
+    }
 </style>
 @endsection
 @section('breadcump')
@@ -112,18 +126,19 @@
                             @foreach ($bidang as $item)
                             <div class="card w-100">
                                 <div class="p-3">
-                                    <div id="heading-{{$item->id}}" onclick="getKegiatan({{$item->id}})" class="p-2 mb-2" data-toggle="collapse" data-target="#collapse-{{$item->id}}" aria-expanded="true" aria-controls="collapseOne">
+                                    <div id="heading-{{$item->id}}" onclick="getKegiatan({{$item->id}})" class="card-header p-2 rounded heading-kegiatan" data-toggle="collapse" data-target="#collapse-{{$item->id}}" aria-expanded="true" aria-controls="collapseOne">
                                         <div class="card-table">
-                                            <p class="taf text-darkblue">
+                                            <div class="taf text-white">
                                                 <strong>{{$item->name}}</strong>
-                                            </p>
+                                            </div>
                                             <div class="card-table-cell tar">
-                                                <button type="button" class=" btn btn-sm btn-secondary rounded" style="width: 120pt"><strong>Total Kegiatan : {{$item->kegiatan->count()}}</strong></button>
-                                                <button type="button" class="btn btn-sm btn-secondary rounded" style="width: 200pt"><strong>Total Pagu : Rp {{number_format($item->kegiatan->sum('alokasi'))}}</strong></button>
+                                                <button type="button" class=" btn btn-sm btn-light rounded text-darkblue" style="width: 120pt"><strong>Total Kegiatan : {{$item->kegiatan->count()}}</strong></button>
+                                                <button type="button" class="btn btn-sm btn-light rounded text-darkblue" style="width: 200pt"><strong>Total Pagu : Rp {{number_format($item->kegiatan->sum('alokasi'))}}</strong></button>
                                             </div>
                                         </div>
                                     </div>
-                                    <table class="table table-responsive table-bordered align-middle">
+                                    @include('backend.kegiatan._collapse_kegiatan')
+                                    <table id="tableKegiatanPekerjaan" class="table table-responsive table-bordered align-middle">
                                         <thead>
                                             <tr>
                                                 <th class="text-center" colspan="2">Kode</th>
@@ -141,7 +156,6 @@
                                                 <th class="text-center">Pekerjaan</th>
                                                 <th class="text-center">Pekerjaan</th>
                                                 <th class="text-center">Pagu / Nilai Kontrak</th>
-                                                <th class="text-center">Realisasi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1076,7 +1090,13 @@
 </script>
 
 <script>
-    function postVerifikasi() {
+     let idBidang = @json($bidang->map(function($item){ return $item->id; }));
+     let headingColors = ["#6097d3", "#dc6789","#df8d72" , "#afc28a" ,"#49c3a3", "#715fa5"]
+    console.log(idBidang[0]);
+    for (let index = 0; index < idBidang.length; index++) {
+        let idHeadings = document.getElementById(`heading-${idBidang[index]}`);
+        console.log(idHeadings)
+        idHeadings.style.backgroundColor = headingColors[index];
 
     }
 </script>

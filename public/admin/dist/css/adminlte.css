@@ -9461,6 +9461,11 @@ button.bg-dark:focus {
     .card-table-cell {
         display: none !important;
     }
+    .card-table{
+        display:flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
 }
 
 @media (min-width: 768px) {
@@ -37681,6 +37686,10 @@ a.disabled.mailbox-attachment-close {
     font-weight: 300;
     margin-bottom: .9rem;
     text-align: center;
+}
+
+.bg-dropdown{
+    background-color: #F5FAFF;
 }
 
 .login-img {
