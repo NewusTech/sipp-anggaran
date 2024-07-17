@@ -16,20 +16,12 @@ jobs:
 
     - name: Deployment
 
-      uses: appleboy/ssh-action@master
-
-      with:
-
-        host: 178.16.142.192
-
-        key: AAAAC3NzaC1lZDI1NTE5AAAAICVilz6pqL4lWrvFuBUJZoKcigSjcHmmpIMZQqqsOpAs newustechnology@gmail.com
-
-        username: syukron
-
-        script: |
+      run: |
 
           cd /home/sippp-puprtubabakab-anggaran/htdocs/anggaran.sippp-puprtubabakab.com
 
           git checkout -f
 
           git pull
+
+    - run : systemctl restart nginx
