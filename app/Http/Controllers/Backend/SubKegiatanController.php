@@ -11,6 +11,8 @@ use App\Models\SubKegiatan;
 use App\Models\Pengambilan;
 use App\Models\DetailKegiatan;
 use App\Models\Anggaran;
+use App\Models\Bidang;
+use App\Models\Program;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -19,113 +21,28 @@ use Illuminate\Http\Response;
 
 class SubKegiatanController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     * 
-     */
-    public function store(Request $request, $id)
+    public function index(){
+        $bidangs = Bidang::get(['id', 'name']);
+        $programs = Program::get(['id', 'name']);
+        $kegiatans = Kegiatan::with('bidang', 'program')->orderBy('bidang_id')->get(['id', 'title','bidang_id']);
+        // dd($kegiatans);
+        $subKegiatan = SubKegiatan::with(['kegiatan'])->get(['id','kode_sub_kegiatan', 'kegiatan_id', 'title']);
+        // dd($subKegiatan);
+        return view('backend.sub-kegiatan.index', compact(['subKegiatan', 'kegiatans', 'bidangs', 'programs']));
+    }
+    public function store(Request $request)
     {
+        try{
         $subKegiatan = SubKegiatan::create([
-					'dpa_id' => $id,
-					'kegiatan_id' => $request->kegiatan_id,
-					'detail_kegiatan_id' => $request->detail_kegiatan_id,
-					'sumber_dana_id' => $request->sumber_dana_id,
+            'title' => $request->title,
+            'kegiatan_id' => $request->kegiatan_id,
+            'kode_sub_kegiatan' => $request->kode_sub_kegiatan
         ]);
-				$sub = SubKegiatan::where('id', $subKegiatan->id)->first();
-        $pagu = Pagu::create(
-        [
-          'dpa_id' => $id,
-          'kegiatan_id' => $request->kegiatan_id,
-          'sub_kegiatan_id' => $sub->id,
-          'detail_kegiatan_id' => $request->detail_kegiatan_id,
-					'tanggal' => $request->tanggal,
-					'belanja_operasi' => $request->belanja_operasi ?? 0,
-					'belanja_modal' => $request->belanja_modal ?? 0,
-					'belanja_tak_terduga' => $request->belanja_tak_terduga ?? 0,
-					'belanja_transfer' => $request->belanja_transfer ?? 0,
-					'keterangan' => $request->keterangan ?? null,
-        ]);
-				$totalbelanjaOperasi = Pagu::where('sub_kegiatan_id', '=', $sub->id)->sum('belanja_operasi');
-				$totalbelanjaModal = Pagu::where('sub_kegiatan_id', '=', $sub->id)->sum('belanja_modal');
-				$totalbelanjaTakTerduga = Pagu::where('sub_kegiatan_id', '=', $sub->id)->sum('belanja_tak_terduga');
-				$totalbelanjaTransfer = Pagu::where('sub_kegiatan_id', '=', $sub->id)->sum('belanja_transfer');
-				$totalPagu = $totalbelanjaOperasi + $totalbelanjaModal + $totalbelanjaTakTerduga + $totalbelanjaTransfer;
-				$sub->update([
-          'total_pagu' => $totalPagu
-				]);
-				$totalRealisasi = SubKegiatan::where('dpa_id', '=', $id)->sum('total_pagu');
-				$dpa = Dpa::where('id', '=', $id)->update([
-					'realisasi' => $totalRealisasi
-				]);
-				$detailKegiatan = DetailKegiatan::where('id', $request->detail_kegiatan_id)->first();
-        $belanjaOperasi = Anggaran::updateOrCreate([
-          'detail_kegiatan_id' => $request->detail_kegiatan_id,
-          'daya_serap' => "Belanja Operasi",
-        ],
-        [
-          'detail_kegiatan_id' => $request->detail_kegiatan_id,
-          'daya_serap' => "Belanja Operasi",
-          'sisa' => 0,
-          'tanggal' => $request->tanggal,
-          'keterangan' => $request->keterangan ?? null,
-          'daya_serap_kontrak' => $request->belanja_operasi ?? 0,
-          'sisa_kontrak' => $request->sisa_kontrak ?? 0,
-          'sisa_anggaran' => $request->sisa_anggaran ?? 0,
-          'progress' => 0
-        ]);
-				$belanjaModal = Anggaran::updateOrCreate([
-          'detail_kegiatan_id' => $request->detail_kegiatan_id,
-          'daya_serap' => "Belanja Modal",
-        ],
-        [
-          'detail_kegiatan_id' => $request->detail_kegiatan_id,
-          'daya_serap' => "Belanja Modal",
-          'sisa' => 0,
-          'tanggal' => $request->tanggal,
-          'keterangan' => $request->keterangan ?? null,
-          'daya_serap_kontrak' => $request->belanja_modal ?? 0,
-          'sisa_kontrak' => $request->sisa_kontrak ?? 0,
-          'sisa_anggaran' => $request->sisa_anggaran ?? 0,
-          'progress' => 0
-        ]);
-				$belanjaTakTerduga = Anggaran::updateOrCreate([
-          'detail_kegiatan_id' => $request->detail_kegiatan_id,
-          'daya_serap' => "Belanja Tak Terduga",
-        ],
-        [
-          'detail_kegiatan_id' => $request->detail_kegiatan_id,
-          'daya_serap' => "Belanja Tak Terduga",
-          'sisa' => 0,
-          'tanggal' => $request->tanggal,
-          'keterangan' => $request->keterangan ?? null,
-          'daya_serap_kontrak' => $request->belanja_tak_terduga ?? 0,
-          'sisa_kontrak' => $request->sisa_kontrak ?? 0,
-          'sisa_anggaran' => $request->sisa_anggaran ?? 0,
-          'progress' => 0
-        ]);
-				$belanjaTransfer = Anggaran::updateOrCreate([
-          'detail_kegiatan_id' => $request->detail_kegiatan_id,
-          'daya_serap' => "Belanja Transfer",
-        ],
-        [
-          'detail_kegiatan_id' => $request->detail_kegiatan_id,
-          'daya_serap' => "Belanja Transfer",
-          'sisa' => 0,
-          'tanggal' => $request->tanggal,
-          'keterangan' => $request->keterangan ?? null,
-          'daya_serap_kontrak' => $request->belanja_transfer ?? 0,
-          'sisa_kontrak' => $request->sisa_kontrak ?? 0,
-          'sisa_anggaran' => $request->sisa_anggaran ?? 0,
-          'progress' => 0
-        ]);
-				$totalDayaSerap = Anggaran::where('detail_kegiatan_id', '=', $detailKegiatan->id)->sum('daya_serap_kontrak');
-				$detailKegiatan->update([
-          'pagu' => $totalDayaSerap
-				]);
-        return redirect()->route('backend.dpa.show', $id)->with('success', 'Kegiatan berhasil disimpan')->with('step', 'sub_kegiatan');
+        return redirect()->route('backend.sub_kegiatan.index')->with('success', 'Kegiatan berhasil disimpan')->with('step', 'sub_kegiatan');
+        }
+        catch (\Exception $e){
+            throw $e;
+        }
     }
 
 		/**
@@ -137,104 +54,18 @@ class SubKegiatanController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-				$sub = SubKegiatan::where('id', $id)->first();
-				$sub->update([
-          'detail_kegiatan_id' => $request->detail_kegiatan_id,
-          'sumber_dana_id' => $request->sumber_dana_id,
-        ]);
-				$pagu = Pagu::where('kegiatan_id', $sub->kegiatan_id)->where('dpa_id', $sub->dpa_id)->where('sub_kegiatan_id', $sub->id)->first();
-        if($pagu->update([
-					'detail_kegiatan_id' => $request->detail_kegiatan_id,
-					'sub_kegiatan_id' => $sub->id,
-					'belanja_operasi' => $request->belanja_operasi,
-					'belanja_modal' => $request->belanja_modal,
-					'belanja_tak_terduga' => $request->belanja_tak_terduga,
-					'belanja_transfer' => $request->belanja_transfer,
-					'keterangan' => $request->keterangan ?? null,
-        ])) {
-					$totalbelanjaOperasi = Pagu::where('sub_kegiatan_id', '=', $sub->id)->sum('belanja_operasi');
-					$totalbelanjaModal = Pagu::where('sub_kegiatan_id', '=', $sub->id)->sum('belanja_modal');
-					$totalbelanjaTakTerduga = Pagu::where('sub_kegiatan_id', '=', $sub->id)->sum('belanja_tak_terduga');
-					$totalbelanjaTransfer = Pagu::where('sub_kegiatan_id', '=', $sub->id)->sum('belanja_transfer');
-					$totalPagu = $totalbelanjaOperasi + $totalbelanjaModal + $totalbelanjaTakTerduga + $totalbelanjaTransfer;
-
-					$sub->update([
-						'total_pagu' => $totalPagu
-					]);
-					$totalRealisasi = SubKegiatan::where('dpa_id', '=', $sub->dpa_id)->sum('total_pagu');
-					$dpa = Dpa::where('id', '=', $sub->dpa_id)->update([
-						'realisasi' => $totalRealisasi
-					]);
-					$detailKegiatan = DetailKegiatan::where('id', $request->detail_kegiatan_id)->first();
-					$belanjaOperasi = Anggaran::updateOrCreate([
-						'detail_kegiatan_id' => $request->detail_kegiatan_id,
-						'daya_serap' => "Belanja Operasi",
-					],
-					[
-						'detail_kegiatan_id' => $request->detail_kegiatan_id,
-						'daya_serap' => "Belanja Operasi",
-						'sisa' => 0,
-						'tanggal' => $request->tanggal,
-						'keterangan' => $request->keterangan ?? null,
-						'daya_serap_kontrak' => $request->belanja_operasi ?? 0,
-						'sisa_kontrak' => $request->sisa_kontrak ?? 0,
-						'sisa_anggaran' => $request->sisa_anggaran ?? 0,
-						'progress' => 0
-					]);
-					$belanjaModal = Anggaran::updateOrCreate([
-						'detail_kegiatan_id' => $request->detail_kegiatan_id,
-						'daya_serap' => "Belanja Modal",
-					],
-					[
-						'detail_kegiatan_id' => $request->detail_kegiatan_id,
-						'daya_serap' => "Belanja Modal",
-						'sisa' => 0,
-						'tanggal' => $request->tanggal,
-						'keterangan' => $request->keterangan ?? null,
-						'daya_serap_kontrak' => $request->belanja_modal ?? 0,
-						'sisa_kontrak' => $request->sisa_kontrak ?? 0,
-						'sisa_anggaran' => $request->sisa_anggaran ?? 0,
-						'progress' => 0
-					]);
-					$belanjaTakTerduga = Anggaran::updateOrCreate([
-						'detail_kegiatan_id' => $request->detail_kegiatan_id,
-						'daya_serap' => "Belanja Tak Terduga",
-					],
-					[
-						'detail_kegiatan_id' => $request->detail_kegiatan_id,
-						'daya_serap' => "Belanja Tak Terduga",
-						'sisa' => 0,
-						'tanggal' => $request->tanggal,
-						'keterangan' => $request->keterangan ?? null,
-						'daya_serap_kontrak' => $request->belanja_tak_terduga ?? 0,
-						'sisa_kontrak' => $request->sisa_kontrak ?? 0,
-						'sisa_anggaran' => $request->sisa_anggaran ?? 0,
-						'progress' => 0
-					]);
-					$belanjaTransfer = Anggaran::updateOrCreate([
-						'detail_kegiatan_id' => $request->detail_kegiatan_id,
-						'daya_serap' => "Belanja Transfer",
-					],
-					[
-						'detail_kegiatan_id' => $request->detail_kegiatan_id,
-						'daya_serap' => "Belanja Transfer",
-						'sisa' => 0,
-						'tanggal' => $request->tanggal,
-						'keterangan' => $request->keterangan ?? null,
-						'daya_serap_kontrak' => $request->belanja_transfer ?? 0,
-						'sisa_kontrak' => $request->sisa_kontrak ?? 0,
-						'sisa_anggaran' => $request->sisa_anggaran ?? 0,
-						'progress' => 0
-					]);
-					$totalDayaSerap = Anggaran::where('detail_kegiatan_id', '=', $detailKegiatan->id)->sum('daya_serap_kontrak');
-					$detailKegiatan->update([
-						'pagu' => $totalDayaSerap
-					]);
-            return redirect()->route('backend.dpa.show', ['id'
-            => $sub->dpa_id])->with('success', 'Data Sub Kegiatan berhasil diubah');
+        // dd($request->all());
+        try {
+            $sub = SubKegiatan::where('id', $id)->first();
+            $sub->update([
+                'title' => $request->title,
+                'kegiatan_id' => $request->kegiatan_id,
+                'kode_sub_kegiatan' => $request->kode_sub_kegiatan
+            ]);
+            return redirect()->route('backend.sub_kegiatan.index')->with('success', 'Sub Kegiatan berhasil disimpan');
+        } catch (\Exception $e) {
+            return redirect()->route('backend.sub_kegiatan.index')->with('error', $e->getMessage());
         }
-        return redirect()->route('backend.dpa.show', ['id'
-        => $sub->dpa_id])->with('error', 'Data Sub Kegiatan gagal diubah');
     }
 
 		/**

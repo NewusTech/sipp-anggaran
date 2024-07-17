@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Program extends Model
 {
     use HasFactory, SoftDeletes;
-    
+
     protected $table = 'program';
     /**
      * The attributes that are mass assignable.
@@ -20,4 +20,9 @@ class Program extends Model
         'name',
         'kode'
     ];
+
+    public function kegiatan()
+    {
+        return $this->hasMany(Kegiatan::class, 'kegiatan_id', 'id');
+    }
 }

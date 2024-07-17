@@ -17,6 +17,9 @@ use App\Models\PenanggungJawab;
 use App\Models\Pengambilan;
 use App\Models\SumberDana;
 use App\Exports\LaporanPengambilanExport;
+use App\Models\SubKegiatan;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Date;
 use Maatwebsite\Excel\Facades\Excel;
 
 class KegiatanController extends Controller
@@ -164,20 +167,20 @@ class KegiatanController extends Controller
      * @return \Illuminate\Http\Response
      *
      */
-    public function store(Request $request)
+    public function store(Request $request) : RedirectResponse
     {
         $kegiatan = Kegiatan::create([
             'title' => $request->title,
             'no_rek' => $request->no_rek,
-            'alokasi' => $request->alokasi,
+            'alokasi' => 0,
             'tahun' => $request->tahun,
             'program' => $request->program,
-            'no_rek_program' => $request->no_rek_program,
+            'no_rek_program' => '-',
             'bidang_id' => $request->bidang_id,
-            'sumber_dana' => $request->sumber_dana,
-            'jenis_paket' => $request->jenis_paket,
+            'sumber_dana' => 1,
+            'jenis_paket' => 1,
         ]);
-        return redirect()->route('backend.kegiatan.index')->with('success', 'Kegiatan berhasil disimpan');
+        return redirect()->route('backend.sub_kegiatan.index')->with('success', 'Kegiatan berhasil disimpan');
     }
 
     /**

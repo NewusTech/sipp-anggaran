@@ -890,26 +890,6 @@
                         <div class="col-sm-12">
                             <!-- text input -->
                             <div class="form-group">
-                                <label class="text-darkblue">Judul Kegiatan</label>
-                                <input type="text" class="form-control" name="title" placeholder="Silahkan masukan judul Kegiatan" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="text-darkblue">Kode Kegiatan</label>
-                                <input type="text" class="form-control" name="no_rek_program" placeholder="Silahkan masukan nomor rekening program" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="text-darkblue">Nomor Rekening</label>
-                                <input type="text" class="form-control" name="no_rek" placeholder="Silahkan masukan nomor rekening" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="text-darkblue">Pagu Anggaran</label>
-                                <input type="text" class="form-control" name="alokasi" placeholder="Silahkan masukan alokasi" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="text-darkblue">Tahun Kegiatan</label>
-                                <input type="text" class="form-control" name="tahun" placeholder="Silahkan masukan tahun kegiatan" required>
-                            </div>
-                            <div class="form-group">
                                 <label class="text-darkblue">Program</label>
                                 <select name="program" id="program" class="form-control" required>
                                     <option selected>-- Pilih Program --</option>
@@ -918,7 +898,26 @@
                                     @endforeach
                                 </select>
                             </div>
-
+                            <div class="form-group">
+                                <label class="text-darkblue">Kegiatan</label>
+                                <input type="text" class="form-control" name="title" placeholder="Silahkan masukan judul Kegiatan" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-darkblue">Sub Kegiatan</label>
+                                <input type="text" class="form-control" name="sub_kegiatan_title" placeholder="Silahkan masukan Sub Kegiatan" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-darkblue">Nama Pekerjaan</label>
+                                <input type="text" class="form-control" name="pekerjaan_title" placeholder="Silahkan masukan judul Pekerjaan" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-darkblue">Pagu Anggaran</label>
+                                <input type="number" class="form-control" name="alokasi" placeholder="Silahkan masukan alokasi" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-darkblue">Tahun Kegiatan</label>
+                                <input type="text" class="form-control" name="tahun" placeholder="Silahkan masukan tahun kegiatan" required>
+                            </div>
                             <div class="form-group">
                                 <label class="text-darkblue">Bidang</label>
                                 <select name="bidang_id" id="bidang_id" class="form-control" required>
@@ -938,12 +937,12 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="text-darkblue">Tipe Paket</label>
-                                <select name="jenis_paket" id="jenis_paket" class="form-control" required>
-                                    <option selected>-- Pilih Tipe Paket --</option>
-                                    <option value="1">Paket Fisik</option>
-                                    <option value="2">Paket Non Fisik</option>
-                                </select>
+                                <label class="text-darkblue">Jenis Pengadaan</label>
+                                <input type="text" class="form-control" name="jenis_pengadaan" placeholder="Silahkan masukan jenis Pengadaan" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-darkblue">Metode Pemilihan</label>
+                                <input type="text" class="form-control" name="metode_pemilihan" placeholder="Silahkan masukan Metode Pemilihan" required>
                             </div>
                         </div>
                     </div>
