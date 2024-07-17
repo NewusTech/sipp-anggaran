@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Bidang extends Model
 {
     use HasFactory, SoftDeletes;
-    
+
     protected $table = 'bidang';
     /**
      * The attributes that are mass assignable.

@@ -290,7 +290,8 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
     });
 
     Route::group(['prefix' => 'sub-kegiatan', 'as' => 'sub_kegiatan.'], function () {
-        Route::post('/{id}', [SubKegiatanController::class, 'store'])->name('store');
+        Route::get('/', [SubKegiatanController::class, 'index'])->name('index');
+        Route::post('/', [SubKegiatanController::class, 'store'])->name('store');
         Route::put('/{id}', [SubKegiatanController::class, 'update'])->name('update');
         Route::delete('/{id}', [SubKegiatanController::class, 'destroy'])->name('destroy');
     });

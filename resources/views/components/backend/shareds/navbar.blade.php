@@ -54,6 +54,9 @@
                         @can('lihat penanggung jawab')
                         <li><a href="{{route('backend.penanggung_jawab.index')}}" class="dropdown-item">Pengaturan Penanggung Jawab</a></li>
                         @endcan
+                        @can('lihat kegiatan')
+                        <li><a href="{{route('backend.sub_kegiatan.index')}}" class="dropdown-item">Pengaturan Sub Kegiatan</a></li>
+                        @endcan
                         @can('lihat program')
                         <li><a href="{{route('backend.program.index')}}" class="dropdown-item">Pengaturan Program</a></li>
                         @endcan

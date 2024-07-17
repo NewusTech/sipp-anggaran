@@ -35,10 +35,20 @@ class Kegiatan extends Model
     {
         return $this->belongsTo(Bidang::class);
     }
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
+    }
+
 
     public function detail()
     {
         return $this->hasMany(DetailKegiatan::class, 'kegiatan_id', 'id');
+    }
+
+    public function subKegiatan()
+    {
+        return $this->hasMany(SubKegiatan::class, 'kegiatan_id', 'id');
     }
 
     // scope untuk filter detail kegiatan
