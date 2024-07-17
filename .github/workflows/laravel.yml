@@ -30,6 +30,6 @@ jobs:
 
           cd /home/sippp-puprtubabakab-anggaran/htdocs/anggaran.sippp-puprtubabakab.com
 
-          git checkout main
+          git checkout -f
 
           git pull
