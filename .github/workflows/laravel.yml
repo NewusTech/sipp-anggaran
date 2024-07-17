@@ -5,19 +5,31 @@ on:
     branches: [ "main" ]
 
 jobs:
-  laravel-ci-cd:
+  deploy:
 
     runs-on: self-hosted
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
+    - name: Checkout
+
+      uses: actions/checkout@v2
+
+    - name: Deployment
+
+      uses: appleboy/ssh-action@main
+
       with:
-          php-version: '8.2'
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
-          coverage: none
-    - name: Git pull
-      run: git pull origin main
-    - name: Run composer update
-      run: composer update -n --prefer-dist
+
+        host: ${{ secrets.SSH_HOST }}
+
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+        username: ${{ secrets.SSH_USERNAME }}
+
+        script: |
+
+          cd /home/sippp-puprtubabakab-anggaran/htdocs/anggaran.sippp-puprtubabakab.com
+
+          git checkout main
+
+          git pull
