@@ -22,7 +22,7 @@ jobs:
 
         host: 178.16.142.192
 
-        key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVilz6pqL4lWrvFuBUJZoKcigSjcHmmpIMZQqqsOpAs newustechnology@gmail.com
+        key: AAAAC3NzaC1lZDI1NTE5AAAAICVilz6pqL4lWrvFuBUJZoKcigSjcHmmpIMZQqqsOpAs newustechnology@gmail.com
 
         username: syukron
 
