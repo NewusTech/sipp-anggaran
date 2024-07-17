@@ -20,11 +20,11 @@ jobs:
 
       with:
 
-        host: ${{ secrets.SSH_HOST }}
+        host: 178.16.142.192
 
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVilz6pqL4lWrvFuBUJZoKcigSjcHmmpIMZQqqsOpAs newustechnology@gmail.com
 
-        username: ${{ secrets.SSH_USERNAME }}
+        username: root
 
         script: |
 
