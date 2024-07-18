@@ -21,40 +21,38 @@ use Illuminate\Http\Response;
 
 class SubKegiatanController extends Controller
 {
-    public function index(){
-        $bidangs = Bidang::get(['id', 'name']);
-        $programs = Program::get(['id', 'name']);
-        $kegiatans = Kegiatan::with('bidang', 'program')->orderBy('bidang_id')->get(['id', 'title','bidang_id']);
-        // dd($kegiatans);
-        $subKegiatan = SubKegiatan::with(['kegiatan'])->get(['id','kode_sub_kegiatan', 'kegiatan_id', 'title']);
-        // dd($subKegiatan);
-        return view('backend.sub-kegiatan.index', compact(['subKegiatan', 'kegiatans', 'bidangs', 'programs']));
+    public function index()
+    {
+        try {
+            $bidangs = Bidang::get(['id', 'name']);
+            $programs = Program::get(['id', 'name']);
+            $kegiatans = Kegiatan::with('bidang')->orderBy('bidang_id')->get(['id', 'title', 'bidang_id', 'program']);
+            $kegiatans->map(function ($kegiatan) use ($programs) {
+                $kegiatan->program_name = $programs->where('id', $kegiatan->program)->first()->name;
+            });
+            $subKegiatan = SubKegiatan::with(['kegiatan'])->get(['id', 'kode_sub_kegiatan', 'kegiatan_id', 'title']);
+
+            return view('backend.sub-kegiatan.index', compact(['subKegiatan', 'kegiatans', 'bidangs', 'programs']));
+        } catch (\Exception $e) {
+            return redirect()->route('backend.sub_kegiatan.index')->with('error', $e->getMessage());
+        }
     }
     public function store(Request $request)
     {
-        try{
-        $subKegiatan = SubKegiatan::create([
-            'title' => $request->title,
-            'kegiatan_id' => $request->kegiatan_id,
-            'kode_sub_kegiatan' => $request->kode_sub_kegiatan
-        ]);
-        return redirect()->route('backend.sub_kegiatan.index')->with('success', 'Kegiatan berhasil disimpan')->with('step', 'sub_kegiatan');
-        }
-        catch (\Exception $e){
-            throw $e;
+        try {
+            $subKegiatan = SubKegiatan::create([
+                'title' => $request->title,
+                'kegiatan_id' => $request->kegiatan_id,
+                'kode_sub_kegiatan' => $request->kode_sub_kegiatan
+            ]);
+            return redirect()->route('backend.sub_kegiatan.index')->with('success', 'Kegiatan berhasil disimpan')->with('step', 'sub_kegiatan');
+        } catch (\Exception $e) {
+            return redirect()->route('backend.sub_kegiatan.index')->with('error', $e->getMessage());
         }
     }
 
-		/**
-     * Update the specified resource in storage.
-     *
-     * @param UpdatePengambilanRequest $request
-     * @param Pengambilan $pengambilan
-     * @return RedirectResponse
-     */
     public function update(Request $request, $id): RedirectResponse
     {
-        // dd($request->all());
         try {
             $sub = SubKegiatan::where('id', $id)->first();
             $sub->update([
@@ -68,7 +66,7 @@ class SubKegiatanController extends Controller
         }
     }
 
-		/**
+    /**
      * Remove the specified resource from storage.
      *
      * @param Pengambilan $Pengambilan
@@ -76,17 +74,12 @@ class SubKegiatanController extends Controller
      */
     public function destroy($id): RedirectResponse
     {
-			$sub = SubKegiatan::where('id', $id)->first();
-			$pagu = Pagu::where('detail_kegiatan_id', $sub->detail_kegiatan_id)->first();
-			$dpaId = $sub->dpa_id;
-			if ($pagu->delete()) {
-				$sub->delete();
-				$totalRealisasi = SubKegiatan::where('dpa_id', '=', $dpaId)->sum('total_pagu');
-				$dpa = Dpa::where('id', '=', $dpaId)->update([
-					'realisasi' => $totalRealisasi
-				]);
-			}
-			return redirect()->route('backend.dpa.show', ['id'
-      => $dpaId])->with('success', 'Data Sub Kegiatan berhasil dihapus');
+        try {
+            $sub = SubKegiatan::where('id', $id)->first();
+            $sub->delete();
+            return redirect()->route('backend.sub_kegiatan.index')->with('success', 'Sub Kegiatan berhasil di hapus');
+        } catch (\Exception $e) {
+            return redirect()->route('backend.sub_kegiatan.index')->with('error', $e->getMessage());
+        }
     }
 }

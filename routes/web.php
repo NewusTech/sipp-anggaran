@@ -128,6 +128,7 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
         Route::get('/{id}/edit', [KegiatanController::class, 'edit'])->name('kegiatan.edit');
         Route::put('/{id}', [KegiatanController::class, 'update'])->name('kegiatan.update');
         Route::delete('/{id}', [KegiatanController::class, 'destroy'])->name('kegiatan.destroy');
+        Route::delete('/master/{id}', [KegiatanController::class, 'deleteMasterKegiatan'])->name('master.kegiatan.destroy');
         Route::get('/{id}', [KegiatanController::class, 'show'])->name('kegiatan.show');
         Route::post('/{id}', [KegiatanController::class, 'arship'])->name('kegiatan.arship');
         Route::post('pptk/{kegiatan_id}', [KegiatanController::class, 'updatePptk'])->name('kegiatan.pptk');
