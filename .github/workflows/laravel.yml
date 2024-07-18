@@ -23,6 +23,10 @@ jobs:
           git checkout -f
           
           git pull
-    - run : composer install
+    - name: Install dependencies
+      env:
+        COMPOSER_ALLOW_SUPERUSER: 1
+      run: |
+        composer update
     - run : php artisan migrate
     - run : systemctl restart nginx
