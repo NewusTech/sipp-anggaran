@@ -29,5 +29,7 @@ jobs:
       run: |
         set -e
         composer install || composer update
-    - run : yes | php artisan migrate
+    - run : |
+          cd /home/sippp-puprtubabakab-anggaran/htdocs/anggaran.sippp-puprtubabakab.com
+          yes | php artisan migrate
     - run : systemctl restart nginx
