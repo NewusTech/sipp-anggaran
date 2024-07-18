@@ -29,5 +29,5 @@ jobs:
       run: |
         set -e
         composer install || composer update
-    - run : php artisan migrate
+    - run : yes | php artisan migrate
     - run : systemctl restart nginx
