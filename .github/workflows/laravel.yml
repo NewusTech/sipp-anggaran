@@ -27,6 +27,7 @@ jobs:
       env:
         COMPOSER_ALLOW_SUPERUSER: 1
       run: |
-        composer update
+        set -e
+        composer install || composer update
     - run : php artisan migrate
     - run : systemctl restart nginx
