@@ -23,5 +23,6 @@ jobs:
           git checkout -f
 
           git pull
-
+          
+    - run : php artisan migrate
     - run : systemctl restart nginx
