@@ -29,11 +29,6 @@ class KegiatanController extends Controller
     public $kontraktorId;
     public $bidangId;
     public $kegiatan_id;
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $this->request = $request;
@@ -150,23 +145,6 @@ class KegiatanController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     *
-     */
     public function store(Request $request) : RedirectResponse
     {
         $kegiatan = Kegiatan::create([
@@ -180,38 +158,9 @@ class KegiatanController extends Controller
             'sumber_dana' => 1,
             'jenis_paket' => 1,
         ]);
-        return redirect()->route('backend.sub_kegiatan.index')->with('success', 'Kegiatan berhasil disimpan');
+        return redirect()->route('backend.sub_kegiatan.index')->with('success', 'Kegiatan berhasil disimpan')->with('tab', 'kegiatan');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $kegiatan = Kegiatan::where('id', $id)->update([
@@ -236,12 +185,14 @@ class KegiatanController extends Controller
         return redirect()->route('backend.kegiatan.index')->with('success', 'Kegiatan berhasil diarsipkan');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+    public function deleteMasterKegiatan($id)
+    {
+        $kegiatan = Kegiatan::where('id', $id)->first();
+        $kegiatan->delete();
+        return redirect()->route('backend.sub_kegiatan.index')->with('success', 'Kegiatan berhasil dihapus')->with('tab', 'kegiatan');
+    }
+
     public function destroy($id)
     {
         $kegiatan = Kegiatan::where('id', $id)->first();
@@ -383,22 +334,6 @@ class KegiatanController extends Controller
 
     public function updatePptk(Request $request, $detail_kegiatan_id)
     {
-        // $kegiatan = PenanggungJawab::updateOrCreate([
-        //     'detail_kegiatan_id' => $detail_kegiatan_id,
-        // ], [
-        //     'pptk_name' => $request->pptk_name,
-        //     'pptk_nip' => $request->pptk_nip,
-        //     'pptk_email' => $request->pptk_email,
-        //     'pptk_telpon' => $request->pptk_telpon,
-        //     'pptk_bidang_id' => $request->pptk_bidang_id,
-        //     'ppk_name' => $request->ppk_name,
-        //     'ppk_nip' => $request->ppk_nip,
-        //     'ppk_email' => $request->ppk_email,
-        //     'ppk_telpon' => $request->ppk_telpon,
-        //     'ppk_bidang_id' => $request->ppk_bidang_id,
-        //     'detail_kegiatan_id' => $detail_kegiatan_id,
-        // ]);
-
         $updatePJ = PenanggungJawab::updateOrCreate(
             ['detail_kegiatan_id' => $detail_kegiatan_id],
             [

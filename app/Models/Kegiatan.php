@@ -37,7 +37,7 @@ class Kegiatan extends Model
     }
     public function program()
     {
-        return $this->belongsTo(Program::class);
+        return $this->belongsTo(Program::class, 'program', 'id');
     }
 
 

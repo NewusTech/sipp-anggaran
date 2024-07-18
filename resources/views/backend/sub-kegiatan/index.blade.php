@@ -1,3 +1,4 @@
+
 @extends('layouts.main')
 
 @section('title', 'Pengaturan Sub Kegiatan')
@@ -21,8 +22,17 @@
 <div class="row">
     <div class="col-md-12">
         <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <button type="button" style="color: white" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             {{ session('success') }}
+        </div>
+    </div>
+</div>
+@elseif (session()->has('error'))
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" style="color: white" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            {{ session('error') }}
         </div>
     </div>
 </div>
@@ -40,11 +50,14 @@
                 </div>
                 <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill" href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home" aria-selected="true">Daftar Bidang</a>
+                        <a class="nav-link {{session('tab') == ''? 'active' : ''}}" id="custom-content-below-home-tab" data-toggle="pill" href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home" aria-selected="true">Daftar Bidang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{session('tab') == 'kegiatan'? 'active' : ''}}" id="custom-content-below-kegiatan-tab" data-toggle="pill" href="#custom-content-below-kegiatan" role="tab" aria-controls="custom-content-below-home" aria-selected="true">Daftar Kegiatan</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="custom-content-below-tabContent">
-                    <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
+                    <div class="tab-pane fade show {{session('tab') == ''? 'active' : ''}}" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
                         <div class="row">
                             <div class="col-12">
                                 <table id="example1" class="table table-responsive" style="width: 100% !important;">
@@ -59,46 +72,18 @@
                                     <tbody>
                                         @foreach ($subKegiatan as $item)
                                         <tr>
-                                            <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{$item->kegiatan->bidang->name}}
+                                            <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{$item->kegiatan->bidang->name ?? 'Data Kosong'}}
                                             </td>
-                                            <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{$item->kegiatan->title}}
+                                            <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{$item->kegiatan->title ?? 'Data Kosong'}}
                                         </td>
                                             <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{$item->kode_sub_kegiatan}} | {{$item->title}}
                                             </td>
                                             <td class="btn-action">
                                                 <button type="button" style="color: white;" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal-edit-sub-kegiatan-{{$item->id}}"><i class="fas fa-edit"></i> </button>
-                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$item->id}}"><i class="fas fa-trash"></i></button>
+                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-sub-kegiatan-{{$item->id}}"><i class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-delete-{{$item->id}}" style="padding-right: 17px; ">
-                                            <form action="{{ route('backend.bidang.destroy', $item->id) }}" method="POST" id="delete_bidang">
-                                                @method('DELETE')
-                                                @csrf
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title"><strong> Hapus Bidang </strong></h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <span class="text-gray">Anda yakin Hapus data?</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer justify-content-between">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                            <button type="submit" id="btn_update" class="btn btn-danger"><i class="fas fa-trash"></i> Hapus</button>
-                                                        </div>
-                                                    </div>
-                                                    <!-- /.modal-content -->
-                                                </div>
-                                            </form>
-                                            <!-- /.modal-dialog -->
-                                        </div>
+                                        @include('backend.sub-kegiatan._modal_delete', ['action' => 'deleteSubKegiatan'])
                                         @include('backend.sub-kegiatan._modal_edit', ['action' => 'editSubKegiatan'])
                                         @endforeach
                                     </tbody>
@@ -106,6 +91,7 @@
                             </div>
                         </div>
                     </div>
+                    @include('backend.sub-kegiatan._tab_kegiatan')
                 </div>
             </div>
             <!-- /.card -->
