@@ -65,7 +65,7 @@
                                 <input type="text" class="form-control" name="target" placeholder="Silahkan masukan target satuan hari" value="{{$detail->target}}" required>
                             </div>
                             <div class="form-group">
-                                <label class="text-darkblue">Alamat</label>
+                                <label class="text-darkblue">Lokasi Pekerjaan</label>
                                 <textarea name="alamat" class="form-control" id="alamat" cols="30" rows="5">{{$detail->alamat}}</textarea>
                             </div>
                             <label class="text-darkblue">Maps</label>

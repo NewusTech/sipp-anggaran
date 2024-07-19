@@ -7,53 +7,45 @@ use App\Http\Requests\Backend\DetailKegiatan\StoreDetailKegiatanRequest;
 use App\Http\Requests\Backend\DetailKegiatan\UpdateDetailAnggaranRequest;
 use App\Http\Requests\Backend\DetailKegiatan\UpdateDetailKegiatanRequest;
 use App\Models\DetailKegiatan;
+use App\Models\Kegiatan;
 use App\Models\RencanaKegiatan;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Date;
 
 class DetailKegiatanController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param StoreDetailKegiatanRequest $request
-     * @return RedirectResponse
-     */
-    public function store(StoreDetailKegiatanRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $detailKegiatan = DetailKegiatan::create([
-            'title' => $request->title,
-            'no_detail_kegiatan' => $request->no_detail_kegiatan,
-            'no_kontrak' => $request->no_kontrak,
-            'no_spmk' => $request->no_spmk,
-            'jenis_pengadaan' => $request->jenis_pengadaan,
-            'nilai_kontrak' => $request->nilai_kontrak,
-            'pagu' => 0,
-            'awal_kontrak' => $request->awal_kontrak,
-            'akhir_kontrak' => $request->akhir_kontrak,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
-            'target' => $request->target ?? null,
-            'real' => $request->real ?? null,
-            'dev' => $request->dev ?? null,
-            'alamat' => $request->alamat ?? null,
-            'kegiatan_id' => $request->kegiatan_id,
-            'daya_serap_kontrak' => $request->daya_serap_kontrak ?? 0,
-            'sisa_kontrak' => $request->sisa_kontrak ?? 0,
-            'sisa_anggaran' => $request->sisa_anggaran ?? 0,
-            'penyedia_jasa_id' => $request->penyedia_jasa_id ?? null,
-            'progress' => 0,
-            'penyedia_jasa' => $request->penyedia_jasa
-        ]);
+        try {
+            $detailKegiatan = DetailKegiatan::create([
+                'title' => $request->title,
+                'no_detail_kegiatan' => 1,
+                'no_kontrak' => '-',
+                'jenis_pengadaan' => $request->jenis_pengadaan,
+                'nilai_kontrak' => 0,
+                'pagu' => $request->pagu ?? 0,
+                'awal_kontrak' => Date::now(),
+                'akhir_kontrak' => Date::now(),
+                'sub_kegiatan_id' => $request->sub_kegiatan_id,
+                'metode_pemilihan' => $request->metode_pemilihan,
+                'kegiatan_id' => $request->kegiatan_id,
+            ]);
 
-        if ($detailKegiatan) {
+            $kegiatan = Kegiatan::where('id', $request->kegiatan_id)->first();
+
+            $kegiatan->update([
+                'tahun' => $request->tahun,
+                'jenis_pengadaan' => $request->jenis_pengadaan
+            ]);
+
             return redirect()->route('backend.kegiatan.index')->with('success', 'Detail Kegiatan berhasil disimpan');
+        } catch (Exception $e) {
+            return redirect()->route('backend.kegiatan.index')->with('error', $e->getMessage());
         }
-
-        return redirect()->route('backend.kegiatan.index')->with('error', 'Detail Kegiatan gagal disimpan');
     }
 
     /**
@@ -100,36 +92,7 @@ class DetailKegiatanController extends Controller
             'verifikasi_pengawas' => $request->verifikasi_pengawas,
             'komentar_pengawas' => $request->komentar_pengawas,
         ])) {
-            $startDate = Carbon::parse($request->awal_kontrak);
-            $endDate = Carbon::parse($request->akhir_kontrak);
-
-            // Hitung jumlah minggu antara startDate dan endDate
-            $totalWeeks = ceil($startDate->diffInWeeks($endDate));
-
-            $progressData = [];
-            $currentMonth = $startDate->month;
-            $weekInMonth = 1;
-
-            for ($i = 0; $i < $totalWeeks; $i++) {
-                $progressData[] = [
-                    'detail_kegiatan_id' => $detailKegiatan->id,
-                    'bulan' => $startDate->format('Y-m'),
-                    'minggu' => $weekInMonth,
-                    'keuangan' => 0,
-                ];
-
-                $startDate->addWeek();
-
-                if ($startDate->month !== $currentMonth) {
-                    $currentMonth = $startDate->month;
-                    $weekInMonth = 1;
-                } else {
-                    $weekInMonth++;
-                }
-            }
-
-            RencanaKegiatan::insert($progressData);
-            return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Kegiatan berhasil diubah');
+         return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Kegiatan berhasil diubah');
         }
         return redirect()->route('backend.kegiatan.index')->with('error', 'Data Detail Kegiatan gagal diubah');
     }
@@ -185,6 +148,36 @@ class DetailKegiatanController extends Controller
                 'alamat' => $request->alamat,
                 'kegiatan_id' => $request->kegiatan_id,
             ])) {
+                $startDate = Carbon::parse($request->awal_kontrak);
+                $endDate = Carbon::parse($request->akhir_kontrak);
+
+                // Hitung jumlah minggu antara startDate dan endDate
+                $totalWeeks = ceil($startDate->diffInWeeks($endDate));
+
+                $progressData = [];
+                $currentMonth = $startDate->month;
+                $weekInMonth = 1;
+
+                for ($i = 0; $i < $totalWeeks; $i++) {
+                    $progressData[] = [
+                        'detail_kegiatan_id' => $detailKegiatan->id,
+                        'bulan' => $startDate->format('Y-m'),
+                        'minggu' => $weekInMonth,
+                        'keuangan' => 0,
+                    ];
+
+                    $startDate->addWeek();
+
+                    if ($startDate->month !== $currentMonth) {
+                        $currentMonth = $startDate->month;
+                        $weekInMonth = 1;
+                    } else {
+                        $weekInMonth++;
+                    }
+                }
+
+                RencanaKegiatan::insert($progressData);
+
                 return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Anggaran berhasil diubah');
             }
             return redirect()->route('backend.kegiatan.index')->with('error', 'Data Detail Anggaran gagal diubah');

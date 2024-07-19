@@ -122,7 +122,7 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
         Route::get('/pencarian', [KegiatanController::class, 'search'])->name('kegiatan.search');
         Route::get('/laporan', [KegiatanController::class, 'laporan'])->name('kegiatan.laporan');
         Route::get('/laporan/download', [KegiatanController::class, 'downloadLaporan'])->name('kegiatan.laporan.download');
-        Route::get('/getKegiatan', [KegiatanController::class, 'getKegiatan'])->name('kegiatan.getKegiatan');
+        Route::get('/getKegiatan', [KegiatanController::class, 'getKegiatanByProgram'])->name('kegiatan.getKegiatanbyprogram');
         Route::get('/create', [KegiatanController::class, 'create'])->name('kegiatan.create');
         Route::post('/', [KegiatanController::class, 'store'])->name('kegiatan.store');
         Route::get('/{id}/edit', [KegiatanController::class, 'edit'])->name('kegiatan.edit');
