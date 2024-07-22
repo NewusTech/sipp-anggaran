@@ -7,7 +7,7 @@
                     <strong>{{$kegiatan->title}}</strong>
                 </div>
                 <div class="col-4 d-flex justify-content-between align-items-center">
-                    <strong>Total: {{$kegiatan->detail_kegiatan->count()}}</strong>
+                    <strong>Total: {{$kegiatan->subKegiatan->count()}}</strong>
                     <img src="{{asset('image/chevron-down.svg')}}" style="width: 25px; height: 25px;" alt="">
                 </div>
             </div>
@@ -15,7 +15,9 @@
         <div id="collapse-{{$kegiatan->id}}" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionKegiatan">
             <div class="card-body py-2 px-0">
                 <!-- Dropdown Pekerjaan -->
-                @forelse ($kegiatan->detail_kegiatan as $detail)
+                @foreach ($kegiatan->subKegiatan as $subKegatan)
+                <div class="text-left p-2 text-bold text-darkblue">Sub: {{$subKegatan->title ?? ''}}</div>
+                @forelse ($subKegatan->detail as $detail)
                 <div class="accordion my-1 mx-1" id="accordionPekerjaan">
                     <div class="card shadow-none border m-0">
                         <div class="card-header px-2 py-4" id="headingTwo">
@@ -72,6 +74,7 @@
                 @empty
                 <div class="text-center">Tidak ada data</div>
                 @endforelse
+                @endforeach
             </div>
         </div>
     </div>

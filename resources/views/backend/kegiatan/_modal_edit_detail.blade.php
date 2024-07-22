@@ -68,15 +68,6 @@
                                 <label class="text-darkblue">Lokasi Pekerjaan</label>
                                 <textarea name="alamat" class="form-control" id="alamat" cols="30" rows="5">{{$detail->alamat}}</textarea>
                             </div>
-                            <label class="text-darkblue">Maps</label>
-                            <span>(Klik Untuk Mendapatkan Koordinat !)</span>
-                            <div class="card">
-                                <div class="card-body">
-                                    <div id="mapDetail"></div>
-                                    <input type="hidden" class="form-control" name="latitude" id="latitude" placeholder="Silahkan masukan latitude">
-                                    <input type="hidden" class="form-control" name="longitude" id="longitude" placeholder="Silahkan masukan longitude">
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

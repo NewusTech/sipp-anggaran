@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><strong> Tambah Sub Kegiatan </strong></h5>
+                <h5 class="modal-title"><strong> Edit Sub Kegiatan </strong></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -47,7 +47,7 @@
 </div>
 
 @elseif ($action == 'editKegiatan')
-<div class="modal fade" id="modal-edit-kegiatan" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-edit-kegiatan-{{$item->id}}" style="padding-right: 17px; ">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -57,7 +57,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('backend.kegiatan.store') }}" method="POST" id="submitKegiatan">
+                <form action="{{ route('backend.kegiatan.update', $item->id) }}" method="POST" id="submitKegiatan">
                     @csrf
                     @method('PUT')
                     <div class="row">
@@ -68,7 +68,7 @@
                                 <select name="program" id="program" class="form-control" required>
                                     <option selected>-- Pilih Program --</option>
                                     @foreach ($programs as $program)
-                                    <option style="overflow: hidden;" value="{{$program->id}}">{{$program->name}}</option>
+                                    <option style="overflow: hidden;" value="{{$program->id}}" {{$program->name == $item->program_name ? 'selected' : ''}} >{{$program->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -77,21 +77,21 @@
                                 <select name="bidang_id" id="bidang_id" class="form-control" required>
                                     <option selected>-- Pilih Bidang --</option>
                                     @foreach ($bidangs as $bidang)
-                                    <option value="{{$bidang->id}}">{{$bidang->name}}</option>
+                                    <option value="{{$bidang->id}}"{{$bidang->id == $item->bidang_id ? 'selected' : ''}}>{{$bidang->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="text-darkblue">Nama Kegiatan</label>
-                                <input type="text" class="form-control" name="title" placeholder="Silahkan masukan Nama Kegiatan" required>
+                                <input type="text" class="form-control" name="title" placeholder="Silahkan masukan Nama Kegiatan" value="{{$item->title}}" required>
                             </div>
                             <div class="form-group">
                                 <label class="text-darkblue">Tahun</label>
-                                <input type="number" class="form-control" name="tahun" placeholder="Silahkan masukan Nama Kegiatan" required>
+                                <input type="number" class="form-control" name="tahun" placeholder="Silahkan masukan Nama Kegiatan" value="{{$item->tahun}}" required>
                             </div>
                             <div class="form-group">
                                 <label class="text-darkblue">Kode</label>
-                                <input type="text" class="form-control" name="no_rek" placeholder="Silahkan masukan Kegiatan" required>
+                                <input type="text" class="form-control" name="no_rek" placeholder="Silahkan masukan Kegiatan" value="{{$item->no_rek}}" required>
                             </div>
                             <span class="text-gray">*Tidak boleh mengandung karakter khusus</span>
                         </div>

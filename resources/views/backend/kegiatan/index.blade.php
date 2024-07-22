@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Pengaturan Bidang')
+@section('title', 'Kegiatan')
 @section('css')
 <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
@@ -22,12 +22,14 @@
         #tableKegiatanPekerjaan {
             display: none;
         }
-        #accordionKegiatan{
+
+        #accordionKegiatan {
             display: inherit;
         }
     }
+
     @media (min-width: 576px) {
-        #accordionKegiatan{
+        #accordionKegiatan {
             display: none;
         }
     }
@@ -90,9 +92,6 @@
                             <a href="{{ route('backend.kegiatan.search') }}" class="btn btn-default btn-sm me-2">
                                 <i class="fas fa-search"></i> Pencarian
                             </a>
-                            <button type="button" class="btn btn-default btn-sm me-2" data-toggle="modal" data-target="#modal-lg-dana">
-                                <i class="fa fa-money"></i> Sumber Dana
-                            </button>
                             @can('tambah kegiatan')
                             <div class="btn-group">
                                 <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -100,8 +99,10 @@
                                 </button>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-lg-create">Manual</a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-import">Import</a>
                                 </div>
                             </div>
+                            @include('backend.kegiatan._modal_import_kegiatan')
                             @endcan
                         </div>
                     </div>
@@ -134,13 +135,13 @@
                                         </div>
                                     </div>
                                     @include('backend.kegiatan._collapse_kegiatan')
-                                    <table id="tableKegiatanPekerjaan" class="table table-responsive table-bordered align-middle">
+                                    <table id="tableKegiatanPekerjaan" class="table table-bordered align-middle">
                                         <thead>
                                             <tr>
-                                                <th class="text-center" colspan="2">Kode</th>
-                                                <th class="text-center" rowspan="2">Judul</th>
-                                                <th class="text-center" rowspan="2">Output</th>
-                                                <th class="text-center" colspan="2">Alokasi</th>
+                                                <th class="text-center" colspan="3">Kode</th>
+                                                <th class="text-center" rowspan="2">Pagu Anggaran</th>
+                                                <th class="text-center" rowspan="2">Nilai Kontrak</th>
+                                                <th class="text-center" rowspan="2">Progres</th>
                                                 <th class="text-center" rowspan="2">Verifikasi Admin</th>
                                                 <th class="text-center" rowspan="2">Komentar</th>
                                                 <th class="text-center" rowspan="2">Verifikasi Pengawas</th>
@@ -149,21 +150,20 @@
                                             </tr>
                                             <tr>
                                                 <th class="text-center">Kegiatan</th>
+                                                <th class="text-center">Sub Kegiatan</th>
                                                 <th class="text-center">Pekerjaan</th>
-                                                <th class="text-center">Pekerjaan</th>
-                                                <th class="text-center">Pagu / Nilai Kontrak</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($item->kegiatan as $kegiatan)
                                             @if ($kegiatan->is_arship == 0)
                                             <tr class="table-success">
-                                                <td>{{$kegiatan->no_rek}}</td>
+                                                <td class="text-center">{{$kegiatan->title}}</td>
                                                 <td></td>
-                                                <td class="text-center ">{{$kegiatan->title}}</td>
-                                                <td class="text-center">Fisik</td>
-                                                <td class="text-center">Rp.{{number_format($kegiatan->alokasi)}}</td>
-                                                <td class="text-center">Rp.{{number_format($kegiatan->total_realisasi)}}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-center"></td>
                                                 <td class="text-center" colspan="4"></td>
                                                 <td>
                                                     <div class="d-flex">
@@ -184,82 +184,12 @@
                                             @include('backend.kegiatan._modal_delete_kegiatan')
                                             @include('backend.kegiatan._modal_update_pptk')
                                             @include('backend.kegiatan._modal_add_detail')
-
-                                            @foreach ($kegiatan->detail_kegiatan as $detail)
-                                            <tr>
-                                                <td></td>
-                                                <td>{{$detail->no_detail_kegiatan}}</td>
-                                                <td class="text-center ">{{$detail->title}}</td>
-                                                <td class="text-center">Fisik</td>
-                                                <td class="text-center">Rp.{{number_format($detail->nilai_kontrak)}}</td>
-                                                <td class="text-center">Rp.{{number_format($detail->realisasi)}}</td>
-                                                <td class="text-center">
-                                                    <form action="{{ route('backend.detail_kegiatan.verifikasi', $detail->id) }}" method="POST">
-                                                        @method('PUT')
-                                                        @csrf
-                                                        <div class="form-check">
-                                                            @can('verifikasi admin')
-                                                            <input type="hidden" name="verifikasi_admin" value="false">
-                                                            <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" name="verifikasi_admin" value="{{ $detail->verifikasi_admin == 'true' ? 'false' : 'true' }}" {{ $detail->verifikasi_admin == 'true' ? 'checked' : '' }} onchange="this.form.submit()">
-                                                            @else
-                                                            <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" {{ $detail->verifikasi_admin == 'true' ? 'checked' : '' }} disabled>
-                                                            @endcan
-                                                        </div>
-                                                    </form>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="form-floating" data-toggle="modal" data-target="#modal-lg-komentar-admin-{{$detail->id}}">
-                                                        @can('komentar admin')
-                                                        <textarea class="form-control" placeholder="Komentar" id="komentarAdmin" name="komentar_admin">{{ $detail->komentar_admin}}</textarea>
-                                                        @else
-                                                        <textarea class="form-control" placeholder="Komentar" disabled>{{ $detail->komentar_admin}}</textarea>
-                                                        @endcan
-                                                    </div>
-                                                    @include('backend.kegiatan._modal_komentar', ['param'=>'admin'])
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="form-check">
-                                                        <form action="{{ route('backend.detail_kegiatan.verifikasi', $detail->id) }}" method="POST">
-                                                            @method('PUT')
-                                                            @csrf
-                                                            <div class="form-check">
-                                                                @can('verifikasi pengawas')
-                                                                <input type="hidden" name="verifikasi_pengawas" value="false"> <!-- Memastikan ketika unchecked checkbox nilainya tetap di kirim -->
-                                                                <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="verifikasiPengawas" name="verifikasi_pengawas" value="{{ $detail->verifikasi_pengawas == 'true' ? 'false' : 'true' }}" {{ $detail->verifikasi_pengawas == 'true' ? 'checked' : '' }} onchange="this.form.submit()">
-                                                                @else
-                                                                <input class="form-check-input position-static" type="checkbox" style="width: 20px; height: 20px;" id="blankCheckbox" {{ $detail->verifikasi_pengawas == 'true' ? 'checked' : '' }} disabled>
-                                                                @endcan
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                                <!-- Komentar -->
-                                                <td class="text-center">
-                                                    <div class="form-floating" data-toggle="modal" data-target="#modal-lg-komentar-pengawas-{{$detail->id}}">
-                                                        @can('komentar pengawas')
-                                                        <textarea class="form-control" placeholder="Komentar" id="komentarPengawas" name="komentar_pengawas">{{ $detail->komentar_pengawas}}</textarea>
-                                                        @else
-                                                        <textarea class="form-control" placeholder="Komentar" disabled>{{ $detail->komentar_pengawas}}</textarea>
-                                                        @endcan
-                                                    </div>
-                                                    @include('backend.kegiatan._modal_komentar', ['param'=>'pengawas'])
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        @can('lihat detail kegiatan')
-                                                        <a href="{{ route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail->id]) }}" class=" btn btn-sm btn-secondary "><i class="fas fa-eye"></i></a>
-                                                        @endcan
-                                                        @can('hapus detail kegiatan')
-                                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-lg-detail-delete-{{$detail->id}}"><i class="fas fa-trash"></i></button>
-                                                        @endcan
-                                                        @can('ubah detail kegiatan')
-                                                        <button type="button" style="color: white;" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modal-lg-edit-detail-{{$detail->id}}"><i class="fas fa-edit"></i></button>
-                                                        @endcan
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @include('backend.kegiatan._modal_delete_detail')
-                                            @include('backend.kegiatan._modal_edit_detail')
+                                            @foreach($kegiatan->subKegiatan as $subKegiatan)
+                                                <tr>
+                                                    <td class="table-success"></td>
+                                                    <td class="text-left table-info" colspan="10">{{$subKegiatan->title}}</td>
+                                                </tr>
+                                            @include('backend.kegiatan._collapse_sub_kegiatan')
                                             @endforeach
                                             @include('backend.kegiatan._modal_edit_kegiatan')
                                             @endif
@@ -433,7 +363,8 @@
         });
 
     });
-        function getKegiatanByProgram(id) {
+
+    function getKegiatanByProgram(id) {
         let token = $("meta[name='csrf-token']").attr("content");
         $.ajax({
 
@@ -448,8 +379,7 @@
                 if (response.success) {
                     if (response.data.length > 0) {
                         console.log(response.data);
-                    } else {
-                    }
+                    } else {}
                 } else {
                     console.log(response.success);
                 }
@@ -468,40 +398,14 @@
 </script>
 
 <script>
-     let idBidang = @json($bidang->map(function($item){ return $item->id; }));
-     let headingColors = ["#6097d3", "#dc6789","#df8d72" , "#afc28a" ,"#49c3a3", "#715fa5"]
+    let idBidang = @json($bidang->map(function($item) {
+        return $item->id;
+    }));
+    let headingColors = ["#6097d3", "#dc6789", "#df8d72", "#afc28a", "#49c3a3", "#715fa5", "#027ADC", "#027ADC", "#027ADC", "#027ADC", "#027ADC"]
     for (let index = 0; index < idBidang.length; index++) {
         let idHeadings = document.getElementById(`heading-${idBidang[index]}`);
         idHeadings.style.backgroundColor = headingColors[index];
 
     }
-</script>
-<script type="text/javascript">
-    // Tulang Bawang, Lampung
-    var startlat = -4.3975495;
-    var startlon = 105.3726319;
-    var map = L.map('mapDetail').setView([startlat, startlon], 10);
-    setTimeout(function() {
-        map.invalidateSize(true)
-    }, 3000);
-    // Tambahkan layer peta dari OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-    setTimeout(function() {
-        map.invalidateSize(true)
-    }, 5000);
-    map.on("click", function(event) {
-        map.eachLayer((layer) => {
-            if (layer instanceof L.Marker) {
-                layer.remove();
-            }
-        });
-        var layer = L.marker(event.latlng).addTo(map);
-        var lat = event.latlng.lat;
-        var lng = event.latlng.lng;
-        $("#latitude").val(lat);
-        $("#longitude").val(lng);
-    });
 </script>
 @endsection

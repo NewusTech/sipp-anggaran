@@ -26,7 +26,7 @@ class SubKegiatanController extends Controller
         try {
             $bidangs = Bidang::get(['id', 'name']);
             $programs = Program::get(['id', 'name']);
-            $kegiatans = Kegiatan::with('bidang')->orderBy('bidang_id')->get(['id', 'title', 'bidang_id', 'program']);
+            $kegiatans = Kegiatan::with('bidang')->orderBy('bidang_id')->get(['id', 'title', 'bidang_id', 'program', 'tahun', 'no_rek']);
             $kegiatans->map(function ($kegiatan) use ($programs) {
                 $kegiatan->program_name = $programs->where('id', $kegiatan->program)->first()->name;
             });

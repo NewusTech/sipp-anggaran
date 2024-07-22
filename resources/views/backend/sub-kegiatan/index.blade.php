@@ -42,15 +42,15 @@
         <div class="card">
             <div class="card-body">
                 <div class="card-action-right">
+                    <button id="addSubKegiatan" class="btn btn-info btn-sm btn-add" data-toggle="modal" data-target="#modal-add-sub-kegiatan"><i class="fas fa-plus"></i> Tambah Sub Kegiatan</button>
                     <button id="addBidang" class="btn btn-primary btn-sm btn-add" data-toggle="modal" data-target="#modal-add-kegiatan"><i class="fas fa-plus"></i> Tambah Kegiatan</button>
-                    <button id="addBidang" class="btn btn-primary btn-sm btn-add" data-toggle="modal" data-target="#modal-add-sub-kegiatan"><i class="fas fa-plus"></i> Tambah Sub Kegiatan</button>
                 </div>
                 <div class="row">
                     <h4 class="text-darkblue"><strong> DATA KEGIATAN </strong></h4>
                 </div>
                 <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link {{session('tab') == ''? 'active' : ''}}" id="custom-content-below-home-tab" data-toggle="pill" href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home" aria-selected="true">Daftar Bidang</a>
+                        <a class="nav-link {{session('tab') == ''? 'active' : ''}}" id="custom-content-below-home-tab" data-toggle="pill" href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home" aria-selected="true">Daftar Sub Kegiatan</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{session('tab') == 'kegiatan'? 'active' : ''}}" id="custom-content-below-kegiatan-tab" data-toggle="pill" href="#custom-content-below-kegiatan" role="tab" aria-controls="custom-content-below-home" aria-selected="true">Daftar Kegiatan</a>
@@ -63,21 +63,19 @@
                                 <table id="example1" class="table table-responsive" style="width: 100% !important;">
                                     <thead>
                                         <tr>
+                                            <th>Kode | Sub Kegiatan</th>
                                             <th>Bidang</th>
                                             <th>Nama Kegiatan</th>
-                                            <th>Nama Sub Kegiatan</th>
                                             <th style="text-align: end">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($subKegiatan as $item)
                                         <tr>
+                                            <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{$item->kode_sub_kegiatan}} | {{$item->title}}</td>
                                             <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{$item->kegiatan->bidang->name ?? 'Data Kosong'}}
                                             </td>
-                                            <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{$item->kegiatan->title ?? 'Data Kosong'}}
-                                        </td>
-                                            <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{$item->kode_sub_kegiatan}} | {{$item->title}}
-                                            </td>
+                                            <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{$item->kegiatan->title ?? 'Data Kosong'}}</td>
                                             <td class="btn-action">
                                                 <button type="button" style="color: white;" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal-edit-sub-kegiatan-{{$item->id}}"><i class="fas fa-edit"></i> </button>
                                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-sub-kegiatan-{{$item->id}}"><i class="fas fa-trash"></i></button>

@@ -29,84 +29,32 @@ class KegiatanController extends Controller
     public $kontraktorId;
     public $bidangId;
     public $kegiatan_id;
+
     public function index(Request $request)
     {
         $this->request = $request;
-        $this->bidang_id =  Auth::user()->bidang_id;
-        $role = Auth::user()->getRoleNames();
-        $idKontraktor = PenyediaJasa::where('email', Auth::user()->email)->pluck('id');
+        $this->bidang_id =  $this->getLoggedUser()->bidang_id;
+        $role = $this->getLoggedUser()->getRoleNames();
+        $idPengawas = Bidang::where('name', 'Pengawas')->first()->id;
         $kegiatans = Kegiatan::get(['id', 'title']);
         $subKegiatans = SubKegiatan::get(['id', 'title']);
-        if ($role[0] == "Kontraktor") {
-            $detailKontraktor = DetailKegiatan::where('penyedia_jasa_id', $idKontraktor)->pluck('kegiatan_id');
-            $this->bidangId = Kegiatan::whereIn('id', $detailKontraktor)->pluck('bidang_id');
-            $this->kegiatan_id = Kegiatan::whereIn('id', $detailKontraktor)->pluck('id');
-            $this->kontraktorId = $idKontraktor;
-        }
 
-        if ($role[0] == 'Pengawas') {
-            $idPengawas = PenanggungJawab::where('pptk_email', Auth::user()->email)->first()->pluck('id');
-            $kegiatanIds = DetailKegiatan::whereIn('penanggung_jawab_id', $idPengawas)->pluck('kegiatan_id');
-            // dd($idPengawas, $kegiatanIds);
-            $this->bidangId = Kegiatan::whereIn('id', $kegiatanIds)->pluck('bidang_id');
-            $this->kegiatan_id = Kegiatan::whereIn('id', $kegiatanIds)->pluck('id');
+        $kegiatan = $this->bidang_id != null ? Kegiatan::with('subKegiatan.detail')->where('bidang_id', $this->bidang_id)->orderBy('created_at', 'desc')->get() : Kegiatan::with('subKegiatan.detail')->where('bidang_id', '!=', $idPengawas)->orderBy('created_at', 'desc')->get();
+        $bidang = $this->bidang_id != null ? Bidang::where('id', $this->bidang_id)->orderBy('created_at', 'desc')->get() : Bidang::where('id', '!=', $idPengawas)->orderBy('created_at', 'desc')->get();
+
+        if ($role[0] == 'Admin' && $this->bidang_id != null) {
+            $kegiatan = Kegiatan::with('subKegiatan.detail')->where('bidang_id', '!=', $idPengawas)->orderBy('created_at', 'desc')->get();
+            $bidang = Bidang::where('id', '!=', $idPengawas)->orderBy('created_at', 'desc')->get();
         }
-        // dd($idPengawas, $kegiatanIds, $this->bidangId, $this->kegiatan_id);
-        if (str_contains($role[0], "Staff") || str_contains($role[0], "Kepala Bidang") || str_contains($role[0], "Kontraktor") || str_contains($role[0], "Konsultan")) {
-            $bidang = Bidang::where('id', $this->bidang_id)->orderBy('created_at', 'desc')->get();
-            if ($role[0] == "Kontraktor") {
-                if ($this->bidang_id == null) {
-                    $bidang = Bidang::whereIn('id', $this->bidangId)->orderBy('created_at', 'desc')->get();
-                }
-            }
-            $kegiatanProgram = Kegiatan::where('bidang_id', $this->bidang_id)->pluck('program')->first();
-            $program = Program::where('id', $kegiatanProgram)->get();
-        } else if ($role[0] == "Pengawas") {
-            if ($this->bidang_id == null) {
-                $bidang = Bidang::whereIn('id', $this->bidangId)->orderBy('created_at', 'desc')->get();
-            }
-            $kegiatanProgram = Kegiatan::where('bidang_id', $this->bidang_id)->pluck('program')->first();
-            $program = Program::where('id', $kegiatanProgram)->get();
-        } else {
-            $bidang = Bidang::orderBy('created_at', 'desc')->get();
-            $program = Program::orderBy('created_at', 'desc')->get();
-        }
-        $bidang->map(function ($item) {
-            if ($this->request['tahun'] != null) {
-                $kegiatan = Kegiatan::where('bidang_id', $item->id)->where('is_arship', 0)->where('tahun', $this->request['tahun'])->orderBy('created_at', 'desc')->get();
-            } else {
-                $kegiatan = Kegiatan::where('bidang_id', $item->id)->where('is_arship', 0)->orderBy('created_at', 'desc')->get();
-            }
-            if (Auth::user()->getRoleNames()[0] == "Kontraktor") {
-                $kegiatan = Kegiatan::where('bidang_id', $item->id)->where('is_arship', 0)->whereIn('id', $this->kegiatan_id)->orderBy('created_at', 'desc')->get();
-            }
-            $kegiatan->map(function ($query) {
-                $penanggung = PenanggungJawab::where('kegiatan_id', $query->id)->first();
-                $detailKegiatan = DetailKegiatan::where('kegiatan_id', $query->id)->orderBy('created_at', 'desc')->get();
-                if (Auth::user()->getRoleNames()[0] == "Kontraktor") {
-                    $detailKegiatan = DetailKegiatan::where('penyedia_jasa_id', $this->kontraktorId)->orderBy('created_at', 'desc')->get();
-                }
-                $detailKegiatan->map(function ($detail) {
-                    $anggaran = Anggaran::where('detail_kegiatan_id', $detail->id)->orderBy('created_at', 'desc')->get();
-                    $detail->anggaran = $anggaran;
-                    $detail->total_realisasi = $anggaran->sum('daya_serap_kontrak');
-                });
-                $query->penanggung = $penanggung;
-                $query->detail_kegiatan = $detailKegiatan;
-                $query->total_pagu = $detailKegiatan->sum(function ($detail) {
-                    return (int) $detail->pagu;
-                });
-                $query->total_realisasi = $detailKegiatan->sum('total_realisasi');
-                $query->total_sisa = $query->alokasi - $detailKegiatan->sum('total_realisasi');
-            });
-            $item->kegiatan = $kegiatan;
-            $item->total_pagu = $kegiatan->sum('total_pagu');
-        });
 
         $program = Program::get(['id', 'name']);
         $penyedia_jasa = PenyediaJasa::orderBy('created_at', 'desc')->get();
         $sumber_dana = SumberDana::orderBy('created_at', 'desc')->get();
-        return view('backend.kegiatan.index', compact(['bidang', 'program', 'penyedia_jasa', 'sumber_dana','kegiatans', 'subKegiatans']));
+        return view('backend.kegiatan.index', compact(['bidang', 'program', 'penyedia_jasa', 'sumber_dana', 'kegiatans', 'subKegiatans']));
+    }
+
+    public function getLoggedUser(){
+        return Auth::user();
     }
 
 
@@ -119,7 +67,7 @@ class KegiatanController extends Controller
         return response()->json($kegiatans);
     }
 
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $kegiatan = Kegiatan::create([
             'title' => $request->title,
@@ -137,22 +85,21 @@ class KegiatanController extends Controller
 
     public function update(Request $request, $id)
     {
-        $kegiatan = Kegiatan::where('id', $id)->update([
-            'title' => $request->title,
-            'no_rek' => $request->no_rek,
-            'alokasi' => $request->alokasi,
-            'tahun' => $request->tahun,
-            'program' => $request->program,
-            'no_rek_program' => $request->no_rek_program,
-            'bidang_id' => $request->bidang_id,
-            'sumber_dana' => $request->sumber_dana,
-            'jenis_paket' => $request->jenis_paket,
-        ]);
-        return redirect()->route('backend.kegiatan.index')->with('success', 'Kegiatan berhasil diedit');
+        try {
+            $kegiatan = Kegiatan::find($id);
+            $kegiatan->fill($request->all());
+            if ($kegiatan->isDirty()) {
+                $kegiatan->save();
+            }
+            return redirect()->route('backend.kegiatan.index')->with('success', 'Kegiatan berhasil diedit');
+        } catch (\Exception $e) {
+            return redirect()->route('backend.kegiatan.index')->with('error', 'Kegiatan gagal diedit');
+        }
     }
 
     public function arship(Request $request, $id)
     {
+        // dd($request->all());
         $kegiatan = Kegiatan::where('id', $id)->update([
             'is_arship' => 1,
         ]);
