@@ -27,6 +27,7 @@ use App\Http\Controllers\Backend\OrganisasiController;
 use App\Http\Controllers\Backend\UnitController;
 use App\Http\Controllers\Backend\SumberDanaController;
 use App\Http\Controllers\Backend\DpaController;
+use App\Http\Controllers\Backend\ExcelController;
 use App\Http\Controllers\Backend\PenanggungJawabController;
 use App\Http\Controllers\Backend\SubKegiatanController;
 use App\Http\Controllers\Backend\PenggunaAnggaranController;
@@ -130,8 +131,9 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => 'auth']
         Route::delete('/{id}', [KegiatanController::class, 'destroy'])->name('kegiatan.destroy');
         Route::delete('/master/{id}', [KegiatanController::class, 'deleteMasterKegiatan'])->name('master.kegiatan.destroy');
         Route::get('/{id}', [KegiatanController::class, 'show'])->name('kegiatan.show');
-        Route::post('/{id}', [KegiatanController::class, 'arship'])->name('kegiatan.arship');
+        // Route::post('/{id}', [KegiatanController::class, 'arship'])->name('kegiatan.arship');
         Route::post('pptk/{kegiatan_id}', [KegiatanController::class, 'updatePptk'])->name('kegiatan.pptk');
+        Route::post('/import', [ExcelController::class, 'importKegiatan'])->name('kegiatan.import');
     });
     Route::group(['prefix' => 'program'], function () {
         Route::get('/', [ProgramController::class, 'index'])->name('program.index');

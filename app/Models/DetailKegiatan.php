@@ -56,6 +56,11 @@ class DetailKegiatan extends Model
         return $this->belongsTo(Kegiatan::class, 'kegiatan_id', 'id');
     }
 
+    public function subKegiatan(): BelongsTo
+    {
+        return $this->belongsTo(SubKegiatan::class, 'sub_kegiatan_id', 'id');
+    }
+
     public function penyedia(): BelongsTo
     {
         return $this->belongsTo(PenyediaJasa::class, 'penyedia_jasa_id', 'id');
