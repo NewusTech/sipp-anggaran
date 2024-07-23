@@ -9,6 +9,7 @@
     <meta name="theme-color" content="#6777ef" />
     <link rel="apple-touch-icon" href="{{ asset('image/logo.jpg') }}">
     <link rel="manifest" href="{{ asset('/manifest.json') }}">
+    <link rel="icon" style="width: 20px; height: 20px" href="{{asset('image/logo.jpg')}}">
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
