@@ -34,7 +34,7 @@ class DashboardController extends Controller
             // dd($idPengawas, $kegiatanIds);
             $bidang_id = Kegiatan::whereIn('id', $kegiatanIds)->pluck('bidang_id');
         }
-        $total_pagu = $bidang_id == null ? Kegiatan::all()->sum('alokasi') : Kegiatan::whereIn('bidang_id', $bidang_id)->filter($request)->sum('alokasi');
+        $total_pagu = $bidang_id == null ? DetailKegiatan::all()->sum('pagu') : DetailKegiatan::whereIn('bidang_id', $bidang_id)->filter($request)->sum('pagu');
         $kegiatan_id = Kegiatan::whereIn('bidang_id', $bidang_id)->pluck('id');
         $detail_kegiatan = DetailKegiatan::select(
             'title',

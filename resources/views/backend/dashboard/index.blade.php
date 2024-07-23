@@ -319,54 +319,8 @@
 {{-- <script src="{{ asset('admin') }}/plugins/chart.js/Chart.min.js"></script> --}}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
-    $(function() {
-        $("#progress").DataTable({
-            "responsive": true,
-            "autoWidth": true,
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": false,
-            "collapsed": true,
-        });
-        $("#progress_filter label").addClass('search');
-        $("#progress-non-fisik").DataTable({
-            "responsive": true,
-            "autoWidth": true,
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": false,
-            "collapsed": true,
-        });
-        $("#progress-non-fisik_filter label").addClass('search');
-        $("#progress-kegiatan").DataTable({
-            "responsive": true,
-            "autoWidth": true,
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": false,
-            "collapsed": true,
-        });
-        $("#progress-kegiatan_filter label").addClass('search');
-        $("#progress-program").DataTable({
-            "responsive": true,
-            "autoWidth": true,
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": false,
-            "collapsed": true,
-        });
-        $("#progress-program_filter label").addClass('search');
-        $(".search input").before(`
-					<span class="fa fa-search"></span>
-			`);
-        $(".search input").attr("placeholder", "Ketik Kata Kunci");
-
-        //start display maps
-        $(".search input").attr("style", "width: 20rem;");
+    //
+    window.addEventListener('DOMContentLoaded', function() {
         var map = L.map('mapDashboard').setView([-4.475296, 105.077107], 9);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -415,6 +369,57 @@
         // end add point on maps
         //end display maps
 
+    });
+</script>
+<script>
+    $(function() {
+        $("#progress").DataTable({
+            "responsive": true,
+            "autoWidth": true,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": false,
+            "collapsed": true,
+        });
+        $("#progress_filter label").addClass('search');
+        $("#progress-non-fisik").DataTable({
+            "responsive": true,
+            "autoWidth": true,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": false,
+            "collapsed": true,
+        });
+        $("#progress-non-fisik_filter label").addClass('search');
+        $("#progress-kegiatan").DataTable({
+            "responsive": true,
+            "autoWidth": true,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": false,
+            "collapsed": true,
+        });
+        $("#progress-kegiatan_filter label").addClass('search');
+        $("#progress-program").DataTable({
+            "responsive": true,
+            "autoWidth": true,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": false,
+            "collapsed": true,
+        });
+        $("#progress-program_filter label").addClass('search');
+        $(".search input").before(`
+					<span class="fa fa-search"></span>
+			`);
+        $(".search input").attr("placeholder", "Ketik Kata Kunci");
+
+        //start display maps
+        $(".search input").attr("style", "width: 20rem;");
     });
 </script>
 <script>
