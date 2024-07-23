@@ -3,7 +3,10 @@
     <td class="table-success"></td>
     <td class="table-info"></td>
     <td class="text-center ">{{$detail->title}}</td>
-    <td class="text-center">Rp.{{number_format($detail->pagu)}}</td>
+    @php
+    $pagu_anggaran = str_replace(',', '', $detail->pagu);
+    @endphp
+    <td class="text-center">Rp.{{ number_format($pagu_anggaran)}}</td>
     <td class="text-center">Rp.{{number_format($detail->nilai_kontrak)}}</td>
     @if ($detail->progres->count() > 0)
         <td class="text-center">{{$detail->progres->last()->nilai}}%</td>
