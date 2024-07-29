@@ -61,6 +61,10 @@ class DetailKegiatan extends Model
         return $this->belongsTo(SubKegiatan::class, 'sub_kegiatan_id', 'id');
     }
 
+    public function penanggungJawab() : BelongsTo {
+        return $this->belongsTo(PenanggungJawab::class, 'penanggung_jawab_id', 'id');
+    }
+
     public function penyedia(): BelongsTo
     {
         return $this->belongsTo(PenyediaJasa::class, 'penyedia_jasa_id', 'id');

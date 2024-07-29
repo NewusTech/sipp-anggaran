@@ -28,11 +28,6 @@ class DashboardController extends Controller
         $role = Auth::user()->getRoleNames();
         if (str_contains($role[0], "Staff") || str_contains($role[0], "Kepala Bidang")) {
             array_push($bidang_id, Auth::user()->bidang_id);
-        } elseif (str_contains($role[0], "Pengawas")) {
-            $idPengawas = PenanggungJawab::where('pptk_email', Auth::user()->email)->first()->pluck('id');
-            $kegiatanIds = DetailKegiatan::whereIn('penanggung_jawab_id', $idPengawas)->pluck('kegiatan_id');
-            // dd($idPengawas, $kegiatanIds);
-            $bidang_id = Kegiatan::whereIn('id', $kegiatanIds)->pluck('bidang_id');
         }
 
         $kegiatan = Kegiatan::whereIn('bidang_id', $bidang_id)->get(['id']);
@@ -62,6 +57,7 @@ class DashboardController extends Controller
         }
         // dd($total_realisasi);
         $total_sisa = $total_pagu - $total_realisasi;
+        // dd(Auth::user()->bidang_id, $bidang_id);
         $fisik = DetailKegiatan::select(
             'detail_kegiatan.id as detail_kegiatan_id',
             'detail_kegiatan.title',
@@ -71,17 +67,14 @@ class DashboardController extends Controller
             'detail_kegiatan.longitude',
             'detail_kegiatan.kegiatan_id',
             'bidang.name as bidang_name',
-            'penanggung_jawab.pptk_name',
+            'penanggung_jawab_id',
             'penyedia_jasa.name as penyedia_jasa'
-        )->with('kegiatan')
+        )->with('kegiatan', 'penanggungJawab')
             ->whereHas('kegiatan', function ($query) use ($bidang_id) {
                 $query->where('is_arship', 0);
-                if ($bidang_id != null) {
+                if ($bidang_id != null && count($bidang_id) > 0) {
                     $query->whereIn('bidang_id', $bidang_id);
                 }
-            })
-            ->leftJoin('penanggung_jawab', function ($join) {
-                $join->on('detail_kegiatan.kegiatan_id', '=', 'penanggung_jawab.kegiatan_id');
             })
             ->leftJoin('kegiatan', function ($join) {
                 $join->on('detail_kegiatan.kegiatan_id', '=', 'kegiatan.id');
@@ -95,83 +88,22 @@ class DashboardController extends Controller
             ->filter($request)
             ->get();
 
+            if ($role[0] == 'Pengawas') {
+                $pengawas = PenanggungJawab::where('pptk_email', Auth::user()->email)->first('id');
+                $fisik = $fisik->where('penanggung_jawab_id', $pengawas->id);
+            }
+
         $progresFisik = ProgresKegiatan::where('jenis_progres', 'fisik')->whereIn('detail_kegiatan_id', $fisik->pluck('detail_kegiatan_id'))->orderBy('nilai', 'desc')->get();
         $rencanaFisik = RencanaKegiatan::whereIn('detail_kegiatan_id', $fisik->pluck('detail_kegiatan_id'))->get();
         $fisik->map(function ($item) use ($progresFisik, $rencanaFisik) {
             $progres = $progresFisik->where('detail_kegiatan_id', $item->detail_kegiatan_id);
             $rencana = $rencanaFisik->where('detail_kegiatan_id', $item->detail_kegiatan_id);
-            $deviasi = ($rencana[$progres->count() - 1]->fisik ?? 0)-($progres->first()->nilai ?? 0);
+            $deviasi = ($rencana[$progres->count() - 1]->fisik ?? 0) - ($progres->first()->nilai ?? 0);
             $item->progress = $progres ?? 0;
             $item->rencana = $rencana ?? 0;
             $item->status_deviasi = $deviasi;
         });
-        // dd($fisik);
-        $nonfisik = DetailKegiatan::select(
-            'detail_kegiatan.id as detail_kegiatan_id',
-            'detail_kegiatan.title',
-            'detail_kegiatan.realisasi',
-            'detail_kegiatan.updated_at',
-            'detail_kegiatan.progress',
-            'detail_kegiatan.akhir_kontrak',
-            'detail_kegiatan.latitude',
-            'detail_kegiatan.longitude',
-            'bidang.name as bidang_name',
-            'penanggung_jawab.pptk_name',
-            'penyedia_jasa.name as penyedia_jasa'
-        )
-            ->whereHas('kegiatan', function ($query) use ($bidang_id) {
-                $query->where('jenis_paket', '2')->where('is_arship', 0);
-                if ($bidang_id) {
-                    $query->whereIn('bidang_id', $bidang_id);
-                }
-            })
-            ->leftJoin('penanggung_jawab', function ($join) {
-                $join->on('detail_kegiatan.kegiatan_id', '=', 'penanggung_jawab.kegiatan_id');
-            })
-            ->leftJoin('kegiatan', function ($join) {
-                $join->on('detail_kegiatan.kegiatan_id', '=', 'kegiatan.id');
-            })
-            ->leftJoin('penyedia_jasa', function ($join) {
-                $join->on('detail_kegiatan.penyedia_jasa_id', '=', 'penyedia_jasa.id');
-            })
-            ->leftJoin('bidang', function ($join) {
-                $join->on('kegiatan.bidang_id', '=', 'bidang.id');
-            })
-            ->filter($request)
-            ->get();
-        $kegiatan = DetailKegiatan::select(
-            'detail_kegiatan.id as detail_kegiatan_id',
-            'detail_kegiatan.title',
-            'detail_kegiatan.realisasi',
-            'detail_kegiatan.updated_at',
-            'detail_kegiatan.progress',
-            'detail_kegiatan.akhir_kontrak',
-            'detail_kegiatan.latitude',
-            'detail_kegiatan.longitude',
-            'bidang.name as bidang_name',
-            'penanggung_jawab.pptk_name',
-            'penyedia_jasa.name as penyedia_jasa'
-        )
-            ->whereHas('kegiatan', function ($query) use ($bidang_id) {
-                $query->where('is_arship', 0);
-                if ($bidang_id) {
-                    $query->whereIn('bidang_id', $bidang_id);
-                }
-            })
-            ->leftJoin('penanggung_jawab', function ($join) {
-                $join->on('detail_kegiatan.kegiatan_id', '=', 'penanggung_jawab.kegiatan_id');
-            })
-            ->leftJoin('kegiatan', function ($join) {
-                $join->on('detail_kegiatan.kegiatan_id', '=', 'kegiatan.id');
-            })
-            ->leftJoin('penyedia_jasa', function ($join) {
-                $join->on('detail_kegiatan.penyedia_jasa_id', '=', 'penyedia_jasa.id');
-            })
-            ->leftJoin('bidang', function ($join) {
-                $join->on('kegiatan.bidang_id', '=', 'bidang.id');
-            })
-            ->filter($request)
-            ->get();
+
         $total_paket = DetailKegiatan::whereHas('kegiatan', function ($query) use ($bidang_id) {
             $query->where('is_arship', 0);
             if ($bidang_id) {
@@ -211,7 +143,7 @@ class DashboardController extends Controller
                 $query->select('id', 'detail_kegiatan_id', 'jenis_progres', 'nilai');
             }])
             ->get()->count();
-        return view('backend.dashboard.index', compact(['total_pagu', 'total_realisasi', 'total_sisa', 'fisik', 'nonfisik', 'kegiatan', 'total_paket', 'total_paket_belum_mulai', 'total_paket_dikerjakan', 'total_paket_selesai', 'detail_kegiatan']));
+        return view('backend.dashboard.index', compact(['total_pagu', 'total_realisasi', 'total_sisa', 'fisik', 'total_paket', 'total_paket_belum_mulai', 'total_paket_dikerjakan', 'total_paket_selesai', 'detail_kegiatan']));
     }
 
     public function chartData(Request $request)

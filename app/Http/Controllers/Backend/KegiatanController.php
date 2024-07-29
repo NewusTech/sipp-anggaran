@@ -17,6 +17,8 @@ use App\Models\PenanggungJawab;
 use App\Models\Pengambilan;
 use App\Models\SumberDana;
 use App\Exports\LaporanPengambilanExport;
+use App\Models\Dpa;
+use App\Models\Pagu;
 use App\Models\SubKegiatan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Date;
@@ -35,17 +37,17 @@ class KegiatanController extends Controller
         $this->request = $request;
         $this->bidang_id =  $this->getLoggedUser()->bidang_id;
         $role = $this->getLoggedUser()->getRoleNames();
-        $idPengawas = Bidang::where('name', 'Pengawas')->first()->id;
+        // $idPengawas = ;
         $kegiatans = Kegiatan::get(['id', 'title']);
         $subKegiatans = SubKegiatan::get(['id', 'title']);
 
-        $kegiatan = $this->bidang_id != null ? Kegiatan::with('subKegiatan.detail')->where('bidang_id', $this->bidang_id)->orderBy('created_at', 'desc')->get() : Kegiatan::with('subKegiatan.detail')->where('bidang_id', '!=', $idPengawas)->orderBy('created_at', 'desc')->get();
-        $bidang = $this->bidang_id != null ? Bidang::where('id', $this->bidang_id)->orderBy('created_at', 'desc')->get() : Bidang::where('id', '!=', $idPengawas)->orderBy('created_at', 'desc')->get();
+        $bidang = $this->bidang_id != null ? Bidang::where('id', $this->bidang_id)->orderBy('created_at', 'desc')->get() : Bidang::orderBy('created_at', 'desc')->get();
 
-        if ($role[0] == 'Admin' && $this->bidang_id != null) {
-            $kegiatan = Kegiatan::with('subKegiatan.detail')->where('bidang_id', '!=', $idPengawas)->orderBy('created_at', 'desc')->get();
-            $bidang = Bidang::where('id', '!=', $idPengawas)->orderBy('created_at', 'desc')->get();
-        }
+        // if ($role[0] == 'Pengawas' && $this->bidang_id == null) {
+        //     $bidang = Bidang::where('id', '!=', $idPengawas)->orderBy('created_at', 'desc')->get();
+        // }
+
+        $bidang->map(fn ($bidang) => $bidang->totalPagu = $this->getTotalPaguBidang($bidang->id));
 
         $program = Program::get(['id', 'name']);
         $penyedia_jasa = PenyediaJasa::orderBy('created_at', 'desc')->get();
@@ -53,7 +55,24 @@ class KegiatanController extends Controller
         return view('backend.kegiatan.index', compact(['bidang', 'program', 'penyedia_jasa', 'sumber_dana', 'kegiatans', 'subKegiatans']));
     }
 
-    public function getLoggedUser(){
+    public function getTotalPaguBidang($bidang_id)
+    {
+        if ($bidang_id) {
+            $kegiatans = Kegiatan::where('bidang_id', $bidang_id)->get();
+            $totalPagu = $kegiatans->map(function ($kegiatan) {
+               return $kegiatan->detail->sum('pagu');
+            });
+            return $totalPagu->sum();
+        } elseif($bidang_id == null){
+            $kegiatans = Kegiatan::get();
+            $totalPagu = $kegiatans->map(function ($kegiatan) {
+               return $kegiatan->detail->sum('pagu');
+            });
+            return $totalPagu->sum();
+        }
+    }
+    public function getLoggedUser()
+    {
         return Auth::user();
     }
 
@@ -192,65 +211,6 @@ class KegiatanController extends Controller
         $kegiatan = Kegiatan::whereIn('id', $kegiatan_id->toArray())->get();
         $details = $role[0] == 'Kontraktor' ? DetailKegiatan::with('progres')->where('penyedia_jasa_id', $penyedia_jasa->id)->get() : DetailKegiatan::with('progres')->whereIn('kegiatan_id', $kegiatan_id->toArray())->get();
         return view('backend.kegiatan.laporan', compact(['listBidang', 'tahun', 'bulan', 'bidang', 'requestBidang', 'search']));
-    }
-
-    public function laporanDPA(Request $request)
-    {
-        $bidang_id = null;
-        $role = Auth::user()->getRoleNames();
-        if (str_contains($role[0], "Staff")) {
-            $bidang_id = Auth::user()->bidang_id;
-        }
-        $dpa = Dpa::filter($request)->get();
-        foreach ($dpa as $key => $item) {
-            $details = DetailKegiatan::select(
-                'detail_kegiatan.title as sub_kegiatan_title',
-                'detail_kegiatan.id',
-                'detail_kegiatan.pagu',
-                'kegiatan.title as kegiatan_title',
-                'kegiatan.alokasi as alokasi',
-                'program.name as program_title'
-            )->filter($request)
-                ->leftJoin('kegiatan', function ($join) {
-                    $join->on('detail_kegiatan.kegiatan_id', '=', 'kegiatan.id');
-                })
-                ->leftJoin('program', function ($join) {
-                    $join->on('kegiatan.program', '=', 'program.id');
-                })
-                ->whereHas('kegiatan', function ($query) use ($bidang_id) {
-                    $query->where('is_arship', 0);
-                    if ($bidang_id) {
-                        $query->where('bidang_id', $bidang_id);
-                    }
-                })->get();
-            foreach ($details as $key => $detail) {
-                $totalbelanjaOperasi = Pagu::where('dpa_id', '=', $item->id)->sum('belanja_operasi');
-                $totalbelanjaModal = Pagu::where('dpa_id', '=', $item->id)->sum('belanja_modal');
-                $totalbelanjaTakTerduga = Pagu::where('dpa_id', '=', $item->id)->sum('belanja_tak_terduga');
-                $totalbelanjaTransfer = Pagu::where('dpa_id', '=', $item->id)->sum('belanja_transfer');
-                $totalOperasi = Pengambilan::where('dpa_id', '=', $item->id)->sum('belanja_operasi');
-                $totalModal = Pengambilan::where('dpa_id', '=', $item->id)->sum('belanja_modal');
-                $totalTakTerduga = Pengambilan::where('dpa_id', '=', $item->id)->sum('belanja_tak_terduga');
-                $totalTransfer = Pengambilan::where('dpa_id', '=', $item->id)->sum('belanja_transfer');
-                $detail->anggaran_belanja_operasi = $totalbelanjaOperasi;
-                $detail->anggaran_belanja_modal = $totalbelanjaModal;
-                $detail->anggaran_belanja_tak_terduga = $totalbelanjaTakTerduga;
-                $detail->anggaran_belanja_transfer = $totalbelanjaTransfer;
-                $detail->pengambilan_belanja_operasi = $totalOperasi;
-                $detail->pengambilan_belanja_modal = $totalModal;
-                $detail->pengambilan_belanja_tak_terduga = $totalTakTerduga;
-                $detail->pengambilan_belanja_transfer = $totalTransfer;
-            }
-        }
-
-        $tahun = $request->tahun;
-        $bulan = $request->bulan;
-        // $bidang = Bidang::orderBy('created_at', 'desc')
-        // ->get();
-        // $program = Program::orderBy('created_at', 'desc')
-        // ->get();
-        // $detailKegiatan = DetailKegiatan::filter($request)->orderBy('created_at', 'desc')->get();
-        return view('backend.kegiatan.laporan', compact(['details', 'tahun', 'bulan']));
     }
 
     public function updatePptk(Request $request, $detail_kegiatan_id)
