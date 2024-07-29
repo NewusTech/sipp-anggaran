@@ -130,7 +130,7 @@
                                             </div>
                                             <div class="card-table-cell tar">
                                                 <button type="button" class=" btn btn-sm btn-light rounded text-darkblue" style="width: 120pt"><strong>Total Kegiatan : {{$item->kegiatan->count()}}</strong></button>
-                                                <button type="button" class="btn btn-sm btn-light rounded text-darkblue" style="width: 200pt"><strong>Total Pagu : Rp {{number_format($item->kegiatan->sum('alokasi'))}}</strong></button>
+                                                <button type="button" class="btn btn-sm btn-light rounded text-darkblue" style="width: 200pt"><strong>Total Pagu : Rp {{number_format($item->totalPagu)}}</strong></button>
                                             </div>
                                         </div>
                                     </div>
