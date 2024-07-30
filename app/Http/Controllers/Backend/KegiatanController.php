@@ -37,18 +37,30 @@ class KegiatanController extends Controller
         $this->request = $request;
         $this->bidang_id =  $this->getLoggedUser()->bidang_id;
         $role = $this->getLoggedUser()->getRoleNames();
-        // $idPengawas = ;
         $kegiatans = Kegiatan::get(['id', 'title']);
         $subKegiatans = SubKegiatan::get(['id', 'title']);
 
         $bidang = $this->bidang_id != null ? Bidang::where('id', $this->bidang_id)->orderBy('created_at', 'desc')->get() : Bidang::orderBy('created_at', 'desc')->get();
 
-        // if ($role[0] == 'Pengawas' && $this->bidang_id == null) {
-        //     $bidang = Bidang::where('id', '!=', $idPengawas)->orderBy('created_at', 'desc')->get();
-        // }
+        if ($role[0] == 'Pengawas') {
+            $idPengawas = PenanggungJawab::where('pptk_email', $this->getLoggedUser()->email)->first('id');
+            $bidang = Bidang::with('kegiatan.subKegiatan.detail')->get();
+
+            $bidang = $bidang->map(function ($bidang) use ($idPengawas) {
+                $bidang->kegiatan = $bidang->kegiatan->map(function ($kegiatan) use ($idPengawas) {
+                    $kegiatan->subKegiatan = $kegiatan->subKegiatan->map(function ($subKegiatan) use ($idPengawas) {
+                        $subKegiatan->detail = $subKegiatan->detail->filter(function ($detail) use ($idPengawas) {
+                            return $detail->penanggung_jawab_id == $idPengawas->id;
+                        });
+                        return $subKegiatan;
+                    });
+                    return $kegiatan;
+                });
+                return $bidang;
+            });
+        }
 
         $bidang->map(fn ($bidang) => $bidang->totalPagu = $this->getTotalPaguBidang($bidang->id));
-
         $program = Program::get(['id', 'name']);
         $penyedia_jasa = PenyediaJasa::orderBy('created_at', 'desc')->get();
         $sumber_dana = SumberDana::orderBy('created_at', 'desc')->get();
@@ -60,13 +72,13 @@ class KegiatanController extends Controller
         if ($bidang_id) {
             $kegiatans = Kegiatan::where('bidang_id', $bidang_id)->get();
             $totalPagu = $kegiatans->map(function ($kegiatan) {
-               return $kegiatan->detail->sum('pagu');
+                return $kegiatan->detail->sum('pagu');
             });
             return $totalPagu->sum();
-        } elseif($bidang_id == null){
+        } elseif ($bidang_id == null) {
             $kegiatans = Kegiatan::get();
             $totalPagu = $kegiatans->map(function ($kegiatan) {
-               return $kegiatan->detail->sum('pagu');
+                return $kegiatan->detail->sum('pagu');
             });
             return $totalPagu->sum();
         }
