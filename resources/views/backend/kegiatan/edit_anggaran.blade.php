@@ -116,9 +116,6 @@
                         <a class="nav-link py-1{{session('tab') == 'penanggung_jawab'? 'active' : ''}}" id="custom-content-below-penanggung_jawab-tab" data-toggle="pill" href="#custom-content-above-penanggung_jawab" role="tab" aria-controls="custom-content-below-penanggung_jawab" aria-selected="true">Penanggung Jawab</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link py-1 {{session('tab') == 'progres'? 'active' : ''}}" id="custom-content-below-progres-tab" data-toggle="pill" href="#custom-content-below-progres" role="tab" aria-controls="custom-content-below-detail" aria-selected="true">Progres</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link py-1 {{session('tab') == 'dokumentasi'? 'active' : ''}}" id="custom-content-below-dokumentasi-tab" data-toggle="pill" href="#custom-content-above-dokumentasi" role="tab" aria-controls="custom-content-below-dokumentasi" aria-selected="true">Dokumentasi</a>
                     </li>
                     <li class="nav-item">
@@ -128,12 +125,9 @@
                 <div class="tab-content" id="custom-content-below-tabContent">
                     @include('backend.kegiatan._detail')
                     @include('backend.kegiatan._penanggung_jawab')
-                    <!-- @include('backend.kegiatan._data_kontrak') -->
                     @include('backend.kegiatan._anggaran')
                     @include('backend.kegiatan._kurva_s')
-                    @include('backend.kegiatan._progres')
                     @include('backend.kegiatan._titik_lokasi')
-                    {{-- @include('backend.kegiatan._pengambilan') --}}
                     @include('backend.kegiatan._dokumentasi')
                 </div>
             </div>
@@ -411,6 +405,50 @@
             }
         });
     }
+</script>
+
+
+<script>
+    // Kurva S
+    let listBulan = <?php echo $bulan; ?>;
+
+    let dataRencana = <?php echo $dataBulan; ?>;
+    let dataProgresFisik = <?php echo $dataProgresFisik; ?>;
+
+    let progresFisik = [];
+    for (let key in dataProgresFisik) {
+        if (dataProgresFisik.hasOwnProperty(key)) {
+            progresFisik.push(dataProgresFisik[key]);
+        }
+    }
+    var kurvaSFisik = {
+        // labels data generate from kontrak
+        labels: listBulan,
+        datasets: [{
+                label: 'Rencana Keuangan',
+                backgroundColor: 'rgba(219, 31, 87, 0.8)',
+                borderColor: 'rgba(219, 31, 87, 0.8)',
+                data: dataRencana.fisik // the length of month generate from contract and end contract
+            },
+
+            {
+                label: 'Progres Keuangan',
+                backgroundColor: '#242e7d',
+                borderColor: '#242e7d',
+                data: progresFisik.map(({
+                    nilai
+                }) => nilai) // the length of month generate from contract and end contract
+            },
+        ]
+    }
+
+    var kurvaSFisikCanvas = $('#kurvaKeuangan').get(0).getContext('2d')
+    var kurvaSFisikData = $.extend(true, {}, kurvaSFisik)
+
+    var lineChart = new Chart(kurvaSFisikCanvas, {
+        type: 'line',
+        data: kurvaSFisikData,
+    })
 </script>
 
 <script type="text/javascript">
