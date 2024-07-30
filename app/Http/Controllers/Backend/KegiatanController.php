@@ -58,6 +58,8 @@ class KegiatanController extends Controller
                 });
                 return $bidang;
             });
+        } elseif($role[0] == 'Admin') {
+            $bidang = Bidang::orderBy('created_at', 'desc')->get();
         }
 
         $bidang->map(fn ($bidang) => $bidang->totalPagu = $this->getTotalPaguBidang($bidang->id));
