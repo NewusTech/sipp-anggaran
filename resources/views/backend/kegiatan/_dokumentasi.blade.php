@@ -107,9 +107,9 @@
             <div class="card-header text-bold text-darkblue">
                 Gallery
             </div>
-            <div class="card-action-right mt-1">
-                <button class="btn btn-primary btn-sm rounded" id="downloadFiles"><i class="fas fa-download"></i> Download</button>
-            </div>
+            <!-- <div class="card-action-right mt-1">
+                <button class="btn btn-primary btn-sm rounded" id=""><i class="fas fa-download"></i> Download</button>
+            </div> -->
             <table class="table table-striped table-dokumentasi table-responsive">
                 <div class="card-body d-flex">
                     <tr>
