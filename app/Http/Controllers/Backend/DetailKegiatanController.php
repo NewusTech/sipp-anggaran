@@ -92,7 +92,7 @@ class DetailKegiatanController extends Controller
             'verifikasi_pengawas' => $request->verifikasi_pengawas,
             'komentar_pengawas' => $request->komentar_pengawas,
         ])) {
-         return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Kegiatan berhasil diubah');
+            return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Kegiatan berhasil diubah');
         }
         return redirect()->route('backend.kegiatan.index')->with('error', 'Data Detail Kegiatan gagal diubah');
     }
@@ -132,27 +132,20 @@ class DetailKegiatanController extends Controller
     public function updateDetail(Request $request, DetailKegiatan $detailKegiatan)
     {
         try {
-            if ($detailKegiatan->update([
-                'title' => $request->title,
-                'no_detail_kegiatan' => $request->no_detail_kegiatan,
-                'no_kontrak' => $request->no_kontrak,
-                'no_spmk' => $request->no_spmk,
-                'nilai_kontrak' => $request->nilai_kontrak,
-                'jenis_pengadaan' => $request->jenis_pengadaan,
-                'target' => $request->target,
-                'awal_kontrak' => $request->awal_kontrak,
-                'akhir_kontrak' => $request->akhir_kontrak,
-                'latitude' => $request->latitude,
-                'longitude' => $request->longitude,
-                'penyedia_jasa' => $request->penyedia_jasa,
-                'alamat' => $request->alamat,
-                'kegiatan_id' => $request->kegiatan_id,
-            ])) {
+            $detailKegiatan->fill($request->all());
+            if ($detailKegiatan->isDirty()) {
+                $detailKegiatan->save();
+
                 $startDate = Carbon::parse($request->awal_kontrak);
                 $endDate = Carbon::parse($request->akhir_kontrak);
+                $existingProgress = RencanaKegiatan::where('detail_kegiatan_id', $detailKegiatan->id)->exists();
 
+                if ($existingProgress) {
+                    RencanaKegiatan::where('detail_kegiatan_id', $detailKegiatan->id)->delete();
+                }
                 // Hitung jumlah minggu antara startDate dan endDate
-                $totalWeeks = ceil($startDate->diffInWeeks($endDate));
+                $totalDays = $startDate->diffInDays($endDate);
+                $totalWeeks = (int)ceil($totalDays / 7);
 
                 $progressData = [];
                 $currentMonth = $startDate->month;
@@ -177,12 +170,11 @@ class DetailKegiatanController extends Controller
                 }
 
                 RencanaKegiatan::insert($progressData);
-
-                return redirect()->route('backend.kegiatan.index')->with('success', 'Data Detail Anggaran berhasil diubah');
             }
-            return redirect()->route('backend.kegiatan.index')->with('error', 'Data Detail Anggaran gagal diubah');
+
+            return redirect()->route('backend.kegiatan.index')->with('success', 'Data Pekerjaan berhasil diubah');
         } catch (Exception $exception) {
-            return redirect()->route('backend.kegiatan.index')->with('error', 'Data Detail Anggaran gagal diubah');
+            return redirect()->route('backend.kegiatan.index')->with('error', 'Data Pekerjaan gagal diubah');
         }
     }
     public function updateAnggaran(UpdateDetailAnggaranRequest $request, DetailKegiatan $detailKegiatan): RedirectResponse
