@@ -19,9 +19,6 @@
                     <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                         <li><a href="{{route('backend.kegiatan.index')}}" class="dropdown-item">Tambah</a></li>
                         <li><a class="dropdown-item" href="{{route('backend.kegiatan.laporan')}}">Laporan</a></li>
-                        @can('lihat arsip')
-                        <li><a href="{{route('backend.arsip.index')}}" class="dropdown-item ">Data Arsip</a></li>
-                        @endcan
                         @can('lihat penyedia jasa')
                         <li><a href="{{route('backend.penyedia_jasa.index')}}" class="dropdown-item">Penyedia Jasa</a></li>
                         @endcan
