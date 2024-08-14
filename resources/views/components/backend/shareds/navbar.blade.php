@@ -31,7 +31,7 @@
 
                 @can('lihat petunjuk')
                 <li class="nav-item">
-                    <a href="{{ route('backend.petunjuk.index') }}" class="nav-link text-darkblue">Petunjuk</a>
+                    <a href="{{ route('backend.petunjuk.index') }}" class="nav-link text-darkblue">Manual Book</a>
                 </li>
                 @endcan
                 @can('lihat pengguna')

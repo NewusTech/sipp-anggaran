@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Petunjuk')
+@section('title', 'Manual Book')
 @section('css')
 <link rel="stylesheet" href="{{ asset('admin/plugins/summernote/summernote-bs4.min.css') }}">
 @endsection
@@ -9,7 +9,7 @@
 <div class="col-sm-6">
     <ol class="breadcrumb float-sm-left">
         <li class="breadcrumb-item"><a href="{{ route('backend.dashboard.index') }}">{{ __('Dashboard') }}</a></li>
-        <li class="breadcrumb-item active">{{ __('Petunjuk') }}</li>
+        <li class="breadcrumb-item active">{{ __('Manual Book') }}</li>
     </ol>
 </div>
 @endsection
@@ -31,7 +31,7 @@
             <div class="card-body">
                 <div class="card-action-right">
                     @can('tambah petunjuk')
-                    <button class="btn btn-primary btn-sm btn-add text-white" data-toggle="modal" data-target="#modal-lg-create"><i class="fas fa-plus"></i> Tambah Petunjuk</button>
+                    <button class="btn btn-primary btn-sm btn-add text-white" data-toggle="modal" data-target="#modal-lg-create"><i class="fas fa-plus"></i> Tambah Manual Book</button>
                     @endcan
                     <button class="btn btn-primary btn-sm btn-add text-white" data-toggle="modal" data-target="#modal-lg-upload"><i class="fas fa-plus"></i>Upload</button>
                 </div>
@@ -39,7 +39,7 @@
 
             <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill" href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home" aria-selected="true">Petunjuk</a>
+                    <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill" href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home" aria-selected="true">Manual Book</a>
                 </li>
             </ul>
             <div class="tab-content" id="custom-content-below-tabContent">
@@ -80,7 +80,7 @@
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title"><strong> Edit Petunjuk </strong></h5>
+                                                        <h5 class="modal-title"><strong> Edit Manual Book </strong></h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -121,7 +121,7 @@
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title"><strong> Hapus Data Petunjuk </strong></h5>
+                                                            <h5 class="modal-title"><strong> Hapus Data Manual Book </strong></h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
@@ -159,7 +159,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><strong> Tambah Petunjuk </strong></h5>
+                <h5 class="modal-title"><strong> Tambah Manual Book </strong></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -196,7 +196,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><strong> Upload Petunjuk </strong></h5>
+                <h5 class="modal-title"><strong> Upload Manual Book </strong></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
