@@ -321,7 +321,11 @@
 <script>
     //
     window.addEventListener('DOMContentLoaded', function() {
-        var map = L.map('mapDashboard').setView([-4.475296, 105.077107], 9);
+        var map = L.map('mapDashboard');
+        setTimeout(function() {
+        map.invalidateSize(true);
+        map.setView([-4.4356471, 105.0966316], 9.5);
+    }, 1500);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy;'
