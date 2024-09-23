@@ -46,7 +46,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="text-darkblue">Nilai Kontrak</label>
-                                <input type="text" class="form-control" name="nilai_kontrak" placeholder="Silahkan masukan nilai kontrak" value="{{ $detail->nilai_kontrak }}" required>
+                                <input type="number" class="form-control" name="nilai_kontrak" placeholder="Silahkan masukan nilai kontrak" value="{{ $detail->nilai_kontrak }}" required>
                             </div>
                             <div class="form-group">
                                 <label class="text-darkblue">Jenis Pengadaan</label>
