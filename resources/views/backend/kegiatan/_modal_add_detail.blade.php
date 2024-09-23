@@ -50,7 +50,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="text-darkblue">Nilai Kontrak</label>
-                                <input type="text" class="form-control" name="nilai_kontrak"
+                                <input type="number" class="form-control" name="nilai_kontrak"
                                     placeholder="Silahkan masukan nilai kontrak" required>
                             </div>
                             <div class="form-group">
