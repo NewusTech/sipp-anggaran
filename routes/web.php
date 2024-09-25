@@ -45,9 +45,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->route('login');
-})->name('home.index');
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// })->name('home.index');
 
 Auth::routes([
     'register' => false, // Registration Routes...
