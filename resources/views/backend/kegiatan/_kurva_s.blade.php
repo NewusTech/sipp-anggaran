@@ -6,7 +6,7 @@
             </li>
         </ul>
         <div class="tab-content" id="custom-content-below-tabContent">
-            @include('backend.kegiatan.tab_kurva_s.tab_fisik')
+            @include('backend.kegiatan.tab_kurva_s.tab_fisik', ['tab' => session('tab')])
         </div>
     </div>
 </div>

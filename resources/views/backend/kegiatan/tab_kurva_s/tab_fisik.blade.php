@@ -1,4 +1,4 @@
-<div class="tab-pane fade show {{session('tab') == '' ? 'active' : ''}}" id="custom-content-above-fisik" role="tabpanel" aria-labelledby="custom-content-below-fisik-tab">
+<div class="tab-pane fade show {{session('tab') == '' || $tab == 'kurva_s' ? 'active' : ''}}" id="custom-content-above-fisik" role="tabpanel" aria-labelledby="custom-content-below-fisik-tab">
     <div class="row">
         <div class="col-md-6">
             <h4>Rencana Kegiatan Fisik</h4>
