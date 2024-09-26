@@ -61,7 +61,7 @@
                                 <td>{{ $permission->id }}</td>
                                 <td>{{ $permission->name }}</td>
                                 <td>{{ $permission->guard_name }}</td>
-                                <td>{{ $permission->created_at->diffForHumans() }}</td>
+                                <td>{{ $permission->created_at }}</td>
                                 <td>
                                     @if (config('app.debug') == true)
                                     @can('ubah permission')

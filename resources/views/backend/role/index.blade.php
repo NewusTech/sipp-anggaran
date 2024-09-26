@@ -56,7 +56,7 @@
                                 <td>{{ $role->id }}</td>
                                 <td>{{ $role->name }}</td>
                                 <td>{{ $role->guard_name }}</td>
-                                <td>{{ $role->created_at->diffForHumans() }}</td>
+                                <td>{{ $role->created_at }}</td>
                                 <td>
                                     @if ($role->name == "Super Admin")
                                     <i class="text-muted">{{ __('Default role') }}</i>
