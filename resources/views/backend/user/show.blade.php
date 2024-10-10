@@ -45,7 +45,7 @@
                             </tr>
                             <tr>
                                 <th>{{ __('Tanggal dibuat') }}</th>
-                                <td>{{ $user->created_at->diffForHumans() }}</td>
+                                <td>{{ $user->created_at }}</td>
                             </tr>
                         </table>
                     </div>

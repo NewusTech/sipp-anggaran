@@ -80,7 +80,7 @@
                 <hr>
                 <strong><i class="fas fa-calendar mr-1"></i> {{ __('Pengguna sejak') }}</strong>
                 <p class="text-muted">
-                    {{ $profile->created_at->diffForHumans() }}
+                    {{ $profile->created_at }}
                 </p>
             </div>
         </div>
