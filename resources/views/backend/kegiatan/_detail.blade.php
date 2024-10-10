@@ -33,7 +33,7 @@
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Nilai Kontrak</td>
-                    <td>Rp. {{ number_format($kegiatan->alokasi) }}</td>
+                    <td>Rp. {{ $kegiatan->alokasi ? number_format($kegiatan->alokasi) : '-' }}</td>
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Penyedia Jasa</td>
@@ -45,15 +45,15 @@
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Realisasi</td>
-                    <td>Rp. {{ number_format($detail->realisasi) }}</td>
+                    <td>Rp. {{$detail->realisasi ? number_format($detail->realisasi) : '-' }}</td>
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Awal Kontrak</td>
-                    <td>{{ $detail->awal_kontrak->format('d-m-Y') ?? "-" }}</td>
+                    <td>{{ $detail->awal_kontrak?  $detail->awal_kontrak->format('d-m-Y') : "-" }}</td>
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Akhir Kontrak</td>
-                    <td>{{ $detail->akhir_kontrak->format('d-m-Y') ?? "-" }}</td>
+                    <td>{{ $detail->akhir_kontrak ? $detail->akhir_kontrak->format('d-m-Y')  : "-" }}</td>
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Target Pekerjaan</td>
