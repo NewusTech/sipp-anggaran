@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('penanggung_jawab', function (Blueprint $table) {
-            $table->dropForeign(['detail_kegiatan_id']);
-        });
+        // Schema::table('penanggung_jawab', function (Blueprint $table) {
+        //     $table->dropForeign(['detail_kegiatan_id']);
+        // });
 
         Schema::table('detail_kegiatan', function (Blueprint $table) {
             $table->foreignId('penanggung_jawab_id')->nullable()->constrained('penanggung_jawab')->onDelete('no action')->onUpdate('no action');
@@ -34,8 +34,8 @@ return new class extends Migration
             $table->dropColumn('penanggung_jawab_id');
         });
 
-        Schema::table('penanggung_jawab', function (Blueprint $table) {
-            $table->foreignId('detail_kegiatan_id')->nullable()->constrained('detail_kegiatan')->onDelete('no action')->onUpdate('no action');
-        });
+        // Schema::table('penanggung_jawab', function (Blueprint $table) {
+        //     $table->foreignId('detail_kegiatan_id')->nullable()->constrained('detail_kegiatan')->onDelete('no action')->onUpdate('no action');
+        // });
     }
 };
