@@ -29,7 +29,7 @@
                                     </td>
                                     <td class="p-2">
                                         @can('ubah kurva')
-                                        <input type="number" class="form-control form-control-sm" name="data[{{ $loop->index }}][fisik]" value="{{ $dataKurvaS->fisik}}">
+                                        <input id="inputKurva" type="text" class="form-control form-control-sm" name="data[{{ $loop->index }}][fisik]" value="{{ $dataKurvaS->fisik }}" pattern="^[0-9]*\.?[0-9]+$" title="Hanya angka dan titik desimal yang diizinkan">
                                         @else
                                         <input type="number" class="form-control form-control-sm" value="{{ $dataKurvaS->fisik }}" disabled>
                                         @endcan
