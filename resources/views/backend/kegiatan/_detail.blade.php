@@ -49,11 +49,11 @@
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Awal Kontrak</td>
-                    <td>{{ $detail->awal_kontrak->format('d-m-Y') }}</td>
+                    <td>{{ $detail->awal_kontrak->format('d-m-Y') ?? "-" }}</td>
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Akhir Kontrak</td>
-                    <td>{{ $detail->akhir_kontrak->format('d-m-Y') }}</td>
+                    <td>{{ $detail->akhir_kontrak->format('d-m-Y') ?? "-" }}</td>
                 </tr>
                 <tr>
                     <td class="text-bold text-darkblue">Target Pekerjaan</td>
