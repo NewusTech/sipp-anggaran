@@ -98,7 +98,7 @@
                             <input type="date" class="form-control form-control-sm" name="tanggal" required>
                         </div>
                         <div class="col">
-                            <input type="number" class="form-control form-control-sm" name="nilai" required>
+                            <input type="text" class="form-control form-control-sm" name="nilai" pattern="^[0-9]*\.?[0-9]+$" title="Hanya angka dan titik desimal yang diizinkan" required>
                         </div>
                     </div>
                     <div class="text-left mt-3" style="margin-bottom: 2.25rem">
