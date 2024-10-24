@@ -286,15 +286,40 @@ class AnggaranController extends Controller
         return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail_kegiatan_id])->with('success', 'Data kurva berhasil diperbarui.')->with('tab', 'kurva_s');
     }
 
+    public function migrateDataProgres()
+    {
+        $progres = ProgresKegiatan::all();
 
+        foreach ($progres as $data) {
+            $tanggal = Carbon::parse($data->tanggal);
+
+            $weekOfMonth = $tanggal->weekOfMonth;
+
+            $data->bulan = $tanggal->month;
+            $data->minggu = $weekOfMonth;
+            $data->save();
+        }
+        return $progres;
+    }
     public function addProgres(Request $request, $detail_kegiatan_id)
     {
-        $progres = new ProgresKegiatan();
-        $progres->detail_kegiatan_id = $detail_kegiatan_id;
-        $progres->tanggal = $request->tanggal;
-        $progres->nilai = $request->nilai;
-        $progres->jenis_progres = $request->jenis_progres;
-        $progres->save();
+        try {
+            foreach ($request->data as $data) {
+                $progres = ProgresKegiatan::updateOrCreate(
+                    [
+                        'detail_kegiatan_id' => $detail_kegiatan_id,
+                        'bulan' => Carbon::parse($data['bulan'])->month,
+                        'minggu' => $data['minggu']
+                    ],
+                    [
+                        'jenis_progres' => $request->jenis_progres,
+                        'nilai' => $data['nilai']
+                    ]
+                );
+            }
+        } catch (\Throwable $th) {
+
+        }
 
         return redirect()->route('backend.detail_anggaran.index', ['detail_kegiatan_id' => $detail_kegiatan_id])->with('success', 'Progres kegiatan berhasil ditambahkan')->with('tab', 'kurva_s');
     }
