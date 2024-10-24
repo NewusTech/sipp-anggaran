@@ -11,7 +11,7 @@ class ProgresKegiatan extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'progres_kegiatan';
-    protected $fillable = ['detail_kegiatan_id', 'tanggal', 'jenis_progres', 'nilai'];
+    protected $fillable = ['detail_kegiatan_id', 'tanggal', 'jenis_progres', 'nilai', 'bulan', 'minggu'];
 
     public function detailKegiatan(): BelongsTo
     {
