@@ -104,10 +104,12 @@ class AnggaranController extends Controller
             })->toArray();
             $dataBulan = ['keuangan' => $kurvaS->pluck('keuangan'), 'fisik' => $kurvaS->pluck('fisik')];
             $dataBulan = json_encode($dataBulan);
-            $dataProgresFisik = json_encode($progresFisik->map(function ($progres) {
+            $progresFisik = $progresFisik->sortBy(function ($progres) {
+                return [$progres->bulan, $progres->minggu];
+            });
+            $dataProgresFisik = json_encode($progresFisik->values()->map(function ($progres) {
                 return [
                     'nilai' => $progres->nilai,
-                    'tanggal' => $progres->tanggal,
                 ];
             }));
             $bulan = json_encode($bulanKurvaS);
