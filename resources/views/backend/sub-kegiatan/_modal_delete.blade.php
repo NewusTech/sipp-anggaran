@@ -1,5 +1,5 @@
 @if ($action == 'deleteSubKegiatan')
-<div class="modal fade" id="modal-delete-sub-kegiatan-{{$item->id}}" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-delete-sub-kegiatan-{{$item->id}}" >
     <form action="{{ route('backend.sub_kegiatan.destroy', $item->id) }}" method="POST" id="delete_sub">
         @method('DELETE')
         @csrf
@@ -29,7 +29,7 @@
     <!-- /.modal-dialog -->
 </div>
 @elseif ($action == 'deleteKegiatan')
-<div class="modal fade" id="modal-delete-kegiatan-{{$item->id}}" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-delete-kegiatan-{{$item->id}}" >
     <form action="{{ route('backend.master.kegiatan.destroy', $item->id) }}" method="POST" id="delete_sub">
         @method('DELETE')
         @csrf

@@ -43,18 +43,17 @@
                 </li>
             </ul>
             <div class="tab-content" id="custom-content-below-tabContent">
-                <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
-                    <div class="row">
-                        <div class="col-12">
-
-                            <div class="row">
-                                <div class="col-12">
+                <div class="tab-pane  px-0 mx-0 fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
+                    <div class="row px-0 mx-0">
+                        <div class="col-12  px-0 mx-0">
+                            <div class="row  px-0 mx-0 pl-3">
+                                <div class="col-12  px-0 mx-0">
                                     <div id="accordion">
                                         @foreach ($petunjuk as $item)
                                         <div class="card">
                                             <div id="heading-{{$item->id}}" class="card-header btn btn-link" data-toggle="collapse" data-target="#collapse-{{$item->id}}" aria-expanded="true" aria-controls="collapseOne" style="background-color: #f5faff; border-radius: 0.5rem;">
-                                                <div class="card-table">
-                                                    <div class="taf text-darkblue">
+                                                <div class="card-table d-flex flex-column  flex-md-row justify-between gap-3">
+                                                    <div class="taf  text-darkblue">
                                                         <strong>{{$item->title}}</strong>
                                                     </div>
                                                     <div class="btn-table-cell tar">
@@ -76,7 +75,7 @@
                                         </div>
 
                                         {{--modal edit--}}
-                                        <div class="modal fade" id="modal-lg-edit-{{$item->id}}" style="padding-right: 17px; ">
+                                        <div class="modal fade" id="modal-lg-edit-{{$item->id}}" >
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -114,7 +113,7 @@
                                             <!-- /.modal-dialog -->
                                         </div>
                                         {{-- modal hapus --}}
-                                        <div class="modal fade" id="modal-delete-{{$item->id}}" style="padding-right: 17px; ">
+                                        <div class="modal fade" id="modal-delete-{{$item->id}}" >
                                             <form action="{{ route('backend.petunjuk.destroy', $item) }}" method="POST" id="delete">
                                                 @method('DELETE')
                                                 @csrf
@@ -155,7 +154,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modal-lg-create" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-create" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -192,7 +191,7 @@
     <!-- /.modal-dialog -->
 </div>
 
-<div class="modal fade" id="modal-lg-upload" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-upload" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

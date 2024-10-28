@@ -1,5 +1,5 @@
 @if ($action == 'add')
-<div class="modal fade" id="modal-lg-create" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-create" >
     <form action="{{route('backend.penanggung_jawab.store')}}" method="POST">
         @method('POST')
         @csrf
@@ -53,7 +53,7 @@
     </form>
 </div>
 @elseif ($action == 'edit')
-<div class="modal fade" id="modal-lg-edit-{{$item->id}}" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-edit-{{$item->id}}" >
     <form action="{{route('backend.penanggung_jawab.update', $item->id)}}" method="POST">
         @method('PUT')
         @csrf
@@ -107,7 +107,7 @@
     </form>
 </div>
 @elseif ($action == 'delete')
-<div class="modal fade" id="modal-delete-{{$item->id}}" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-delete-{{$item->id}}" >
     <form action="{{ route('backend.penanggung_jawab.delete', $item->id) }}" method="POST" id="delete_bidang">
         @method('DELETE')
         @csrf

@@ -1,6 +1,6 @@
 @if ($action == 'addSubKegiatan')
 
-<div class="modal fade" id="modal-add-sub-kegiatan" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-add-sub-kegiatan" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -47,7 +47,7 @@
 </div>
 
 @elseif ($action == 'addKegiatan')
-<div class="modal fade" id="modal-add-kegiatan" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-add-kegiatan" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

@@ -1,6 +1,6 @@
 <div class="tab-pane fade show {{session('tab') == '' || $tab == 'kurva_s' ? 'active' : ''}}" id="custom-content-above-fisik" role="tabpanel" aria-labelledby="custom-content-below-fisik-tab">
     <div class="row mx-0">
-        <div class="col-md-6">
+        <div class="col-md-6 px-0">
             <h4>Rencana Kegiatan Fisik</h4>
             <div class="container">
                 <form action="{{ route('backend.detail_anggaran.update_kurva', ['detail_kegiatan_id' => $detail->id]) }}" method="POST">
@@ -48,7 +48,7 @@
             </div>
         </div>
         <!-- Progress Fisik -->
-        <div class="col-md-6">
+        <div class="col-md-6 px-0">
             <h4>Realisasi Fisik</h4>
             <div class="container">
                 <form action="{{ route('backend.detail_anggaran.tambah_progres', ['detail_kegiatan_id' => $detail->id]) }}" method="POST">

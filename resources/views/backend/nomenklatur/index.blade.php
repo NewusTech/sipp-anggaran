@@ -89,7 +89,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modal-hapus-nomenklatur" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-hapus-nomenklatur" >
   <form action="{{ route('backend.nomenklatur.destroy', $nomenklatur->id ?? '-') }}" method="POST">
       @method('DELETE')
       @csrf

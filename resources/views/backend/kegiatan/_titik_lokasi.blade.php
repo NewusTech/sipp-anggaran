@@ -8,9 +8,9 @@
                     <div class="row mx-0 p-0">
                         <div class="col-sm-12  mx-0 p-0">
                             <label class="text-darkblue">Maps</label>
-                            <span>(Klik Untuk Mendapatkan Koordinat !)</span>
-                            <div class="card">
-                                <div class="card-body">
+                            <span>Klik Untuk Mendapatkan Koordinat!</span>
+                            <div class="card mx-0">
+                                <div class="card-body mx-0">
                                     <div id="mapDetail"></div>
                                     <input type="hidden" class="form-control" name="latitude" id="inputLatitude" placeholder="Silahkan masukan latitude">
                                     <input type="hidden" class="form-control" name="longitude" id="inputLongitude" placeholder="Silahkan masukan longitude">

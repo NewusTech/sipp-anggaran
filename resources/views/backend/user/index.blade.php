@@ -92,7 +92,7 @@
                                                     @endif
                                                 </td>
 
-                                                <div class="modal fade" id="modal-lg-reset-{{$user->id}}" style="padding-right: 17px; ">
+                                                <div class="modal fade" id="modal-lg-reset-{{$user->id}}" >
                                                     <form action="{{ route('backend.users.reset', $user->id) }}" method="POST" id="reset_password">
                                                         @method('PUT')
                                                         @csrf
@@ -128,7 +128,7 @@
                                                     <!-- /.modal-dialog -->
                                                 </div>
 
-                                                <div class="modal fade" id="modal-lg-edit-{{$user->id}}" style="padding-right: 17px; ">
+                                                <div class="modal fade" id="modal-lg-edit-{{$user->id}}" >
                                                     <form action="{{ route('backend.users.update', $user) }}" method="POST" id="update_user">
                                                         @method('PUT')
                                                         @csrf
@@ -206,7 +206,7 @@
                                                     </form>
                                                     <!-- /.modal-dialog -->
                                                 </div>
-                                                <div class="modal fade" id="modal-delete-{{$user->id}}" style="padding-right: 17px; ">
+                                                <div class="modal fade" id="modal-delete-{{$user->id}}" >
                                                     <form action="{{ route('backend.users.destroy', $user->id) }}" method="POST" id="delete_user">
                                                         @method('DELETE')
                                                         @csrf
@@ -253,7 +253,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modal-lg-create" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-create" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

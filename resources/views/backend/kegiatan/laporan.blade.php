@@ -100,7 +100,7 @@
             
         </div>
         <!-- /.card -->
-        <div class="card">
+        <div class="card d-none d-md-block">
             <div class="card-body d-flex flex-column justify-content-center">
                 <div class="col text-center">
                     <h4><strong>RELASI LAPORAN KEGIATAN DINAS PUPR</strong></h4>
@@ -166,6 +166,66 @@
                 </div>
             </div>
         </div>
+        {{--  --}}
+        <div class="card d-block d-md-none">
+            <div class="card-body d-flex flex-column justify-content-center">
+                <div class="col text-center">
+                    <h5><strong>RELASI LAPORAN KEGIATAN DINAS PUPR</strong></h5>
+                    <h5><strong>KABUPATEN TULANG BAWANG BARAT</strong></h5>
+                </div>
+                <div class="col mt-3 px-0 mx-0">
+                    <div class="row px-0 mx-0">
+                        @php
+                            $index = 1;
+                        @endphp
+                        @if ($bidang->count() > 0)
+                            @foreach ($bidang as $item)
+                                @foreach ($item->kegiatan as $kegiatan)
+                                    <!-- Kegiatan Card -->
+                                    <div class="col-md-12 mb-3 px-0 mx-0">
+                                        <div class="card bg-light px-0 mx-0">
+                                            <div class="card-header bg-secondary text-white">
+                                                <strong>{{ $index }}. {{ $kegiatan->title }}</strong>
+                                            </div>
+                                            <div class="card-body px-0 pl-3 mx-0">
+                                                @if (count($kegiatan->detail) > 0)
+                                                    @foreach ($kegiatan->detail as $detail)
+                                                        <!-- Detail Pekerjaan -->
+                                                        <div class="card mb-3">
+                                                            <div class="card-body">
+                                                                <p><strong>No Kontrak:</strong> {{ $detail->no_kontrak }}</p>
+                                                                <p><strong>Nama Pekerjaan:</strong> {{ $detail->title }}</p>
+                                                                <p><strong>Perusahaan:</strong> {{ $detail->penyedia_jasa }}</p>
+                                                                <p><strong>Tgl Kontrak:</strong> {{ \Carbon\Carbon::parse($detail->awal_kontrak)->format('d-m-Y') }}</p>
+                                                                <p><strong>Nilai Kontrak:</strong> {{ 'Rp.'. number_format($detail->nilai_kontrak) }}</p>
+                                                                <p><strong>Nomor SPMK:</strong> {{ $detail->no_spmk }}</p>
+                                                                <p><strong>Tanggal Akhir Kontrak:</strong> {{ \Carbon\Carbon::parse($detail->akhir_kontrak)->format('d-m-Y') }}</p>
+                                                                <p><strong>Progress:</strong> {{ $detail->progress }}%</p>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <p class="text-center">Tidak Ada Data</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @php
+                                        $index++;
+                                    @endphp
+                                @endforeach
+                            @endforeach
+                        @else
+                            <div class="col-md-12">
+                                <p class="text-center">Tidak ada data yang tersedia.</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {{--  --}}
     </div>
 </div>
 </div>

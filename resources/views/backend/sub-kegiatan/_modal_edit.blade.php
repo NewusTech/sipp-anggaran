@@ -1,5 +1,5 @@
 @if ($action == 'editSubKegiatan')
-<div class="modal fade" id="modal-edit-sub-kegiatan-{{$item->id}}" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-edit-sub-kegiatan-{{$item->id}}" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -47,7 +47,7 @@
 </div>
 
 @elseif ($action == 'editKegiatan')
-<div class="modal fade" id="modal-edit-kegiatan-{{$item->id}}" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-edit-kegiatan-{{$item->id}}" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

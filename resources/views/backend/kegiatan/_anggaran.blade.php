@@ -25,7 +25,7 @@
                             <button type="button" style="color: white;" class="btn btn-block btn-warning btn-xs" data-toggle="modal" data-target="#modal-lg-edit-anggaran-{{ $agr->id }}"><i class="fas fa-edit"></i></button>
                             <button type="button" class="btn btn-block btn-danger btn-xs" data-toggle="modal" data-target="#modal-delete-anggaran-{{ $agr->id }}"><i class="fas fa-trash"></i></button>
 
-                            <div class="modal fade" id="modal-delete-anggaran-{{$agr->id}}" style="padding-right: 17px; ">
+                            <div class="modal fade" id="modal-delete-anggaran-{{$agr->id}}">
                                 <form action="{{ route('backend.detail_anggaran.destroy', $agr->id) }}" method="POST" id="delete_anggaran">
                                     @method('DELETE')
                                     @csrf
@@ -53,7 +53,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="modal fade" id="modal-lg-edit-anggaran-{{$agr->id}}" style="padding-right: 17px; ">
+                            <div class="modal fade" id="modal-lg-edit-anggaran-{{$agr->id}}">
                                 <form action="{{ route('backend.detail_anggaran.update', $agr) }}" method="POST" id="update_data_anggaran">
                                     @method('PUT')
                                     @csrf
@@ -172,7 +172,7 @@
 </div>
 
 @if($isEdit)
-<div class="modal fade" id="modal-lg-create-anggaran" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-create-anggaran">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

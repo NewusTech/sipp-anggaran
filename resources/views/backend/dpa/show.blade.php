@@ -182,7 +182,7 @@
                                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$item->id}}"><i class="fas fa-trash"></i> Hapus</button>
                                                     </td>
                                                 </tr>
-                                                <div class="modal fade" id="modal-lg-edit-{{$item->id}}" style="padding-right: 17px; ">
+                                                <div class="modal fade" id="modal-lg-edit-{{$item->id}}" >
                                                     <form action="{{ route('backend.sub_kegiatan.update', $item->id) }}" method="POST">
                                                         @method('PUT')
                                                         @csrf
@@ -256,7 +256,7 @@
                                                     </form>
                                                     <!-- /.modal-dialog -->
                                                 </div>
-                                                <div class="modal fade" id="modal-delete-{{$item->id}}" style="padding-right: 17px; ">
+                                                <div class="modal fade" id="modal-delete-{{$item->id}}" >
                                                     <form action="{{ route('backend.sub_kegiatan.destroy', $item->id) }}" method="POST">
                                                         @method('DELETE')
                                                         @csrf
@@ -453,7 +453,7 @@
                                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-pengguna-{{$item->id}}"><i class="fas fa-trash"></i> Hapus</button>
                                                     </td>
                                                 </tr>
-                                                <div class="modal fade" id="modal-lg-edit-pengguna-{{$item->id}}" style="padding-right: 17px; ">
+                                                <div class="modal fade" id="modal-lg-edit-pengguna-{{$item->id}}" >
                                                     <form action="{{ route('backend.pengguna_anggaran.update', $item->id) }}" method="POST">
                                                         @method('PUT')
                                                         @csrf
@@ -495,7 +495,7 @@
                                                     </form>
                                                     <!-- /.modal-dialog -->
                                                 </div>
-                                                <div class="modal fade" id="modal-delete-pengguna-{{$item->id}}" style="padding-right: 17px; ">
+                                                <div class="modal fade" id="modal-delete-pengguna-{{$item->id}}" >
                                                     <form action="{{ route('backend.pengguna_anggaran.destroy', $item->id) }}" method="POST">
                                                         @method('DELETE')
                                                         @csrf
@@ -594,7 +594,7 @@
                                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-ttd-{{$item->id}}"><i class="fas fa-trash"></i> Hapus</button>
                                                     </td>
                                                 </tr>
-                                                <div class="modal fade" id="modal-lg-edit-ttd-{{$item->id}}" style="padding-right: 17px; ">
+                                                <div class="modal fade" id="modal-lg-edit-ttd-{{$item->id}}" >
                                                     <form action="{{ route('backend.tanda_tangan.update', $item->id) }}" method="POST">
                                                         @method('PUT')
                                                         @csrf
@@ -636,7 +636,7 @@
                                                     </form>
                                                     <!-- /.modal-dialog -->
                                                 </div>
-                                                <div class="modal fade" id="modal-delete-ttd-{{$item->id}}" style="padding-right: 17px; ">
+                                                <div class="modal fade" id="modal-delete-ttd-{{$item->id}}" >
                                                     <form action="{{ route('backend.tanda_tangan.destroy', $item->id) }}" method="POST">
                                                         @method('DELETE')
                                                         @csrf
@@ -686,7 +686,7 @@
         <!-- /.card -->
     </div>
 </div>
-<div class="modal fade" id="modal-lg-create" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-create" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -760,7 +760,7 @@
     <!-- /.modal-dialog -->
 </div>
 
-<div class="modal fade" id="modal-lg-create-pengguna" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-create-pengguna" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -802,7 +802,7 @@
     <!-- /.modal-dialog -->
 </div>
 
-<div class="modal fade" id="modal-lg-create-ttd" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-create-ttd" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
