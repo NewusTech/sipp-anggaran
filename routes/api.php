@@ -27,7 +27,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'users'], function () {
 
 
 Route::group(['middleware' => 'api', 'prefix' => 'dashboard'], function () {
-    Route::get('/total-pagu-relasi', [DashboardController::class, 'getTotalPaguAndRelasi']);
+    Route::get('/total-pagu-realisasi', [DashboardController::class, 'getTotalPaguAndRelasi']);
     Route::get('/chart', [DashboardController::class, 'getChartRealisasi']);
     Route::get('/realisasi-data', [DashboardController::class, 'getRealisasiDataAndCont']);
 });

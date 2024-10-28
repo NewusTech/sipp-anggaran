@@ -93,8 +93,7 @@ class DashboardController extends Controller
 
             $data = [
                 'chart_data' => $result,
-                'bulan' => $monthlyData
-
+                // 'bulan' => $monthlyData
             ];
 
             return response()->json([
