@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,5 +22,12 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
 });
 
 Route::group(['middleware' => 'api', 'prefix' => 'users'], function () {
-   Route::get('/', [AuthController::class, 'getUserData']);
+    Route::get('/', [AuthController::class, 'getUserData']);
+});
+
+
+Route::group(['middleware' => 'api', 'prefix' => 'dashboard'], function () {
+    Route::get('/total-pagu-relasi', [DashboardController::class, 'getTotalPaguAndRelasi']);
+    Route::get('/chart', [DashboardController::class, 'getChartRealisasi']);
+    Route::get('/realisasi-data', [DashboardController::class, 'getRealisasiDataAndCont']);
 });
