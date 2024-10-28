@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-lg-edit-pptk-{{$kegiatan->id}}" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-edit-pptk-{{$kegiatan->id}}" >
     <form action="{{ route('backend.kegiatan.pptk', $kegiatan->id) }}" method="POST">
             @csrf
             <div class="modal-dialog modal-lg">

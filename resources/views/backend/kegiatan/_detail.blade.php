@@ -1,5 +1,5 @@
 <div class="tab-pane fade show {{session('tab') == ''? 'active' : ''}}" id="custom-content-above-detail" role="tabpanel" aria-labelledby="custom-content-below-detail-tab">
-    <div class="row">
+    <div class="row mx-0">
         <div class="col-12">
             <table class="table table-responsive">
                 <tr>

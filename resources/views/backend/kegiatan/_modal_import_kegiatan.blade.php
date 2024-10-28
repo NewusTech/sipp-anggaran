@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-import" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-import" >
     <form action="{{ route('backend.kegiatan.import') }}" method="POST"  enctype="multipart/form-data">
         @csrf
         <div class="modal-dialog">

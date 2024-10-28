@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-lg-edit-pptk-pr-{{$detail->id}}" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-edit-pptk-pr-{{$detail->id}}">
     <form action="{{ route('backend.detail_kegiatan.update.pengawas', $detail->id) }}" method="POST">
         @method('PUT')
         @csrf

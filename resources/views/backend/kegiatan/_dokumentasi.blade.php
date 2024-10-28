@@ -39,7 +39,7 @@
                                     @csrf
                                     <div class="modal-body">
                                         <input type="text" hidden="true" name="detail_kegiatan_id" value="{{ request()->detail_kegiatan_id }}">
-                                        <div class="row">
+                                        <div class="row mx-0">
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <label class="text-darkblue">Minggu Ke</label>
@@ -78,7 +78,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="row">
+                                        <div class="row mx-0">
                                             <div class="col-sm-12">
                                                 <span class="text-gray">Anda yakin Hapus data?</span>
                                             </div>
@@ -113,13 +113,13 @@
             <table class="table table-striped table-dokumentasi table-responsive">
                 <div class="card-body d-flex">
                     <tr>
-                        <th scope="row">Progres</th>
+                        <th scope="row mx-0">Progres</th>
                         @foreach($dokumentasi as $key => $dok)
                         <td>{{$dok->keterangan}} %</td>
                         @endforeach
                     </tr>
                     <tr>
-                        <th scope="row">Dokumentasi</th>
+                        <th scope="row mx-0">Dokumentasi</th>
                         @foreach($dokumentasi as $key => $dok)
                         @foreach($dok->files as $file)
                         <td>
@@ -159,7 +159,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-lg-create-dokumentasi" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-create-dokumentasi">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -172,7 +172,7 @@
                 @csrf
                 <div class="modal-body">
                     <input type="text" hidden="true" name="detail_kegiatan_id" value="{{ request()->detail_kegiatan_id }}">
-                    <div class="row">
+                    <div class="row mx-0">
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="text-darkblue">Minggu Ke</label>

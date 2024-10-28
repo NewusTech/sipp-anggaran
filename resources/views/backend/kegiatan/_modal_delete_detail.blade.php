@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-lg-detail-delete-{{$detail->id}}" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-detail-delete-{{$detail->id}}" >
     <form action="{{ route('backend.detail_kegiatan.destroy', $detail) }}" method="POST">
         @method('DELETE')
         @csrf

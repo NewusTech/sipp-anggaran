@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-lg-komentar-{{$param}}-{{$detail->id}}" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-komentar-{{$param}}-{{$detail->id}}" >
     <form id="komentar-pengawas-form-{{$detail->id}}" action="{{ route('backend.detail_kegiatan.verifikasi', $detail->id) }}" method="POST">
         @method('PUT')
         @csrf

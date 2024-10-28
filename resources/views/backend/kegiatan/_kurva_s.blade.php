@@ -1,4 +1,4 @@
-<div class="tab-pane fade show {{ session('tab') == 'kurva_s' ? 'active' : '' }}" id="custom-content-below-kurva-s" role="tabpanel" aria-labelledby="custom-content-below-kurva-s-tab">
+<div class="tab-pane  mx-0 fade show {{ session('tab') == 'kurva_s' ? 'active' : '' }}" id="custom-content-below-kurva-s" role="tabpanel" aria-labelledby="custom-content-below-kurva-s-tab">
     <div class="p-3">
         <ul class="nav nav-tabs pb-1" id="custom-content-below-tab" role="tablist">
             <li class="nav-item">

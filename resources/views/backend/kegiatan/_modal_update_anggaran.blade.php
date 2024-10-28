@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-lg-edit-anggaran" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-edit-anggaran" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
