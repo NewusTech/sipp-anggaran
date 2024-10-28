@@ -209,7 +209,7 @@
 </div>
 </div>
 </div>
-<div class="modal fade" id="modal-lg-create" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-create">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -302,7 +302,7 @@
     <!-- /.modal-dialog -->
 </div>
 
-<div class="modal fade" id="modal-lg-print" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-print">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

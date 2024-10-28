@@ -62,7 +62,7 @@
                                             <button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$item->id}}"><i class="fas fa-trash"></i> Hapus</button>
                                         </td>
                                     </tr>
-                                    <div class="modal fade" id="modal-lg-edit-{{$item->id}}" style="padding-right: 17px; ">
+                                    <div class="modal fade" id="modal-lg-edit-{{$item->id}}" >
                                         <form action="{{ route('backend.program.update', $item->id) }}" method="POST" id="update_program">
                                             @method('PUT')
                                             @csrf
@@ -99,7 +99,7 @@
                                         </form>
                                         <!-- /.modal-dialog -->
                                     </div>
-                                    <div class="modal fade" id="modal-delete-{{$item->id}}" style="padding-right: 17px; ">
+                                    <div class="modal fade" id="modal-delete-{{$item->id}}" >
                                         <form action="{{ route('backend.program.destroy', $item->id) }}" method="POST" id="delete_program">
                                             @method('DELETE')
                                             @csrf
@@ -140,7 +140,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modal-lg-create" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-create" >
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
