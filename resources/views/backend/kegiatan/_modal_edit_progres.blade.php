@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-md-edit-progres-{{ $item->id }}" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-md-edit-progres-{{ $item->id }}" >
     <div class="modal-dialog modal-md">
         <div class="modal-content p-3">
             <div class="modal-header">

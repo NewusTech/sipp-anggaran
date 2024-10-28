@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-lg-edit-{{$kegiatan->id}}" style="padding-right: 17px; ">
+<div class="modal fade" id="modal-lg-edit-{{$kegiatan->id}}" >
     <form action="{{ route('backend.kegiatan.update', $kegiatan->id) }}" method="POST" id="update_kegiatan">
         @method('PUT')
         @csrf
