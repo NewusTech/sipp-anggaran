@@ -32,11 +32,7 @@ class DashboardController extends Controller
                 array_push($bidang_id, auth('api')->user()->bidang_id);
             }
 
-            $kegiatan = Kegiatan::whereIn('bidang_id', $bidang_id)->get(['id']);
-
-            $kegiatan = $kegiatan->map(function ($item) {
-                return $item->id;
-            });
+            $kegiatan = Kegiatan::whereIn('bidang_id', $bidang_id)->pluck('id');
 
             $total_pagu = $bidang_id == null ? DetailKegiatan::whereYear('created_at', $year)->sum('pagu') : DetailKegiatan::whereIn('kegiatan_id', $kegiatan)->whereYear('created_at', $year)->sum('pagu');
 
@@ -57,7 +53,6 @@ class DashboardController extends Controller
                 'total_pagu' => $total_pagu,
                 'total_realisasi' => $total_realisasi,
                 'total_sisa' => $total_sisa,
-                // 'detail_kegiatan' => $detail_kegiatan
             ];
 
             return response()->json([
@@ -77,7 +72,6 @@ class DashboardController extends Controller
     {
         $year = $request->query('year', date('Y'));
         try {
-            // get monthly data
             $monthlyData = ProgresKegiatan::whereYear('tanggal', $year)
                 ->select('nilai', 'jenis_progres', DB::raw('MONTH(tanggal) as bulan'))
                 ->get()
@@ -89,11 +83,10 @@ class DashboardController extends Controller
                     'total_keuangan' => $items->where('jenis_progres', 'keuangan')->sum('nilai'),
                     'total_fisik' => $items->where('jenis_progres', 'fisik')->sum('nilai'),
                 ];
-            })->values();
+            })->sortBy('bulan')->values();
 
             $data = [
                 'chart_data' => $result,
-                // 'bulan' => $monthlyData
             ];
 
             return response()->json([

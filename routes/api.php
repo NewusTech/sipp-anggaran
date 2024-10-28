@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\DashboardController;
+use App\Http\Controllers\API\KegiantanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,4 +31,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'dashboard'], function () {
     Route::get('/total-pagu-realisasi', [DashboardController::class, 'getTotalPaguAndRelasi']);
     Route::get('/chart', [DashboardController::class, 'getChartRealisasi']);
     Route::get('/realisasi-data', [DashboardController::class, 'getRealisasiDataAndCont']);
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'kegiatan'], function () {
+    Route::get('/', [KegiantanController::class, 'index']);
 });
