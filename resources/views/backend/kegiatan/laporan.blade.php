@@ -48,8 +48,8 @@
             <div class="tab-content" id="custom-content-below-tabContent">
                 <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
                     <form action="" method="GET">
-                        <div class="row">
-                            <div class="col-1">
+                        <div class="row mx-0">
+                            <div class="col-6 col-sm-6 col-md-1 mb-3">
                                 <select name="bulan" id="bulan_laporan" class="form-control">
                                     <option value="" selected>-- Pilih Bulan --</option>
                                     <option value="januari" {{$bulan == "januari"?"selected":""}}>Januari</option>
@@ -66,7 +66,7 @@
                                     <option value="desember" {{$bulan == "desember"?"selected":""}}>Desember</option>
                                 </select>
                             </div>
-                            <div class="col-3">
+                            <div class="col-6 col-sm-6 col-md-3 mb-3">
                                 <select name="bidang" id="bidangId" class="form-control">
                                     <option value="" selected>-- Pilih Bidang --</option>
                                     @foreach (Auth::user()->bidang_id == null ? $listBidang : $bidang as $item)
@@ -74,26 +74,30 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-1">
+                            <div class="col-6 col-sm-6 col-md-1 mb-3">
                                 <select name="tahun" id="tahun_laporan" class="form-control">
                                     <option value="" selected>-- Pilih Tahun --</option>
-                                    @for ($i = 0; $i < 5; $i++) <option value="{{date('Y')-$i}}" {{$tahun == (date('Y')-$i) ? "selected" : ""}}>{{((int)date('Y'))-$i}}</option>
-                                        @endfor
+                                    @for ($i = 0; $i < 5; $i++) 
+                                        <option value="{{date('Y')-$i}}" {{$tahun == (date('Y')-$i) ? "selected" : ""}}>{{((int)date('Y'))-$i}}</option>
+                                    @endfor
                                 </select>
                             </div>
-                            <div class="col-3">
+                            <div class="col-6 col-sm-6 col-md-3 mb-3">
                                 <input type="search" class="form-control" name="search" placeholder="Cari Kegiatan ..." value="{{ request('search') }}">
                             </div>
-                            <div class="col-2">
+                            <div class="col-6 col-sm-6 col-md-2 mb-3">
                                 <button type="submit" class="btn btn-primary btn-block">Filter</button>
                             </div>
-                            <div class="col-2">
-                                <a href="/backend/kegiatan/laporan/download?bulan={{$bulan}}&tahun={{$tahun}}&requestBidang={{$requestBidang}}" class="btn btn-primary"> <i class="fas fa-download"></i> Download</a>
+                            <div class="col-6 col-sm-6 col-md-2 mb-3">
+                                <a href="/backend/kegiatan/laporan/download?bulan={{$bulan}}&tahun={{$tahun}}&requestBidang={{$requestBidang}}" class="btn btn-primary btn-block"> 
+                                    <i class="fas fa-download"></i> Download
+                                </a>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
+            
         </div>
         <!-- /.card -->
         <div class="card">

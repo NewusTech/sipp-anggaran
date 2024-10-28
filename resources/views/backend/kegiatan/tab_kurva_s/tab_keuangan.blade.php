@@ -1,5 +1,5 @@
 <div class="tab-pane fade show {{session('tab') == 'keuangan'? 'active' : ''}}" id="custom-content-below-keuangan" role="tabpanel" aria-labelledby="custom-content-below-keuangan-tab">
-    <div class="row">
+    <div class="row mx-0">
         <div class="col-md-6">
             <h4>Rencana Keuangan</h4>
             <div class="container">

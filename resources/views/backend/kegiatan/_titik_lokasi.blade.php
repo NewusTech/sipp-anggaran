@@ -1,12 +1,12 @@
 <div class="tab-pane fade show {{session('tab') == 'titik_lokasi' ? 'active' : ''}}" id="custom-content-above-titik-lokasi" role="tabpanel" aria-labelledby="custom-content-below-titik-lokasi-tab">
-    <div class="row">
-        <div class="col-sm-12 col-md-6 col-lg-12">
+    <div class="row mx-0 p-0">
+        <div class="col-sm-12 col-md-6 col-lg-12 mx-0 p-0">
             <form action="{{ route('backend.detail_kegiatan.update.map_point', $detail->id) }}" method="POST">
                 @method('PUT')
                 @csrf
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-12">
+                <div class="modal-body mx-0 p-0">
+                    <div class="row mx-0 p-0">
+                        <div class="col-sm-12  mx-0 p-0">
                             <label class="text-darkblue">Maps</label>
                             <span>(Klik Untuk Mendapatkan Koordinat !)</span>
                             <div class="card">
