@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\DashboardController;
+use App\Http\Controllers\API\DetailAnggaranController;
+use App\Http\Controllers\API\DetailKegitanController;
 use App\Http\Controllers\API\KegiantanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,4 +37,17 @@ Route::group(['middleware' => 'api', 'prefix' => 'dashboard'], function () {
 
 Route::group(['middleware' => 'api', 'prefix' => 'kegiatan'], function () {
     Route::get('/', [KegiantanController::class, 'index']);
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'detail-kegiatan'], function () {
+    Route::get('/kegitan-and-sub-kegiatan', [DetailKegitanController::class, 'getKegiatanAndSubKegiatan']);
+    Route::get('/bidang-and-sumber-dana', [DetailKegitanController::class, 'getBidangAndSumberDana']);
+    Route::post('/', [DetailKegitanController::class, 'store']);
+    Route::get('/{detail_kegitan_id}', [DetailKegitanController::class, 'show']);
+    Route::put('/{detail_kegitan_id}', [DetailKegitanController::class, 'update']);
+    Route::delete('/{detail_kegitan_id}', [DetailKegitanController::class, 'destroy']);
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'detail-anggaran'], function () {
+    Route::get('/{detail_kegitan_id}', [DetailAnggaranController::class, 'detail']);
 });

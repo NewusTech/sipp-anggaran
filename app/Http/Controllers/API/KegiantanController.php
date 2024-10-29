@@ -38,7 +38,7 @@ class KegiantanController extends Controller
                         $query->select('id', 'sub_kegiatan_id', 'title', 'created_at')
                             ->with(['progres' => function ($query) {
                                 $query->orderByDesc('nilai')
-                                    ->where('jenis_progres', 'fisix')
+                                    ->where('jenis_progres', 'fisik')
                                     ->select('id', 'nilai', 'detail_kegiatan_id');
                             }]);
                     }
