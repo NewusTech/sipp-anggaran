@@ -238,12 +238,15 @@ class DetailKegitanController extends Controller
             $startDate = Carbon::parse($request->awal_kontrak);
             $endDate = Carbon::parse($request->akhir_kontrak);
 
-            $existingProgress = RencanaKegiatan::where('detail_kegiatan_id', $detailKegiatan->id)
-                ->delete();
-
             if ($detailKegiatan->progres()->exists()) {
                 $detailKegiatan->progres()->delete();
             }
+
+            if ($detailKegiatan->rencana_kegiatans()->exists()) {
+                $detailKegiatan->rencana_kegiatans()->delete();
+            }
+
+
 
             $totalDays = $startDate->diffInDays($endDate);
             $totalWeeks = (int)ceil($totalDays / 7);
@@ -268,6 +271,12 @@ class DetailKegitanController extends Controller
                     'nilai' => 0,
                     'bulan' => $startDate->format('Y-m'),
                     'minggu' => $weekInMonth,
+                ]);
+
+                $detailKegiatan->rencana_kegiatans()->create([
+                    'bulan' => $startDate->format('Y-m'),
+                    'minggu' => $weekInMonth,
+                    'keuangan' => 0,
                 ]);
                 $progressData[] = [
                     'detail_kegiatan_id' => $detailKegiatan->id,
