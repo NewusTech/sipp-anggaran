@@ -7,204 +7,242 @@
     <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
 @section('breadcump')
-<div class="col-sm-6">
-    <ol class="breadcrumb float-sm-left">
-        <li class="breadcrumb-item "><a href="{{ route('backend.dashboard.index') }}" class="text-lightgray fs-14">{{ __('Dashboard') }}</a></li>
-        <li class="breadcrumb-item"><span class=" text-lightgray">{{ __('Pengaturan') }}</span></li>
-        <li class="breadcrumb-item active "><span class="text-darkblue">{{ __('Pengaturan Sumber Dana') }}</span></li>
-    </ol>
-</div>
+    <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item "><a href="{{ route('backend.dashboard.index') }}"
+                    class="text-lightgray fs-14">{{ __('Dashboard') }}</a></li>
+            <li class="breadcrumb-item"><span class=" text-lightgray">{{ __('Pengaturan') }}</span></li>
+            <li class="breadcrumb-item active "><span class="text-darkblue">{{ __('Pengaturan Sumber Dana') }}</span></li>
+        </ol>
+    </div>
 @endsection
 
 @section('main')
-@if (session()->has('success'))
-<div class="row">
-    <div class="col-md-12">
-        <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            {{ session('success') }}
-        </div>
-    </div>
-</div>
-@endif
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-							<div class="card-action-right">
-								<button id="addsumber_dana" class="btn btn-primary btn-sm btn-add" data-toggle="modal" data-target="#modal-lg-create"><i class="fas fa-plus"></i> Tambah Sumber Dana</button>
-							</div>
-                <div class="row">
-                    <h4 class="text-darkblue"><strong> DATA SUMBER DANA </strong></h4>
+    @if (session()->has('success'))
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    {{ session('success') }}
                 </div>
-                <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
-                    <li class="nav-item">
-                    <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill" href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home" aria-selected="true">Daftar Sumber Dana</a>
-                    </li>
-                </ul>
-                <div class="tab-content" id="custom-content-below-tabContent">
-                    <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
-                        <div class="row">
-                            <div class="col-12">
-                                <table id="example1" class="table ">
-                                    <thead>
-                                    <tr>
-                                        <th style="width: 80%; padding:1rem 2.25rem;">Nama</th>
-                                        <th style="text-align: center">Aksi</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach ($sumberDana as $item)
-                                    <tr>
-                                        <td>{{$item->kode}} | {{$item->name}}</td>
-                                        <td class="btn-action">
-                                            <button type="button" style="color: white;" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal-lg-edit-{{$item->id}}"><i class="fas fa-edit"></i> Edit</button>
-                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$item->id}}"><i class="fas fa-trash"></i> Hapus</button>
-                                        </td>
-                                    </tr>
-                                    <div class="modal fade" id="modal-lg-edit-{{$item->id}}" >
-                                        <form action="{{ route('backend.sumber_dana.update', $item->id) }}" method="POST" id="update_sumber_dana">
-                                            @method('PUT')
-                                            @csrf
-                                            <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                <h5 class="modal-title"><strong> Data Sumber Dana </strong></h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <!-- text input -->
-																												<div class="form-group">
-																													<label class="text-darkblue">Kode</label>
-																													<input type="text" class="form-control" name="kode" value="{{$item->kode}}" placeholder="Silahkan masukan Kode" required>
-																												</div>
-                                                        <div class="form-group">
-                                                        <label class="text-darkblue">Nama</label>
-                                                        <input type="text" class="form-control" name="name" value="{{$item->name}}" placeholder="Silahkan masukan nama sumber dana" required>
+            </div>
+        </div>
+    @endif
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex mb-3 flex-md-row flex-column justify-content-md-between">
+                        <div class="row mb-0">
+                            <h4 class="text-darkblue mb-0"><strong> DATA SUMBER DANA </strong></h4>
+                        </div>
+                        <div class="ml-2 mb-2 card-action-right d-flex justify-content-end ">
+                            <button id="addsumber_dana" class="btn btn-primary btn-sm btn-add" data-toggle="modal"
+                                data-target="#modal-lg-create"><i class="fas fa-plus"></i> Tambah Sumber Dana</button>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill"
+                                href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home"
+                                aria-selected="true">Daftar Sumber Dana</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="custom-content-below-tabContent">
+                        <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel"
+                            aria-labelledby="custom-content-below-home-tab">
+                            <div class="row">
+                                <div class="col-12 table-responsive">
+                                    <table id="example1" class="table ">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama</th>
+                                                <th style="text-align: center">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($sumberDana as $item)
+                                                <tr>
+                                                    <td
+                                                        style="overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;">
+                                                        {{ $item->kode }} | {{ $item->name }}</td>
+                                                    <td class="btn-action">
+                                                        <button type="button" style="color: white;"
+                                                            class="btn btn-warning btn-sm" data-toggle="modal"
+                                                            data-target="#modal-lg-edit-{{ $item->id }}"><i
+                                                                class="fas fa-edit"></i></button>
+                                                        <button type="button" class="btn btn-danger btn-sm"
+                                                            data-toggle="modal"
+                                                            data-target="#modal-delete-{{ $item->id }}"><i
+                                                                class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <div class="modal fade" id="modal-lg-edit-{{ $item->id }}">
+                                                    <form action="{{ route('backend.sumber_dana.update', $item->id) }}"
+                                                        method="POST" id="update_sumber_dana">
+                                                        @method('PUT')
+                                                        @csrf
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title"><strong> Data Sumber Dana
+                                                                        </strong></h5>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <!-- text input -->
+                                                                            <div class="form-group">
+                                                                                <label class="text-darkblue">Kode</label>
+                                                                                <input type="text" class="form-control"
+                                                                                    name="kode"
+                                                                                    value="{{ $item->kode }}"
+                                                                                    placeholder="Silahkan masukan Kode"
+                                                                                    required>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label class="text-darkblue">Nama</label>
+                                                                                <input type="text" class="form-control"
+                                                                                    name="name"
+                                                                                    value="{{ $item->name }}"
+                                                                                    placeholder="Silahkan masukan nama sumber dana"
+                                                                                    required>
+                                                                            </div>
+                                                                            <span class="text-gray">*Tidak boleh mengandung
+                                                                                karakter khusus</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer justify-content-end">
+                                                                    <button type="submit" id="btn_update"
+                                                                        class="btn btn-primary">Simpan</button>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.modal-content -->
                                                         </div>
-                                                        <span class="text-gray">*Tidak boleh mengandung karakter khusus</span>
-                                                    </div>
-                                                    </div>
+                                                    </form>
+                                                    <!-- /.modal-dialog -->
                                                 </div>
-                                                <div class="modal-footer justify-content-end">
-                                                <button type="submit" id="btn_update" class="btn btn-primary">Simpan</button>
+                                                <div class="modal fade" id="modal-delete-{{ $item->id }}">
+                                                    <form action="{{ route('backend.sumber_dana.destroy', $item->id) }}"
+                                                        method="POST" id="delete_sumber_dana">
+                                                        @method('DELETE')
+                                                        @csrf
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title"><strong> Hapus Data </strong>
+                                                                    </h5>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <span class="text-gray">Anda yakin Hapus
+                                                                                data?</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer justify-content-between">
+                                                                    <button type="button" class="btn btn-default"
+                                                                        data-dismiss="modal">Close</button>
+                                                                    <button type="submit" id="btn_update"
+                                                                        class="btn btn-danger"><i
+                                                                            class="fas fa-trash"></i> Hapus</button>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.modal-content -->
+                                                        </div>
+                                                    </form>
+                                                    <!-- /.modal-dialog -->
                                                 </div>
-                                            </div>
-                                            <!-- /.modal-content -->
-                                            </div>
-                                        </form>
-                                        <!-- /.modal-dialog -->
-                                    </div>
-                                    <div class="modal fade" id="modal-delete-{{$item->id}}" >
-                                        <form action="{{ route('backend.sumber_dana.destroy', $item->id) }}" method="POST" id="delete_sumber_dana">
-                                            @method('DELETE')
-                                            @csrf
-                                            <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                <h5 class="modal-title"><strong> Hapus Data </strong></h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <span class="text-gray">Anda yakin Hapus data?</span>
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer justify-content-between">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                <button type="submit" id="btn_update" class="btn btn-danger"><i class="fas fa-trash"></i> Hapus</button>
-                                                </div>
-                                            </div>
-                                            <!-- /.modal-content -->
-                                            </div>
-                                        </form>
-                                        <!-- /.modal-dialog -->
-                                    </div>
-                                    @endforeach
-                                    </tbody>
-                                </table>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- /.card -->
             </div>
-            <!-- /.card -->
         </div>
     </div>
-</div>
-<div class="modal fade" id="modal-lg-create" >
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title"><strong> Data Sumber Dana </strong></h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form action="{{ route('backend.sumber_dana.store') }}" method="POST" id="submit_sumber_dana">
-                @csrf
-                <div class="row">
-                  <div class="col-sm-12">
-                    <!-- text input -->
-                    <div class="form-group">
-                        <label class="text-darkblue">Kode</label>
-                        <input type="text" class="form-control" name="kode" placeholder="Silahkan masukan Kode" required>
-                    </div>
-                    <div class="form-group">
-                      <label class="text-darkblue">Nama</label>
-                      <input type="text" class="form-control" name="name" placeholder="Silahkan masukan nama sumber dana" required>
-                    </div>
-                    <span class="text-gray">*Tidak boleh mengandung karakter khusus</span>
-                  </div>
+    <div class="modal fade" id="modal-lg-create">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><strong> Data Sumber Dana </strong></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </form>
+                <div class="modal-body">
+                    <form action="{{ route('backend.sumber_dana.store') }}" method="POST" id="submit_sumber_dana">
+                        @csrf
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label class="text-darkblue">Kode</label>
+                                    <input type="text" class="form-control" name="kode"
+                                        placeholder="Silahkan masukan Kode" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="text-darkblue">Nama</label>
+                                    <input type="text" class="form-control" name="name"
+                                        placeholder="Silahkan masukan nama sumber dana" required>
+                                </div>
+                                <span class="text-gray">*Tidak boleh mengandung karakter khusus</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-end">
+                    <button type="button" id="btn_submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
         </div>
-        <div class="modal-footer justify-content-end">
-          <button type="button" id="btn_submit" class="btn btn-primary">Simpan</button>
-        </div>
-      </div>
-      <!-- /.modal-content -->
+        <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal-dialog -->
-</div>
 
 @endsection
 
 @section('js')
-<!-- DataTables  & Plugins -->
-<script src="{{ asset('admin') }}/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="{{ asset('admin') }}/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="{{ asset('admin') }}/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="{{ asset('admin') }}/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="{{ asset('admin') }}/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script>
-  $(function () {
-    $("#example1").DataTable({
-        "responsive": true,
-        "autoWidth": true,
-        "paging": true,
-        "lengthChange": true,
-        "searching": true,
-        "ordering": false,
-        "collapsed": true,
-    });
-    $("#example1_filter label").addClass('search');
-    $(".search input").before( `
+    <!-- DataTables  & Plugins -->
+    <script src="{{ asset('admin') }}/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('admin') }}/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('admin') }}/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('admin') }}/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="{{ asset('admin') }}/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script>
+        $(function() {
+            $("#example1").DataTable({
+                "autoWidth": true,
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": false,
+                "collapsed": true,
+            });
+            $("#example1_filter label").addClass('search');
+            $(".search input").before(`
         <span class="fa fa-search"></span>
     `);
-    $(".search input").attr("placeholder", "Ketik Kata Kunci");
-    $("#btn_submit").on("click", function (){
-        $("#submit_sumber_dana").submit();
-    });
-  });
-</script>
+            $(".search input").attr("placeholder", "Ketik Kata Kunci");
+            $("#btn_submit").on("click", function() {
+                $("#submit_program").submit();
+            });
+        });
+    </script>
 @endsection
