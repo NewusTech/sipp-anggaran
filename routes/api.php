@@ -33,6 +33,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'dashboard'], function () {
     Route::get('/total-pagu-realisasi', [DashboardController::class, 'getTotalPaguAndRelasi']);
     Route::get('/chart', [DashboardController::class, 'getChartRealisasi']);
     Route::get('/realisasi-data', [DashboardController::class, 'getRealisasiDataAndCont']);
+    Route::get('/tabel-data', [DashboardController::class, 'getTabelData']);
 });
 
 Route::group(['middleware' => 'api', 'prefix' => 'kegiatan'], function () {
@@ -48,6 +49,14 @@ Route::group(['middleware' => 'api', 'prefix' => 'detail-kegiatan'], function ()
     Route::delete('/{detail_kegitan_id}', [DetailKegitanController::class, 'destroy']);
 });
 
-Route::group(['middleware' => 'api', 'prefix' => 'detail-anggaran'], function () {
-    Route::get('/{detail_kegitan_id}', [DetailAnggaranController::class, 'detail']);
+Route::group(['middleware' => 'api', 'prefix' => 'detail-anggaran/{detail_kegitan_id}'], function () {
+    //detail
+    Route::get('/', [DetailAnggaranController::class, 'detail']);
+    // kurfa fisik
+    Route::get('/kurfa-fisik', [DetailAnggaranController::class, 'kurfaFisik']);
+    Route::put('/kurfa-fisik/progres', [DetailAnggaranController::class, 'updateProgresFisik']);
+    Route::put('/kurfa-fisik/rencana', [DetailAnggaranController::class, 'updateRencanaFisik']);
+    // kurfa keuangan
+    Route::get('/kurfa-keuangan', [DetailAnggaranController::class, 'kurfaKeuangan']);
+    Route::put('/kurfa-keuangan', [DetailAnggaranController::class, 'updateProgresKeuangan']);
 });

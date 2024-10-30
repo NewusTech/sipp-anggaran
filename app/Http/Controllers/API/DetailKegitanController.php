@@ -198,20 +198,6 @@ class DetailKegitanController extends Controller
 
         try {
             $detailKegiatan = DetailKegiatan::with('progres', 'rencana_kegiatans')->where('id', $detail_kegitan_id)
-                ->select([
-                    'id',
-                    'title',
-                    'no_detail_kegiatan',
-                    'no_kontrak',
-                    'no_spmk',
-                    'nilai_kontrak',
-                    'jenis_pengadaan',
-                    'awal_kontrak',
-                    'akhir_kontrak',
-                    'penyedia_jasa',
-                    'target',
-                    'alamat'
-                ])
                 ->first();
 
             if (!$detailKegiatan) {
@@ -237,6 +223,7 @@ class DetailKegitanController extends Controller
 
             $startDate = Carbon::parse($request->awal_kontrak);
             $endDate = Carbon::parse($request->akhir_kontrak);
+
 
             if ($detailKegiatan->progres()->exists()) {
                 $detailKegiatan->progres()->delete();
@@ -278,12 +265,7 @@ class DetailKegitanController extends Controller
                     'minggu' => $weekInMonth,
                     'keuangan' => 0,
                 ]);
-                $progressData[] = [
-                    'detail_kegiatan_id' => $detailKegiatan->id,
-                    'bulan' => $startDate->format('Y-m'),
-                    'minggu' => $weekInMonth,
-                    'keuangan' => 0,
-                ];
+
 
                 $startDate->addWeek();
 
@@ -294,7 +276,23 @@ class DetailKegitanController extends Controller
                     $weekInMonth++;
                 }
             }
-            RencanaKegiatan::insert($progressData);
+
+            $detailKegiatan = DetailKegiatan::with('progres', 'rencana_kegiatans')->where('id', $detail_kegitan_id)
+                ->select([
+                    'id',
+                    'title',
+                    'no_detail_kegiatan',
+                    'no_kontrak',
+                    'no_spmk',
+                    'nilai_kontrak',
+                    'jenis_pengadaan',
+                    'awal_kontrak',
+                    'akhir_kontrak',
+                    'penyedia_jasa',
+                    'target',
+                    'alamat'
+                ])
+                ->first();
 
             return response()->json([
                 'success' => true,
