@@ -11,6 +11,7 @@ use App\Models\RencanaKegiatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Contracts\Role;
 
 class DashboardController extends Controller
@@ -237,51 +238,97 @@ class DashboardController extends Controller
                 array_push($bidang_id, auth('api')->user()->bidang_id);
             }
 
+            // $fisik = DetailKegiatan::select(
+            //     'detail_kegiatan.id as detail_kegiatan_id',
+            //     'detail_kegiatan.title',
+            //     'detail_kegiatan.progress',
+            //     'detail_kegiatan.akhir_kontrak',
+            //     'detail_kegiatan.latitude',
+            //     'detail_kegiatan.longitude',
+            //     'detail_kegiatan.kegiatan_id',
+            //     'bidang.name as bidang_name',
+            //     'penanggung_jawab_id',
+            //     'penyedia_jasa.name as penyedia_jasa'
+            // )->with('kegiatan', 'penanggungJawab', 'progres', 'rencana_kegiatans')
+            //     ->whereHas('kegiatan', function ($query) use ($bidang_id) {
+            //         $query->where('is_arship', 0);
+            //         if ($bidang_id != null && count($bidang_id) > 0) {
+            //             $query->whereIn('bidang_id', $bidang_id);
+            //         }
+            //     })
+            //     // ->leftJoin('kegiatan', function ($join) {
+            //     //     $join->on('detail_kegiatan.kegiatan_id', '=', 'kegiatan.id');
+            //     // })
+            //     ->leftJoin('penyedia_jasa', function ($join) {
+            //         $join->on('detail_kegiatan.penyedia_jasa_id', '=', 'penyedia_jasa.id');
+            //     })
+            //     ->leftJoin('bidang', function ($join) {
+            //         $join->on('kegiatan.bidang_id', '=', 'bidang.id');
+            //     })
+            //     ->filter($request)
+            //     ->get();
+
             $fisik = DetailKegiatan::select(
-                'detail_kegiatan.id as detail_kegiatan_id',
-                'detail_kegiatan.title',
-                'detail_kegiatan.progress',
-                'detail_kegiatan.akhir_kontrak',
-                'detail_kegiatan.latitude',
-                'detail_kegiatan.longitude',
-                'detail_kegiatan.kegiatan_id',
-                'bidang.name as bidang_name',
+                'id',
+                'title',
+                'progress',
+                'akhir_kontrak',
+                'latitude',
+                'longitude',
+                'kegiatan_id',
                 'penanggung_jawab_id',
-                'penyedia_jasa.name as penyedia_jasa'
-            )->with('kegiatan', 'penanggungJawab')
+                'penyedia_jasa_id'
+            )
+                ->with([
+                    'kegiatan' => function ($query) {
+                        $query->select('id', 'title', 'bidang_id', 'alokasi', 'program');
+                    },
+                    'penanggungJawab',
+                    'progres',
+                    'rencana_kegiatans',
+                    'penyedia'
+                ])
                 ->whereHas('kegiatan', function ($query) use ($bidang_id) {
                     $query->where('is_arship', 0);
-                    if ($bidang_id != null && count($bidang_id) > 0) {
+
+                    if (!is_null($bidang_id) && count($bidang_id) > 0) {
                         $query->whereIn('bidang_id', $bidang_id);
                     }
                 })
-                ->leftJoin('kegiatan', function ($join) {
-                    $join->on('detail_kegiatan.kegiatan_id', '=', 'kegiatan.id');
-                })
-                ->leftJoin('penyedia_jasa', function ($join) {
-                    $join->on('detail_kegiatan.penyedia_jasa_id', '=', 'penyedia_jasa.id');
-                })
-                ->leftJoin('bidang', function ($join) {
-                    $join->on('kegiatan.bidang_id', '=', 'bidang.id');
-                })
-                ->filter($request)
-                ->get();
+                ->with([
+                    'kegiatan.bidang' => function ($query) {
+                        $query->select('id', 'name');
+                    }
+                ])
+                ->whereYear('created_at', $year)
+                ->get();;
+
 
             if ($role[0] == 'Pengawas') {
                 $pengawas = PenanggungJawab::where('pptk_email', Auth::user()->email)->first('id');
                 $fisik = $fisik->where('penanggung_jawab_id', $pengawas->id);
             }
 
-            $progresFisik = ProgresKegiatan::where('jenis_progres', 'fisik')->whereIn('detail_kegiatan_id', $fisik->pluck('detail_kegiatan_id'))->orderBy('nilai', 'desc')->get();
-            $rencanaFisik = RencanaKegiatan::whereIn('detail_kegiatan_id', $fisik->pluck('detail_kegiatan_id'))->get();
-            $fisik->map(function ($item) use ($progresFisik, $rencanaFisik) {
-                $progres = $progresFisik->where('detail_kegiatan_id', $item->detail_kegiatan_id);
-                $rencana = $rencanaFisik->where('detail_kegiatan_id', $item->detail_kegiatan_id);
-                $deviasi = ($rencana[$progres->count() - 1]->fisik ?? 0) - ($progres->first()->nilai ?? 0);
-                $item->progress = $progres ?? 0;
-                $item->rencana = $rencana ?? 0;
-                $item->status_deviasi = $deviasi;
+            $fisik->map(function ($item) {
+                $progres = $item->progres()->where('jenis_progres', 'fisik')->orderBy('nilai', 'desc')->first();
+
+                $item->status_deviasi = 'data rencana atau realisasi tidak di temukan';
+                if (!$progres) {
+                    return $item;
+                }
+                $rencana = $item->rencana_kegiatans()
+                    ->where('bulan', $progres->bulan)
+                    ->where('minggu', $progres->minggu)->first();
+
+                if ($rencana) {
+                    $deviasi = ($rencana->fisik) - ($progres->first()->nilai ?? 0);
+                    $item->status_deviasi = $deviasi;
+                }
+
+                return $item;
             });
+
+
 
 
 
@@ -294,7 +341,7 @@ class DashboardController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $th->getMessage()
-            ]);
+            ], 500);
         }
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\DetailAnggaranController;
 use App\Http\Controllers\API\DetailKegitanController;
 use App\Http\Controllers\API\KegiantanController;
+use App\Http\Controllers\API\LaporanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -59,4 +60,9 @@ Route::group(['middleware' => 'api', 'prefix' => 'detail-anggaran/{detail_kegita
     // kurfa keuangan
     Route::get('/kurfa-keuangan', [DetailAnggaranController::class, 'kurfaKeuangan']);
     Route::put('/kurfa-keuangan', [DetailAnggaranController::class, 'updateProgresKeuangan']);
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'laporan'], function () {
+    Route::get('/bidang', [LaporanController::class, 'getBidang']);
+    Route::get('/', [LaporanController::class, 'index']);
 });

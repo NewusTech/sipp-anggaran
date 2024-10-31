@@ -22,4 +22,9 @@ class PenyediaJasa extends Model
         'join_date',
         'email'
     ];
+
+    public function detailKegiatan()
+    {
+        return $this->hasMany(DetailKegiatan::class, 'penyedia_jasa_id', 'id');
+    }
 }
