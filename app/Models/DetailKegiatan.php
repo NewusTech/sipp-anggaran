@@ -61,7 +61,8 @@ class DetailKegiatan extends Model
         return $this->belongsTo(SubKegiatan::class, 'sub_kegiatan_id', 'id');
     }
 
-    public function penanggungJawab() : BelongsTo {
+    public function penanggungJawab(): BelongsTo
+    {
         return $this->belongsTo(PenanggungJawab::class, 'penanggung_jawab_id', 'id');
     }
 
@@ -73,6 +74,11 @@ class DetailKegiatan extends Model
     public function progres(): HasMany
     {
         return $this->hasMany(ProgresKegiatan::class, 'detail_kegiatan_id', 'id');
+    }
+
+    public function rencana_kegiatans(): HasMany
+    {
+        return $this->hasMany(RencanaKegiatan::class, 'detail_kegiatan_id', 'id');
     }
 
     // scope untuk filter detail kegiatan

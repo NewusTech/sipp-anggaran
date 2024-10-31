@@ -5,10 +5,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\DetailKegiatan;
 use App\Models\Kegiatan;
+use App\Models\PenanggungJawab;
 use App\Models\ProgresKegiatan;
+use App\Models\RencanaKegiatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Contracts\Role;
 
 class DashboardController extends Controller
@@ -74,19 +77,26 @@ class DashboardController extends Controller
         try {
             $monthlyData = ProgresKegiatan::whereYear('tanggal', $year)
                 ->select('nilai', 'jenis_progres', DB::raw('MONTH(tanggal) as bulan'))
+                ->orderBy('bulan')
                 ->get()
                 ->groupBy('bulan');
 
-            $result = $monthlyData->map(function ($items, $bulan) {
-                return [
-                    'bulan' => $bulan,
-                    'total_keuangan' => $items->where('jenis_progres', 'keuangan')->sum('nilai'),
-                    'total_fisik' => $items->where('jenis_progres', 'fisik')->sum('nilai'),
-                ];
-            })->sortBy('bulan')->values();
+            $chartDatafisik = $monthlyData->map(function ($items, $bulan) {
+                return $items->where('jenis_progres', 'fisik')->sum('nilai');
+            });
 
+            $chartDataKeuangan = $monthlyData->map(function ($items, $bulan) {
+                return $items->where('jenis_progres', 'keuangan')->sum('nilai');
+            });
+
+            $chartDatafisik = $chartDatafisik->toArray();
+            $chartDataKeuangan = $chartDataKeuangan->toArray();
             $data = [
-                'chart_data' => $result,
+                'chart_data' => [
+                    'labels' => array_keys($chartDatafisik),
+                    'data_fisik' => array_values($chartDatafisik),
+                    'data_keuangan' => array_values($chartDataKeuangan)
+                ],
             ];
 
             return response()->json([
@@ -211,6 +221,127 @@ class DashboardController extends Controller
                 'success' => false,
                 'message' => $th->getMessage()
             ]);
+        }
+    }
+
+    public function getTabelData(Request $request)
+    {
+        $year = $request->query('year', date('Y'));
+
+        try {
+
+            $bidang_id = [];
+            $role = auth('api')->user()->getRoleNames();
+
+
+            if (str_contains($role[0], "Staff") || str_contains($role[0], "Kepala Bidang")) {
+                array_push($bidang_id, auth('api')->user()->bidang_id);
+            }
+
+            // $fisik = DetailKegiatan::select(
+            //     'detail_kegiatan.id as detail_kegiatan_id',
+            //     'detail_kegiatan.title',
+            //     'detail_kegiatan.progress',
+            //     'detail_kegiatan.akhir_kontrak',
+            //     'detail_kegiatan.latitude',
+            //     'detail_kegiatan.longitude',
+            //     'detail_kegiatan.kegiatan_id',
+            //     'bidang.name as bidang_name',
+            //     'penanggung_jawab_id',
+            //     'penyedia_jasa.name as penyedia_jasa'
+            // )->with('kegiatan', 'penanggungJawab', 'progres', 'rencana_kegiatans')
+            //     ->whereHas('kegiatan', function ($query) use ($bidang_id) {
+            //         $query->where('is_arship', 0);
+            //         if ($bidang_id != null && count($bidang_id) > 0) {
+            //             $query->whereIn('bidang_id', $bidang_id);
+            //         }
+            //     })
+            //     // ->leftJoin('kegiatan', function ($join) {
+            //     //     $join->on('detail_kegiatan.kegiatan_id', '=', 'kegiatan.id');
+            //     // })
+            //     ->leftJoin('penyedia_jasa', function ($join) {
+            //         $join->on('detail_kegiatan.penyedia_jasa_id', '=', 'penyedia_jasa.id');
+            //     })
+            //     ->leftJoin('bidang', function ($join) {
+            //         $join->on('kegiatan.bidang_id', '=', 'bidang.id');
+            //     })
+            //     ->filter($request)
+            //     ->get();
+
+            $fisik = DetailKegiatan::select(
+                'id',
+                'title',
+                'progress',
+                'akhir_kontrak',
+                'latitude',
+                'longitude',
+                'kegiatan_id',
+                'penanggung_jawab_id',
+                'penyedia_jasa_id'
+            )
+                ->with([
+                    'kegiatan' => function ($query) {
+                        $query->select('id', 'title', 'bidang_id', 'alokasi', 'program');
+                    },
+                    'penanggungJawab',
+                    'progres',
+                    'rencana_kegiatans',
+                    'penyedia'
+                ])
+                ->whereHas('kegiatan', function ($query) use ($bidang_id) {
+                    $query->where('is_arship', 0);
+
+                    if (!is_null($bidang_id) && count($bidang_id) > 0) {
+                        $query->whereIn('bidang_id', $bidang_id);
+                    }
+                })
+                ->with([
+                    'kegiatan.bidang' => function ($query) {
+                        $query->select('id', 'name');
+                    }
+                ])
+                ->whereYear('created_at', $year)
+                ->get();;
+
+
+            if ($role[0] == 'Pengawas') {
+                $pengawas = PenanggungJawab::where('pptk_email', Auth::user()->email)->first('id');
+                $fisik = $fisik->where('penanggung_jawab_id', $pengawas->id);
+            }
+
+            $fisik->map(function ($item) {
+                $progres = $item->progres()->where('jenis_progres', 'fisik')->orderBy('nilai', 'desc')->first();
+
+                $item->status_deviasi = 'data rencana atau realisasi tidak di temukan';
+                if (!$progres) {
+                    return $item;
+                }
+                $rencana = $item->rencana_kegiatans()
+                    ->where('bulan', $progres->bulan)
+                    ->where('minggu', $progres->minggu)->first();
+
+                if ($rencana) {
+                    $deviasi = ($rencana->fisik) - ($progres->first()->nilai ?? 0);
+                    $item->status_deviasi = $deviasi;
+                }
+
+                return $item;
+            });
+
+
+
+
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Get Dashboard Data Success',
+                'data' => $fisik
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ], 500);
         }
     }
 }
