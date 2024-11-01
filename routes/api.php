@@ -6,6 +6,7 @@ use App\Http\Controllers\API\DetailAnggaranController;
 use App\Http\Controllers\API\DetailKegitanController;
 use App\Http\Controllers\API\KegiantanController;
 use App\Http\Controllers\API\LaporanController;
+use App\Http\Controllers\Backend\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -60,9 +61,36 @@ Route::group(['middleware' => 'api', 'prefix' => 'detail-anggaran/{detail_kegita
     // kurfa keuangan
     Route::get('/kurfa-keuangan', [DetailAnggaranController::class, 'kurfaKeuangan']);
     Route::put('/kurfa-keuangan', [DetailAnggaranController::class, 'updateProgresKeuangan']);
+
+    //penaggung jawab
+    Route::get('/penanggung-jawab', [DetailAnggaranController::class, 'getPenanggungJawab']);
+    Route::put('/penanggung-jawab', [DetailAnggaranController::class, 'updatePenanggungJawab']);
+
+    //get Dokumentasi
+    Route::get('/dokumentasi', [DetailAnggaranController::class, 'getDokumentasi']);
+    Route::post('/dokumentasi', [DetailAnggaranController::class, 'storeDokumentasi']);
+    Route::post('/dokumentasi/{dokumen_id}', [DetailAnggaranController::class, 'updateDokumentasi']);
+    Route::delete('/dokumentasi/{dokumen_id}', [DetailAnggaranController::class, 'deteletDokumentasi']);
+
+    //get titik lokasi
+    Route::get('/titik-lokasi', [DetailAnggaranController::class, 'getTitikLokasi']);
+    Route::post('/titik-lokasi', [DetailAnggaranController::class, 'updateLokasi']);
+});
+
+// helper
+Route::group(['middleware' => 'api'], function () {
+    Route::get('/list-penanggung-jawab', [DetailAnggaranController::class, 'getListPenanggungJawab']);
 });
 
 Route::group(['middleware' => 'api', 'prefix' => 'laporan'], function () {
     Route::get('/bidang', [LaporanController::class, 'getBidang']);
     Route::get('/', [LaporanController::class, 'index']);
+});
+
+// profile
+Route::group(['middleware' => 'api', 'prefix' => 'profile'], function () {
+    Route::get('/', [ProfileController::class, 'index']);
+    Route::put('/', [ProfileController::class, 'update']);
+    Route::put('/password', [ProfileController::class, 'updatePassword']);
+    Route::patch('/photo', [ProfileController::class, 'updateImage']);
 });

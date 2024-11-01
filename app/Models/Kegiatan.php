@@ -51,6 +51,11 @@ class Kegiatan extends Model
         return $this->hasMany(SubKegiatan::class, 'kegiatan_id', 'id');
     }
 
+    public function penanggung()
+    {
+        return $this->hasOne(PenanggungJawab::class, 'kegiatan_id', 'id');
+    }
+
     // scope untuk filter detail kegiatan
     public function scopeFilter($query, $request)
     {
