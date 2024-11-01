@@ -18,7 +18,8 @@ class AuthController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'token' => $token,
-            'type' => 'Bearer'
+            'type' => 'Bearer',
+            'app_name' => 'SIPP-Anggaran'
         ];
 
         return response()->json([
@@ -43,7 +44,8 @@ class AuthController extends Controller
         ], 401);
     }
 
-    public function getUserData(){
+    public function getUserData()
+    {
         try {
             $user = auth('api')->user();
             return response()->json([

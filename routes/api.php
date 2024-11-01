@@ -6,6 +6,7 @@ use App\Http\Controllers\API\DetailAnggaranController;
 use App\Http\Controllers\API\DetailKegitanController;
 use App\Http\Controllers\API\KegiantanController;
 use App\Http\Controllers\API\LaporanController;
+use App\Http\Controllers\Backend\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -84,4 +85,12 @@ Route::group(['middleware' => 'api'], function () {
 Route::group(['middleware' => 'api', 'prefix' => 'laporan'], function () {
     Route::get('/bidang', [LaporanController::class, 'getBidang']);
     Route::get('/', [LaporanController::class, 'index']);
+});
+
+// profile
+Route::group(['middleware' => 'api', 'prefix' => 'profile'], function () {
+    Route::get('/', [ProfileController::class, 'index']);
+    Route::put('/', [ProfileController::class, 'update']);
+    Route::put('/password', [ProfileController::class, 'updatePassword']);
+    Route::patch('/photo', [ProfileController::class, 'updateImage']);
 });
