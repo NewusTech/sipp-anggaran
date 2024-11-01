@@ -6,7 +6,7 @@ use App\Http\Controllers\API\DetailAnggaranController;
 use App\Http\Controllers\API\DetailKegitanController;
 use App\Http\Controllers\API\KegiantanController;
 use App\Http\Controllers\API\LaporanController;
-use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\API\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
