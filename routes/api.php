@@ -92,5 +92,5 @@ Route::group(['middleware' => 'api', 'prefix' => 'profile'], function () {
     Route::get('/', [ProfileController::class, 'index']);
     Route::put('/', [ProfileController::class, 'update']);
     Route::put('/password', [ProfileController::class, 'updatePassword']);
-    Route::patch('/photo', [ProfileController::class, 'updateImage']);
+    Route::post('/photo', [ProfileController::class, 'updateImage']);
 });
