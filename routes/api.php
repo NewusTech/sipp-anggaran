@@ -60,6 +60,25 @@ Route::group(['middleware' => 'api', 'prefix' => 'detail-anggaran/{detail_kegita
     // kurfa keuangan
     Route::get('/kurfa-keuangan', [DetailAnggaranController::class, 'kurfaKeuangan']);
     Route::put('/kurfa-keuangan', [DetailAnggaranController::class, 'updateProgresKeuangan']);
+
+    //penaggung jawab
+    Route::get('/penanggung-jawab', [DetailAnggaranController::class, 'getPenanggungJawab']);
+    Route::put('/penanggung-jawab', [DetailAnggaranController::class, 'updatePenanggungJawab']);
+
+    //get Dokumentasi
+    Route::get('/dokumentasi', [DetailAnggaranController::class, 'getDokumentasi']);
+    Route::post('/dokumentasi', [DetailAnggaranController::class, 'storeDokumentasi']);
+    Route::post('/dokumentasi/{dokumen_id}', [DetailAnggaranController::class, 'updateDokumentasi']);
+    Route::delete('/dokumentasi/{dokumen_id}', [DetailAnggaranController::class, 'deteletDokumentasi']);
+
+    //get titik lokasi
+    Route::get('/titik-lokasi', [DetailAnggaranController::class, 'getTitikLokasi']);
+    Route::post('/titik-lokasi', [DetailAnggaranController::class, 'updateLokasi']);
+});
+
+// helper
+Route::group(['middleware' => 'api'], function () {
+    Route::get('/list-penanggung-jawab', [DetailAnggaranController::class, 'getListPenanggungJawab']);
 });
 
 Route::group(['middleware' => 'api', 'prefix' => 'laporan'], function () {

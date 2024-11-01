@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -34,16 +35,22 @@ class PenanggungJawab extends Model
 
     protected $with = ['bidang_pptk', 'bidang_ppk'];
 
-    public function detail(): HasMany {
-        return $this->hasMany(DetailKegiatan::class,'penanggung_jawab_id','id');
+    public function kegiatan(): hasMany
+    {
+        return $this->hasMany(Kegiatan::class, 'id', 'kegiatan_id');
+    }
+
+    public function detail(): HasMany
+    {
+        return $this->hasMany(DetailKegiatan::class, 'penanggung_jawab_id', 'id');
     }
     public function bidang_pptk()
     {
-        return $this->belongsTo(Bidang::class,'pptk_bidang_id','id');
+        return $this->belongsTo(Bidang::class, 'pptk_bidang_id', 'id');
     }
 
     public function bidang_ppk()
     {
-        return $this->belongsTo(Bidang::class,'ppk_bidang_id','id');
+        return $this->belongsTo(Bidang::class, 'ppk_bidang_id', 'id');
     }
 }
