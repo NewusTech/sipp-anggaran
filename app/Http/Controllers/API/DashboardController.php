@@ -131,7 +131,6 @@ class DashboardController extends Controller
             $kegiatan = $kegiatan->map(function ($item) {
                 return $item->id;
             });
-
             $realisasi_fisik_from_detail_kegiatan = DetailKegiatan::select('id', 'title')
                 ->with('progres')
                 ->whereHas('progres', function ($query) {
@@ -141,10 +140,10 @@ class DashboardController extends Controller
                         ->limit(1);
                 })
                 ->whereYear('created_at', $year)
-                ->get()
-                ->sortByDesc(function ($detailKegiatan) {
-                    return $detailKegiatan->progres->first()->nilai ?? 0;
-                });
+                ->get();
+            // ->sortByDesc(function ($detailKegiatan) {
+            //     return $detailKegiatan->progres->first()->nilai ?? 0;
+            // });
 
             $realsisasi_keuangan_from_detail_kegitan = DetailKegiatan::select('id', 'title')
                 ->with('progres')
@@ -155,10 +154,10 @@ class DashboardController extends Controller
                         ->limit(1);
                 })
                 ->whereYear('created_at', $year)
-                ->get()
-                ->sortByDesc(function ($detailKegiatan) {
-                    return $detailKegiatan->progres->first()->nilai ?? 0;
-                });
+                ->get();
+            // ->sortByDesc(function ($detailKegiatan) {
+            //     return $detailKegiatan->progres->first()->nilai ?? 0;
+            // });
 
             $count_paket = DetailKegiatan::whereYear('created_at', $year)
                 ->whereHas('kegiatan', function ($query) use ($bidang_id) {
@@ -203,8 +202,8 @@ class DashboardController extends Controller
                 ->count();
 
             $data = [
-                'realisasi_keuangan' => $realsisasi_keuangan_from_detail_kegitan,
                 'realisasi_fisik' => $realisasi_fisik_from_detail_kegiatan,
+                'realisasi_keuangan' => $realsisasi_keuangan_from_detail_kegitan,
                 'total_paket' => $count_paket,
                 'total_paket_belum_mulai' => $count_paket_belum_mulai,
                 'total_paket_dikerjakan' => $count_paket_dikerjakan,

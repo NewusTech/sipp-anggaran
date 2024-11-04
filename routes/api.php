@@ -4,9 +4,11 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\DetailAnggaranController;
 use App\Http\Controllers\API\DetailKegitanController;
+use App\Http\Controllers\apI\DownloadLaporanController;
 use App\Http\Controllers\API\KegiantanController;
 use App\Http\Controllers\API\LaporanController;
 use App\Http\Controllers\API\ProfileController;
+use App\Http\Controllers\apI\RealisasiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -93,4 +95,15 @@ Route::group(['middleware' => 'api', 'prefix' => 'profile'], function () {
     Route::put('/', [ProfileController::class, 'update']);
     Route::put('/password', [ProfileController::class, 'updatePassword']);
     Route::post('/photo', [ProfileController::class, 'updateImage']);
+});
+
+// realisasi
+Route::group(['middleware' => 'api', 'prefix' => 'realisasi'], function () {
+    Route::get('/keuangan', [RealisasiController::class, 'RealisasiKeuangan']);
+    Route::get('/fisik', [RealisasiController::class, 'RealisasiFisik']);
+});
+
+// download laporan
+Route::group(['middleware' => 'api', 'prefix' => 'download'], function () {
+    Route::get('/laporan', [DownloadLaporanController::class, 'downloadLaporan']);
 });
