@@ -269,7 +269,7 @@ class DashboardController extends Controller
                     }
                 })
                 ->whereYear('created_at', $year)
-                ->get();
+                ->paginate(10);
 
             if ($role[0] == 'Pengawas') {
                 $pengawas = PenanggungJawab::where('pptk_email', Auth::user()->email)->first('id');
