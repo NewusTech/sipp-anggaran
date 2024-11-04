@@ -9,6 +9,7 @@ use App\Http\Controllers\API\KegiantanController;
 use App\Http\Controllers\API\LaporanController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\apI\RealisasiController;
+use App\Http\Controllers\Backend\ExcelController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -106,4 +107,9 @@ Route::group(['middleware' => 'api', 'prefix' => 'realisasi'], function () {
 // download laporan
 Route::group(['middleware' => 'api', 'prefix' => 'download'], function () {
     Route::get('/laporan', [DownloadLaporanController::class, 'downloadLaporan']);
+});
+
+// import
+Route::group(['middleware' => 'api', 'prefix' => 'import'], function () {
+    Route::post('/kegiatan', [ExcelController::class, 'importKegiatan']);
 });
