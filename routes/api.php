@@ -5,6 +5,7 @@ use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\DetailAnggaranController;
 use App\Http\Controllers\API\DetailKegitanController;
 use App\Http\Controllers\apI\DownloadLaporanController;
+use App\Http\Controllers\apI\ImportExcelController;
 use App\Http\Controllers\API\KegiantanController;
 use App\Http\Controllers\API\LaporanController;
 use App\Http\Controllers\API\ProfileController;
@@ -106,4 +107,9 @@ Route::group(['middleware' => 'api', 'prefix' => 'realisasi'], function () {
 // download laporan
 Route::group(['middleware' => 'api', 'prefix' => 'download'], function () {
     Route::get('/laporan', [DownloadLaporanController::class, 'downloadLaporan']);
+});
+
+// import
+Route::group(['middleware' => 'api', 'prefix' => 'import'], function () {
+    Route::post('/kegiatan', [ImportExcelController::class, 'importKegiatan']);
 });
