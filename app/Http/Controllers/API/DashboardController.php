@@ -132,14 +132,12 @@ class DashboardController extends Controller
                 return $item->id;
             });
             $realisasi_fisik_from_detail_kegiatan = DetailKegiatan::select('id', 'title')
-                ->with(['progres' => function ($query) {
+                ->with('progres')
+                ->whereHas('progres', function ($query) {
                     $query->where('jenis_progres', 'fisik')
                         ->orderByDesc('nilai')
                         ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai')
                         ->limit(1);
-                }])
-                ->whereHas('progres', function ($query) {
-                    $query->where('jenis_progres', 'fisik');
                 })
                 ->whereYear('created_at', $year)
                 ->get();
@@ -148,16 +146,11 @@ class DashboardController extends Controller
             // });
 
             $realsisasi_keuangan_from_detail_kegitan = DetailKegiatan::select('id', 'title')
-                ->with(['progres' => function ($query) {
-                    $query->where('jenis_progres', 'keuangan')
-                        ->orderByDesc('nilai')
-                        ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai')
-                        ->limit(1);
-                }])
+                ->with('progres')
                 ->whereHas('progres', function ($query) {
                     $query->where('jenis_progres', 'keuangan')
                         ->orderByDesc('nilai')
-                        ->select('id') // Minimal select to optimize the `whereHas` check
+                        ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai')
                         ->limit(1);
                 })
                 ->whereYear('created_at', $year)

@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class RealisasiController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'logout']]);
+    }
     public function RealisasiKeuangan(Request $request)
     {
         $year = $request->input('year', date('Y'));
@@ -15,16 +19,12 @@ class RealisasiController extends Controller
         try {
 
             $realsisasi_keuangan_from_detail_kegitan = DetailKegiatan::select('id', 'title')
-                ->with(['progres' => function ($query) {
-                    $query->orderByDesc('nilai')
+                ->with('progres')
+                ->whereHas('progres', function ($query) {
+                    $query->where('jenis_progres', 'keuangan')
+                        ->orderByDesc('nilai')
                         ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai')
                         ->limit(1);
-                }])
-                ->whereHas('progres', function ($query) {
-                    $query->where('jenis_progres', 'keuangan');
-                    // ->orderByDesc('nilai')
-                    // ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai')
-                    // ->limit(1);
                 })
                 ->whereYear('created_at', $year)
                 ->get();
@@ -49,11 +49,7 @@ class RealisasiController extends Controller
         try {
 
             $realsisasi_fisik_from_detail_kegitan = DetailKegiatan::select('id', 'title')
-                ->with(['progres' => function ($query) {
-                    $query->orderByDesc('nilai')
-                        ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai')
-                        ->limit(1);
-                }])
+                ->with('progres')
                 ->whereHas('progres', function ($query) {
                     $query->where('jenis_progres', 'fisik')
                         ->orderByDesc('nilai')
