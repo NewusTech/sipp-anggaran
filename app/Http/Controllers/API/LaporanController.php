@@ -63,14 +63,23 @@ class LaporanController extends Controller
                 $bidang_id = $request_bidang_id;
             }
 
-            if ($request_search) {
-                $data = Bidang::with(['kegiatan' => function ($query) use ($request_tahun, $request_bulan, $request_search) {
-                    $query->where('nama', 'like', '%' . $request_search . '%')
-                        ->with('detail.progres');
-                }])->where('id', $bidang_id)->get();
-            } else {
-                $data = Bidang::with('kegiatan.detail.progres')->where('id', $bidang_id)->get();
-            }
+            $data = Bidang::with(['kegiatan' => function ($query) use ($request_search, $request_tahun, $request_bulan) {
+                if ($request_search) {
+                    $query->where('nama', 'like', '%' . $request_search . '%');
+                }
+
+                if ($request_tahun) {
+                    $query->whereYear('created_at', $request_tahun);
+                }
+
+                if ($request_bulan) {
+                    $query->whereMonth('created_at', $request_bulan)
+                        ->whereYear('created_at', $request_tahun ?? date('Y')); // Default to current year if no year is specified
+                }
+
+                $query->with('detail.progres');
+            }])->where('id', $bidang_id)->get();
+
 
             if ($bidang_id == null) {
                 $data = Bidang::with('kegiatan.detail.progres')->get();
@@ -96,8 +105,8 @@ class LaporanController extends Controller
 
             $return_data = [
                 'bidang' => $data,
-                'kegiatan' => $kegiatan,
-                'details' => $details
+                // 'kegiatan' => $kegiatan,
+                // 'details' => $details
             ];
 
             return response()->json([

@@ -15,7 +15,7 @@ class DownloadLaporanController extends Controller
     }
     public function downloadLaporan(Request $request)
     {
-        $date = date('Y-m-d');
-        return Excel::download(new LaporanPengambilanExport($request), $date . 'laporan_kegiatan.xlsx');
+        $time = time();
+        return Excel::download(new LaporanPengambilanExport($request), $time . '- laporan_kegiatan.xlsx');
     }
 }
