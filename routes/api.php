@@ -5,11 +5,11 @@ use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\DetailAnggaranController;
 use App\Http\Controllers\API\DetailKegitanController;
 use App\Http\Controllers\apI\DownloadLaporanController;
+use App\Http\Controllers\apI\ImportExcelController;
 use App\Http\Controllers\API\KegiantanController;
 use App\Http\Controllers\API\LaporanController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\apI\RealisasiController;
-use App\Http\Controllers\Backend\ExcelController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -111,5 +111,5 @@ Route::group(['middleware' => 'api', 'prefix' => 'download'], function () {
 
 // import
 Route::group(['middleware' => 'api', 'prefix' => 'import'], function () {
-    Route::post('/kegiatan', [ExcelController::class, 'importKegiatan']);
+    Route::post('/kegiatan', [ImportExcelController::class, 'importKegiatan']);
 });
