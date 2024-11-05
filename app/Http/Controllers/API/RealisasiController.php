@@ -22,10 +22,12 @@ class RealisasiController extends Controller
         $request_tahun = $request->tahun;
         $request_bulan = $request->bulan;
         $request_search = $request->search;
+        $request_start_date = $request->start_date;
+        $request_end_date = $request->end_date ??  date('Y-m-d');
 
         try {
 
-            $realsisasi_keuangan_from_detail_kegitan = DetailKegiatan::select('id', 'title')
+            $realsisasi_keuangan_from_detail_kegitan =  DetailKegiatan::select('id', 'title')
                 ->with([
                     'progres' => function ($query) {
                         $query->where('jenis_progres', 'keuangan')
@@ -36,8 +38,10 @@ class RealisasiController extends Controller
                 ->when($request_tahun, fn($query) => $query->whereYear('created_at', $request_tahun))
                 ->when($request_bulan, fn($query) => $query->whereMonth('created_at', $request_bulan))
                 ->when($request_search, fn($query) => $query->where('title', 'like', '%' . $request_search . '%'))
+                ->when($request_start_date && $request_end_date, function ($query) use ($request_start_date, $request_end_date) {
+                    $query->whereBetween('created_at', [$request_start_date, $request_end_date]);
+                })
                 ->when($request_status, function ($query) use ($request_status) {
-                    // Filter based on progress status
                     match ($request_status) {
                         'sedang dikerjakan' => $query->whereHas('progres', function ($q) {
                             $q->whereBetween('nilai', [1, 99]);
@@ -74,11 +78,13 @@ class RealisasiController extends Controller
         $request_tahun = $request->tahun;
         $request_bulan = $request->bulan;
         $request_search = $request->search;
+        $request_start_date = $request->start_date;
+        $request_end_date = $request->end_date ??  date('Y-m-d');
 
 
         try {
 
-            $realsisasi_fisik_from_detail_kegitan = DetailKegiatan::select('id', 'title')
+            $realsisasi_fisik_from_detail_kegitan =  DetailKegiatan::select('id', 'title')
                 ->with([
                     'progres' => function ($query) {
                         $query->where('jenis_progres', 'fisik')
@@ -89,8 +95,10 @@ class RealisasiController extends Controller
                 ->when($request_tahun, fn($query) => $query->whereYear('created_at', $request_tahun))
                 ->when($request_bulan, fn($query) => $query->whereMonth('created_at', $request_bulan))
                 ->when($request_search, fn($query) => $query->where('title', 'like', '%' . $request_search . '%'))
+                ->when($request_start_date && $request_end_date, function ($query) use ($request_start_date, $request_end_date) {
+                    $query->whereBetween('created_at', [$request_start_date, $request_end_date]);
+                })
                 ->when($request_status, function ($query) use ($request_status) {
-                    // Filter based on progress status
                     match ($request_status) {
                         'sedang dikerjakan' => $query->whereHas('progres', function ($q) {
                             $q->whereBetween('nilai', [1, 99]);

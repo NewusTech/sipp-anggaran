@@ -34,7 +34,7 @@ class LaporanPengambilanExport implements FromView
     {
         $tahun = $this->request->tahun;
         $bulan = $this->request->bulan;
-        $requestBidang = $this->request->requestBidang;
+        $requestBidang = $this->request->bidang;
 
         $bidang_id = null;
         $role = Auth::user()->getRoleNames();

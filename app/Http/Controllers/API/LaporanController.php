@@ -63,27 +63,33 @@ class LaporanController extends Controller
                 $bidang_id = $request_bidang_id;
             }
 
-            $data = Bidang::with(['kegiatan' => function ($query) use ($request_search, $request_tahun, $request_bulan) {
-                if ($request_search) {
-                    $query->where('nama', 'like', '%' . $request_search . '%');
-                }
 
-                if ($request_tahun) {
-                    $query->whereYear('created_at', $request_tahun);
-                }
+            $data = Bidang::when($bidang_id, function ($query) use ($bidang_id) {
+                $query->where('id', $bidang_id);
+            })
+                ->with(['kegiatan' => function ($query) use ($request_search, $request_tahun, $request_bulan) {
+                    if ($request_search) {
+                        $query->where('title', 'like', '%' . $request_search . '%');
+                    }
 
-                if ($request_bulan) {
-                    $query->whereMonth('created_at', $request_bulan)
-                        ->whereYear('created_at', $request_tahun ?? date('Y')); // Default to current year if no year is specified
-                }
+                    if ($request_tahun) {
+                        $query->whereYear('created_at', $request_tahun);
+                    }
 
-                $query->with('detail.progres');
-            }])->where('id', $bidang_id)->get();
+                    if ($request_bulan) {
+                        $query->whereMonth('created_at', $request_bulan)
+                            ->whereYear('created_at', $request_tahun ?? date('Y'));
+                    }
 
+                    $query->with('detail.progres');
+                }])
+                ->when($request_search, function ($query) use ($request_search) {
+                    $query->whereHas('kegiatan', function ($q) use ($request_search) {
+                        $q->where('title', 'like', '%' . $request_search . '%');
+                    });
+                })
+                ->get();
 
-            if ($bidang_id == null) {
-                $data = Bidang::with('kegiatan.detail.progres')->get();
-            }
 
             $data->map(function ($bidang) {
                 $bidang->kegiatan->map(function ($kegiatan) {
