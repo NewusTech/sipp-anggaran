@@ -9,7 +9,7 @@ use App\Http\Controllers\apI\ImportExcelController;
 use App\Http\Controllers\API\KegiantanController;
 use App\Http\Controllers\API\LaporanController;
 use App\Http\Controllers\API\ProfileController;
-use App\Http\Controllers\apI\RealisasiController;
+use App\Http\Controllers\API\RealisasiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
