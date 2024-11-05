@@ -30,13 +30,14 @@ class DetailAnggaranController extends Controller
                     'penyedia_jasa',
                     'no_spmk',
                     'realisasi',
+                    'nilai_kontrak',
                     'awal_kontrak',
                     'akhir_kontrak',
                     'target',
                     'kegiatan_id',
                 )
                 ->with(['kegiatan' => function ($query) {
-                    $query->select('id', 'title', 'bidang_id', 'alokasi', 'program')
+                    $query->select('id', 'title', 'bidang_id', 'alokasi', 'tahun', 'program')
                         ->with(['program' => function ($query) {
                             $query->select('id', 'name');
                         }]);
