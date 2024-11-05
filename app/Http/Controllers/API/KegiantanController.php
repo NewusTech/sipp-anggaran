@@ -35,7 +35,7 @@ class KegiantanController extends Controller
                         // ->whereYear('created_at', $year);
                     },
                     'kegiatan.subKegiatan.detail' => function ($query) {
-                        $query->select('id', 'sub_kegiatan_id', 'title', 'created_at')
+                        $query->select('id', 'sub_kegiatan_id', 'title', 'pagu', 'nilai_kontrak', 'created_at')
                             ->with(['progres' => function ($query) {
                                 $query->orderByDesc('nilai')
                                     ->where('jenis_progres', 'fisik')
@@ -43,6 +43,20 @@ class KegiantanController extends Controller
                             }]);
                     }
                 ])->get();
+
+            $bidang->map(function ($item) {
+                $item->kegiatan->map(function ($kegiatan) {
+                    $kegiatan->subKegiatan->map(function ($subKegiatan) {
+                        $subKegiatan->detail->map(function ($detail) {
+                            $detail->jenis_kegiatan = "fisik";
+                            return $detail;
+                        });
+                        return $subKegiatan;
+                    });
+                    return $kegiatan;
+                });
+                return $item;
+            });
 
 
             return response()->json([
