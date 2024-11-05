@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\apI;
+namespace App\Http\Controllers\API;
 
 use App\Exports\LaporanPengambilanExport;
 use App\Http\Controllers\Controller;

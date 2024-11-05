@@ -4,7 +4,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\DetailAnggaranController;
 use App\Http\Controllers\API\DetailKegitanController;
-use App\Http\Controllers\apI\DownloadLaporanController;
+use App\Http\Controllers\API\DownloadLaporanController;
 use App\Http\Controllers\apI\ImportExcelController;
 use App\Http\Controllers\API\KegiantanController;
 use App\Http\Controllers\API\LaporanController;
