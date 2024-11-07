@@ -27,7 +27,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login']);
+    Route::get('logout', [AuthController::class, 'logout']);
 });
+Route::get('get-permission', [AuthController::class, 'getAllPermissions']);
 
 Route::group(['middleware' => 'api', 'prefix' => 'users'], function () {
     Route::get('/', [AuthController::class, 'getUserData']);

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -14,11 +16,17 @@ class AuthController extends Controller
 
     public function loginResponse($token, $user)
     {
+
+        $role = $user->getRoleNames();
+
+        $roles = Role::where('name', 'Staff Keuangan')->first();
+        $user_permission = $roles->permissions->pluck('name');
         $data = [
             'name' => $user->name,
             'email' => $user->email,
             'token' => $token,
             'type' => 'Bearer',
+            'permission' => $user_permission,
             'app_name' => 'SIPP-Anggaran'
         ];
 
@@ -66,6 +74,16 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Logout Success'
+        ], 200);
+    }
+
+    public function getAllPermissions()
+    {
+        $permissions = Permission::all();
+        return response()->json([
+            'success' => true,
+            'message' => 'Get All Permissions Success',
+            'data' => $permissions
         ], 200);
     }
 }
