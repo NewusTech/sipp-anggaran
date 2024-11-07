@@ -19,7 +19,7 @@ class AuthController extends Controller
 
         $role = $user->getRoleNames();
 
-        $roles = Role::where('name', 'Staff Keuangan')->first();
+        $roles = Role::where('name', $role[0])->first();
         $user_permission = $roles->permissions->pluck('name');
         $data = [
             'name' => $user->name,
