@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bidang;
 use App\Models\DetailKegiatan;
 use App\Models\Kegiatan;
+use App\Models\Program;
 use App\Models\ProgresKegiatan;
 use App\Models\RencanaKegiatan;
 use App\Models\SubKegiatan;
@@ -22,18 +23,35 @@ class DetailKegitanController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'logout']]);
     }
 
+    public function getProgram()
+    {
+        try {
+            $program = Program::select('id', 'name', 'kode')->get();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Get  Program Success',
+                'data' => $program
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
 
     public function getKegiatanAndSubKegiatan(Request $request)
     {
         try {
             $kegiatan = Kegiatan::select('id', 'title')
-                ->with('subKegiatan:id,kegiatan_id,title')
                 ->get();
             // $subKegiatan = DetailKegiatan::select('id', 'title')->get();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Get Kegiatan and Sub Kegiatan Success',
+                'message' => 'Get Kegiatan Success',
                 'data' => [
                     'kegiatan' => $kegiatan,
                     // 'sub_kegiatan' => $subKegiatan
@@ -45,6 +63,24 @@ class DetailKegitanController extends Controller
                 'message' => $th->getMessage()
             ]);
         }
+    }
+
+    public function getSubKegiatan()
+    {
+        // try {
+        $subKegiatan = SubKegiatan::select('id', 'title')->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Get Sub Kegiatan Success',
+            'data' => $subKegiatan
+        ], 200);
+        // } catch (\Throwable $th) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => $th->getMessage()
+        //     ]);
+        // }
     }
 
     public function getBidangAndSumberDana()

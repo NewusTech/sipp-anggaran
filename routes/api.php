@@ -49,6 +49,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'kegiatan'], function () {
 
 Route::group(['middleware' => 'api', 'prefix' => 'detail-kegiatan'], function () {
     Route::get('/kegitan-and-sub-kegiatan', [DetailKegitanController::class, 'getKegiatanAndSubKegiatan']);
+    Route::get('/sub-kegiatan', [DetailKegitanController::class, 'getSubKegiatan']);
+    Route::get('/program', [DetailKegitanController::class, 'getProgram']);
     Route::get('/bidang-and-sumber-dana', [DetailKegitanController::class, 'getBidangAndSumberDana']);
     Route::post('/', [DetailKegitanController::class, 'store']);
     Route::get('/{detail_kegitan_id}', [DetailKegitanController::class, 'show']);
