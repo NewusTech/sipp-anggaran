@@ -143,22 +143,38 @@ class DashboardController extends Controller
             $kegiatan = $kegiatan->map(function ($item) {
                 return $item->id;
             });
-            $realisasi_fisik_from_detail_kegiatan = DetailKegiatan::select('id', 'title')
-                ->with(['progres' => function ($query) {
-                    $query->where('jenis_progres', 'fisik')
-                        ->orderByDesc('nilai')
-                        ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai');
-                }])
+            $realisasi_fisik_from_detail_kegiatan = DetailKegiatan::select('id', 'title',  'alamat', 'jenis_pengadaan', 'penyedia_jasa', 'kegiatan_id')
+                ->with([
+                    'kegiatan' => function ($query) {
+                        $query->select('id', 'title', 'bidang_id')
+                            ->with(['bidang' => function ($query) {
+                                $query->select('id', 'name');
+                            }]);
+                    },
+                    'progres' => function ($query) {
+                        $query->where('jenis_progres', 'fisik')
+                            ->orderByDesc('nilai')
+                            ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai');
+                    },
+                ])
                 ->whereYear('created_at', $year)
                 ->get();
 
 
-            $realsisasi_keuangan_from_detail_kegitan = DetailKegiatan::select('id', 'title')
-                ->with(['progres' => function ($query) {
-                    $query->where('jenis_progres', 'keuangan')
-                        ->orderByDesc('nilai')
-                        ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai');
-                }])
+            $realsisasi_keuangan_from_detail_kegitan = DetailKegiatan::select('id', 'title',  'alamat', 'jenis_pengadaan', 'penyedia_jasa', 'kegiatan_id')
+                ->with([
+                    'kegiatan' => function ($query) {
+                        $query->select('id', 'title', 'bidang_id')
+                            ->with(['bidang' => function ($query) {
+                                $query->select('id', 'name');
+                            }]);
+                    },
+                    'progres' => function ($query) {
+                        $query->where('jenis_progres', 'kuangan')
+                            ->orderByDesc('nilai')
+                            ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai');
+                    },
+                ])
                 ->whereYear('created_at', $year)
                 ->get();
 

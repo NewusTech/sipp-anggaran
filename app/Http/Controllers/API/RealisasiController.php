@@ -27,13 +27,19 @@ class RealisasiController extends Controller
 
         try {
 
-            $realsisasi_keuangan_from_detail_kegitan =  DetailKegiatan::select('id', 'title')
+            $realsisasi_keuangan_from_detail_kegitan =  DetailKegiatan::select('id', 'title',  'alamat', 'jenis_pengadaan', 'penyedia_jasa', 'kegiatan_id')
                 ->with([
+                    'kegiatan' => function ($query) {
+                        $query->select('id', 'title', 'bidang_id')
+                            ->with(['bidang' => function ($query) {
+                                $query->select('id', 'name');
+                            }]);
+                    },
                     'progres' => function ($query) {
                         $query->where('jenis_progres', 'keuangan')
                             ->orderByDesc('nilai')
                             ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai');
-                    }
+                    },
                 ])
                 ->when($request_tahun, fn($query) => $query->whereYear('created_at', $request_tahun))
                 ->when($request_bulan, fn($query) => $query->whereMonth('created_at', $request_bulan))
@@ -84,13 +90,19 @@ class RealisasiController extends Controller
 
         try {
 
-            $realsisasi_fisik_from_detail_kegitan =  DetailKegiatan::select('id', 'title')
+            $realsisasi_fisik_from_detail_kegitan =  DetailKegiatan::select('id', 'title', 'alamat', 'jenis_pengadaan', 'penyedia_jasa', 'kegiatan_id')
                 ->with([
+                    'kegiatan' => function ($query) {
+                        $query->select('id', 'title', 'bidang_id')
+                            ->with(['bidang' => function ($query) {
+                                $query->select('id', 'name');
+                            }]);
+                    },
                     'progres' => function ($query) {
                         $query->where('jenis_progres', 'fisik')
                             ->orderByDesc('nilai')
                             ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai');
-                    }
+                    },
                 ])
                 ->when($request_tahun, fn($query) => $query->whereYear('created_at', $request_tahun))
                 ->when($request_bulan, fn($query) => $query->whereMonth('created_at', $request_bulan))
