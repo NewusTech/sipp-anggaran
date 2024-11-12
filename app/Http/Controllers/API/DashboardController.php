@@ -245,6 +245,7 @@ class DashboardController extends Controller
     public function getTabelData(Request $request)
     {
         $year = $request->query('year', date('Y'));
+        $count = $request->query('count', 10);
 
         try {
 
@@ -285,7 +286,7 @@ class DashboardController extends Controller
                     }
                 })
                 ->whereYear('created_at', $year)
-                ->paginate(10);
+                ->paginate($count);
 
             if ($role[0] == 'Pengawas') {
                 $pengawas = PenanggungJawab::where('pptk_email', Auth::user()->email)->first('id');

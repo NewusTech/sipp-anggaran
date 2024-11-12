@@ -5,11 +5,15 @@ use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\DetailAnggaranController;
 use App\Http\Controllers\API\DetailKegitanController;
 use App\Http\Controllers\API\DownloadLaporanController;
-use App\Http\Controllers\apI\ImportExcelController;
+use App\Http\Controllers\API\ImportExcelController;
 use App\Http\Controllers\API\KegiantanController;
 use App\Http\Controllers\API\LaporanController;
+use App\Http\Controllers\API\master\BidangController;
+use App\Http\Controllers\API\master\KegiatanController as MasterKegiatanController;
+use App\Http\Controllers\API\master\PengawasController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\RealisasiController;
+use App\Http\Controllers\API\master\SubKegiatanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -116,4 +120,40 @@ Route::group(['middleware' => 'api', 'prefix' => 'download'], function () {
 // import
 Route::group(['middleware' => 'api', 'prefix' => 'import'], function () {
     Route::post('/kegiatan', [ImportExcelController::class, 'importKegiatan']);
+});
+
+
+Route::group(['middleware' => 'api', 'prefix' => 'master'], function () {
+
+
+    Route::group(['prefix' => 'bidang'], function () {
+        Route::get('/', [BidangController::class, 'index']);
+        Route::post('/', [BidangController::class, 'store']);
+        Route::get('/{id}', [BidangController::class, 'show']);
+        Route::put('/{id}', [BidangController::class, 'update']);
+        Route::delete('/{id}', [BidangController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'pengawas'], function () {
+        Route::get('/', [PengawasController::class, 'index']);
+        Route::post('/', [PengawasController::class, 'store']);
+        Route::get('/{id}', [PengawasController::class, 'show']);
+        Route::put('/{id}', [PengawasController::class, 'update']);
+        Route::delete('/{id}', [PengawasController::class, 'destroy']);
+    });
+    Route::group(['prefix' => 'kegiatan'], function () {
+        Route::get('/', [MasterKegiatanController::class, 'index']);
+        Route::post('/', [MasterKegiatanController::class, 'store']);
+        Route::get('/{id}', [MasterKegiatanController::class, 'show']);
+        Route::put('/{id}', [MasterKegiatanController::class, 'update']);
+        Route::delete('/{id}', [MasterKegiatanController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'sub-kegiatan'], function () {
+        Route::get('/', [SubKegiatanController::class, 'index']);
+        Route::post('/', [SubKegiatanController::class, 'store']);
+        Route::get('/{id}', [SubKegiatanController::class, 'show']);
+        Route::put('/{id}', [SubKegiatanController::class, 'update']);
+        Route::delete('/{id}', [SubKegiatanController::class, 'destroy']);
+    });
 });
