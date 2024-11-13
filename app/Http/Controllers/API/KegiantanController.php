@@ -21,6 +21,8 @@ class KegiantanController extends Controller
 
         $user = auth('api')->user();
         $role = $user->getRoleNames();
+
+        $bidang_id = [];
         $bidang_id = $user->bidang_id;
         try {
 
@@ -42,7 +44,11 @@ class KegiantanController extends Controller
                                     ->select('id', 'nilai', 'detail_kegiatan_id');
                             }]);
                     }
-                ])->get();
+                ])
+                ->when($bidang_id, function ($query) use ($bidang_id) {
+                    $query->where('id', $bidang_id);
+                })
+                ->get();
 
             $bidang->map(function ($item) {
                 $item->kegiatan->map(function ($kegiatan) {

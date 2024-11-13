@@ -25,6 +25,9 @@ class RealisasiController extends Controller
         $request_start_date = $request->start_date;
         $request_end_date = $request->end_date ??  date('Y-m-d');
 
+        $user = auth('api')->user();
+        $bidang_id = $user->bidang_id;
+
         try {
 
             $realsisasi_keuangan_from_detail_kegitan =  DetailKegiatan::select('id', 'title',  'alamat', 'jenis_pengadaan', 'penyedia_jasa', 'kegiatan_id')
@@ -41,6 +44,9 @@ class RealisasiController extends Controller
                             ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai');
                     },
                 ])
+                ->whereHas('kegiatan', function ($query) use ($bidang_id) {
+                    $query->where('bidang_id', $bidang_id);
+                })
                 ->when($request_tahun, fn($query) => $query->whereYear('created_at', $request_tahun))
                 ->when($request_bulan, fn($query) => $query->whereMonth('created_at', $request_bulan))
                 ->when($request_search, fn($query) => $query->where('title', 'like', '%' . $request_search . '%'))
@@ -87,7 +93,8 @@ class RealisasiController extends Controller
         $request_start_date = $request->start_date;
         $request_end_date = $request->end_date ??  date('Y-m-d');
 
-
+        $user = auth('api')->user();
+        $bidang_id = $user->bidang_id;
         try {
 
             $realsisasi_fisik_from_detail_kegitan =  DetailKegiatan::select('id', 'title', 'alamat', 'jenis_pengadaan', 'penyedia_jasa', 'kegiatan_id')
@@ -104,6 +111,9 @@ class RealisasiController extends Controller
                             ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai');
                     },
                 ])
+                ->whereHas('kegiatan', function ($query) use ($bidang_id) {
+                    $query->where('bidang_id', $bidang_id);
+                })
                 ->when($request_tahun, fn($query) => $query->whereYear('created_at', $request_tahun))
                 ->when($request_bulan, fn($query) => $query->whereMonth('created_at', $request_bulan))
                 ->when($request_search, fn($query) => $query->where('title', 'like', '%' . $request_search . '%'))
