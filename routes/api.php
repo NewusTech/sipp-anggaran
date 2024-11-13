@@ -93,7 +93,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'detail-anggaran/{detail_kegita
 Route::group(['middleware' => 'api'], function () {
     Route::get('/list-penanggung-jawab', [DetailAnggaranController::class, 'getListPenanggungJawab']);
     Route::get('/bidang-program', [MasterKegiatanController::class, 'getBidangAndProgram']);
-    Route::get('/kegiatan', [SubKegiatanController::class, 'getkegiatan']);
+    Route::get('/list-kegiatan ', [SubKegiatanController::class, 'getkegiatan']);
 });
 
 Route::group(['middleware' => 'api', 'prefix' => 'laporan'], function () {

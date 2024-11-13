@@ -242,6 +242,34 @@ class DashboardController extends Controller
         }
     }
 
+    public function getLokasiMaps()
+    {
+
+        $user = auth('api')->user();
+        $bidang_id = $user->bidang_id;
+        try {
+            $detail_kegiatan = DetailKegiatan::select(
+                'latitude',
+                'longitude'
+            )->where('latitude', '!=', null)->where('longitude', '!=', null)
+                ->whereHas('kegiatan', function ($query) use ($bidang_id) {
+                    $query->where('bidang_id', $bidang_id);
+                })
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Get Dashboard Data Success',
+                'data' => $detail_kegiatan
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
     public function getTabelData(Request $request)
     {
         $year = $request->query('year', date('Y'));
