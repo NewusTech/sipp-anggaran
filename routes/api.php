@@ -14,6 +14,7 @@ use App\Http\Controllers\API\master\PengawasController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\RealisasiController;
 use App\Http\Controllers\API\master\SubKegiatanController;
+// use App\Http\Controllers\API\master\kegiatanController as MasterKegiatanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -91,6 +92,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'detail-anggaran/{detail_kegita
 // helper
 Route::group(['middleware' => 'api'], function () {
     Route::get('/list-penanggung-jawab', [DetailAnggaranController::class, 'getListPenanggungJawab']);
+    Route::get('/bidang-program', [MasterKegiatanController::class, 'getBidangAndProgram']);
+    Route::get('/kegiatan', [SubKegiatanController::class, 'getkegiatan']);
 });
 
 Route::group(['middleware' => 'api', 'prefix' => 'laporan'], function () {

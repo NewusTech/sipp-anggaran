@@ -44,8 +44,10 @@ class RealisasiController extends Controller
                             ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai');
                     },
                 ])
-                ->whereHas('kegiatan', function ($query) use ($bidang_id) {
-                    $query->where('bidang_id', $bidang_id);
+                ->when($bidang_id, function ($query) use ($bidang_id) {
+                    $query->whereHas('kegiatan', function ($query) use ($bidang_id) {
+                        $query->where('bidang_id', $bidang_id);
+                    });
                 })
                 ->when($request_tahun, fn($query) => $query->whereYear('created_at', $request_tahun))
                 ->when($request_bulan, fn($query) => $query->whereMonth('created_at', $request_bulan))
@@ -111,8 +113,10 @@ class RealisasiController extends Controller
                             ->select('id', 'detail_kegiatan_id', 'minggu', 'bulan', 'jenis_progres', 'nilai');
                     },
                 ])
-                ->whereHas('kegiatan', function ($query) use ($bidang_id) {
-                    $query->where('bidang_id', $bidang_id);
+                ->when($bidang_id, function ($query) use ($bidang_id) {
+                    $query->whereHas('kegiatan', function ($query) use ($bidang_id) {
+                        $query->where('bidang_id', $bidang_id);
+                    });
                 })
                 ->when($request_tahun, fn($query) => $query->whereYear('created_at', $request_tahun))
                 ->when($request_bulan, fn($query) => $query->whereMonth('created_at', $request_bulan))

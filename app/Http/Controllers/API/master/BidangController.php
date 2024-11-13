@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class BidangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'logout']]);
+    }
+
     public function index(Request $request)
     {
 
@@ -16,8 +21,8 @@ class BidangController extends Controller
         $count = $request->query('count', 10);
 
         $bidang = Bidang::orderBy('created_at', 'desc')
-            ->when( $seach, function($query) use ($seach){
-                $query->where('name', 'like', '%'.$seach.'%');
+            ->when($seach, function ($query) use ($seach) {
+                $query->where('name', 'like', '%' . $seach . '%');
             })
             ->paginate($count);
         return response()->json([
@@ -103,7 +108,7 @@ class BidangController extends Controller
     {
         $bidang = Bidang::find($id);
 
-        if(!$bidang){
+        if (!$bidang) {
             return response()->json([
                 'success' => false,
                 'message' => 'Data tidak ditemukan',
