@@ -10,10 +10,13 @@ use App\Http\Controllers\API\KegiantanController;
 use App\Http\Controllers\API\LaporanController;
 use App\Http\Controllers\API\master\BidangController;
 use App\Http\Controllers\API\master\KegiatanController as MasterKegiatanController;
+use App\Http\Controllers\API\master\NomenKlaturController;
 use App\Http\Controllers\API\master\PengawasController;
+use App\Http\Controllers\API\master\ProgramController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\RealisasiController;
 use App\Http\Controllers\API\master\SubKegiatanController;
+use App\Http\Controllers\API\master\SumberDanaController;
 // use App\Http\Controllers\API\master\kegiatanController as MasterKegiatanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -160,5 +163,26 @@ Route::group(['middleware' => 'api', 'prefix' => 'master'], function () {
         Route::get('/{id}', [SubKegiatanController::class, 'show']);
         Route::put('/{id}', [SubKegiatanController::class, 'update']);
         Route::delete('/{id}', [SubKegiatanController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'program'], function () {
+        Route::get('/', [ProgramController::class, 'index']);
+        Route::post('/', [ProgramController::class, 'store']);
+        Route::get('/{id}', [ProgramController::class, 'show']);
+        Route::put('/{id}', [ProgramController::class, 'update']);
+        Route::delete('/{id}', [ProgramController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'nomenklatur'], function () {
+        Route::get('/', [NomenKlaturController::class, 'index']);
+        Route::post('/', [NomenKlaturController::class, 'store']);
+    });
+
+    Route::group(['prefix' => 'sumber-dana'], function () {
+        Route::get('/', [SumberDanaController::class, 'index']);
+        Route::post('/', [SumberDanaController::class, 'store']);
+        Route::get('/{id}', [SumberDanaController::class, 'show']);
+        Route::put('/{id}', [SumberDanaController::class, 'update']);
+        Route::delete('/{id}', [SumberDanaController::class, 'destroy']);
     });
 });

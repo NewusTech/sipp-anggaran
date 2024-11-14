@@ -1,0 +1,157 @@
+<?php
+
+namespace App\Http\Controllers\API\master;
+
+use App\Http\Controllers\Controller;
+use App\Models\SumberDana;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+class SumberDanaController extends Controller
+{
+    public function index(Request $request)
+    {
+        $seacth = $request->query('search');
+        $count = $request->query('count', 10);
+
+        try {
+            $sumberdana = SumberDana::orderBy('created_at', 'desc')
+                ->when($seacth, function ($query) use ($seacth) {
+                    $query->where('name', 'like', '%' . $seacth . '%');
+                })
+                ->paginate($count);
+
+            return response()->json([
+                'success' => true,
+                'data' => $sumberdana,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'message' => $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $sumberdana = SumberDana::find($id);
+
+            if (!$sumberdana) {
+                return response()->json([
+                    'message' => 'Data not found',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $sumberdana,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'message' => $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'kode' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors(),
+            ]);
+        }
+        try {
+
+            SumberDana::create([
+                'name' => $request->name,
+                'kode' => $request->kode,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Kegiatan berhasil disimpan',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'message' => $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'kode' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors(),
+            ]);
+        }
+
+        try {
+            $sumberdana = SumberDana::where('id', '=', $id)->update([
+                'name' => $request->name,
+                'kode' => $request->kode,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Sumber Dana berhasil disimpan',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'message' => $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $sumberdana = SumberDana::find($id);
+
+            if (!$sumberdana) {
+                return response()->json([
+                    'message' => 'Data not found',
+                ], 404);
+            }
+
+            $sumberdana->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil dihapus',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'message' => $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+}

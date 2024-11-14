@@ -623,25 +623,38 @@ class DetailAnggaranController extends Controller
                 ->select(
                     'id',
                     'title',
+                    'alamat',
                     'no_detail_kegiatan',
+                    'nilai_kontrak',
                     'no_kontrak',
                     'jenis_pengadaan',
                     'penyedia_jasa',
-                    'no_spmk',
                     'latitude',
                     'longitude',
-                    'realisasi',
-                    'awal_kontrak',
-                    'akhir_kontrak',
-                    'target',
+                    'penanggung_jawab_id',
                     'kegiatan_id',
                 )
-                ->with(['kegiatan' => function ($query) {
-                    $query->select('id', 'title', 'bidang_id', 'alokasi', 'program')
-                        ->with(['program' => function ($query) {
-                            $query->select('id', 'name');
-                        }]);
-                }], 'penyedia')
+                ->with(
+                    ['kegiatan' => function ($query) {
+                        $query->select('id', 'title', 'bidang_id', 'alokasi', 'program')
+                            ->with(['program' => function ($query) {
+                                $query->select('id', 'name');
+                            }]);
+                    }],
+                    'penyedia'
+                )
+                ->first();
+
+            $detail->penanggung_jawab = PenanggungJawab::where('id', $detail->penanggung_jawab_id)
+                ->select(
+                    'id',
+                    'pptk_name',
+                    'pptk_email',
+                    'pptk_telpon',
+                    'ppk_name',
+                    'ppk_email',
+                    'ppk_telpon'
+                )
                 ->first();
 
             if (!$detail) {
