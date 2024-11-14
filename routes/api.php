@@ -50,6 +50,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'dashboard'], function () {
 
 Route::group(['middleware' => 'api', 'prefix' => 'kegiatan'], function () {
     Route::get('/', [KegiantanController::class, 'index']);
+    Route::put('/verifikasi-admin/{detail_kegitan_id}', [KegiantanController::class, 'updateVerifikasiAdmin']);
+    Route::put('/verifikasi-pengawas/{detail_kegitan_id}', [KegiantanController::class, 'updateVerifikasiPengawas']);
 });
 
 Route::group(['middleware' => 'api', 'prefix' => 'detail-kegiatan'], function () {
