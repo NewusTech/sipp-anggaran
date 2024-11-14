@@ -30,7 +30,18 @@ class RealisasiController extends Controller
 
         try {
 
-            $realsisasi_keuangan_from_detail_kegitan =  DetailKegiatan::select('id', 'title',  'alamat', 'jenis_pengadaan', 'penyedia_jasa', 'kegiatan_id')
+            $realsisasi_keuangan_from_detail_kegitan =  DetailKegiatan::select(
+                'id',
+                'title',
+                'alamat',
+                'jenis_pengadaan',
+                'penyedia_jasa',
+                'no_kontrak',
+                'no_spmk',
+                'awal_kontrak',
+                'nilai_kontrak',
+                'kegiatan_id'
+            )
                 ->with([
                     'kegiatan' => function ($query) {
                         $query->select('id', 'title', 'bidang_id')
@@ -99,7 +110,18 @@ class RealisasiController extends Controller
         $bidang_id = $user->bidang_id;
         try {
 
-            $realsisasi_fisik_from_detail_kegitan =  DetailKegiatan::select('id', 'title', 'alamat', 'jenis_pengadaan', 'penyedia_jasa', 'kegiatan_id')
+            $realsisasi_fisik_from_detail_kegitan =  DetailKegiatan::select(
+                'id',
+                'title',
+                'alamat',
+                'jenis_pengadaan',
+                'penyedia_jasa',
+                'no_kontrak',
+                'no_spmk',
+                'awal_kontrak',
+                'nilai_kontrak',
+                'kegiatan_id'
+            )
                 ->with([
                     'kegiatan' => function ($query) {
                         $query->select('id', 'title', 'bidang_id')

@@ -143,7 +143,18 @@ class DashboardController extends Controller
             $kegiatan = $kegiatan->map(function ($item) {
                 return $item->id;
             });
-            $realisasi_fisik_from_detail_kegiatan = DetailKegiatan::select('id', 'title',  'alamat', 'jenis_pengadaan', 'penyedia_jasa', 'kegiatan_id')
+            $realisasi_fisik_from_detail_kegiatan = DetailKegiatan::select(
+                'id',
+                'title',
+                'alamat',
+                'jenis_pengadaan',
+                'penyedia_jasa',
+                'no_kontrak',
+                'no_spmk',
+                'awal_kontrak',
+                'nilai_kontrak',
+                'kegiatan_id'
+            )
                 ->with([
                     'kegiatan' => function ($query) {
                         $query->select('id', 'title', 'bidang_id')
@@ -161,7 +172,18 @@ class DashboardController extends Controller
                 ->get();
 
 
-            $realsisasi_keuangan_from_detail_kegitan = DetailKegiatan::select('id', 'title',  'alamat', 'jenis_pengadaan', 'penyedia_jasa', 'kegiatan_id')
+            $realsisasi_keuangan_from_detail_kegitan = DetailKegiatan::select(
+                'id',
+                'title',
+                'alamat',
+                'jenis_pengadaan',
+                'penyedia_jasa',
+                'no_kontrak',
+                'no_spmk',
+                'awal_kontrak',
+                'nilai_kontrak',
+                'kegiatan_id'
+            )
                 ->with([
                     'kegiatan' => function ($query) {
                         $query->select('id', 'title', 'bidang_id')
