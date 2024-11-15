@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\API\master;
 
 use App\Http\Controllers\Controller;
-use App\Models\SumberDana;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class SumberDanaController extends Controller
+class UnitController extends Controller
 {
     public function index(Request $request)
     {
@@ -15,7 +15,7 @@ class SumberDanaController extends Controller
         $count = $request->query('count', 10);
 
         try {
-            $sumberdana = SumberDana::orderBy('created_at', 'desc')
+            $unit = Unit::orderBy('created_at', 'desc')
                 ->when($seacth, function ($query) use ($seacth) {
                     $query->where('name', 'like', '%' . $seacth . '%');
                 })
@@ -23,7 +23,7 @@ class SumberDanaController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $sumberdana,
+                'data' => $unit,
             ]);
         } catch (\Exception $e) {
             return response()->json(
@@ -38,9 +38,9 @@ class SumberDanaController extends Controller
     public function show($id)
     {
         try {
-            $sumberdana = SumberDana::find($id);
+            $unit = Unit::find($id);
 
-            if (!$sumberdana) {
+            if (!$unit) {
                 return response()->json([
                     'message' => 'Data not found',
                 ], 404);
@@ -48,7 +48,7 @@ class SumberDanaController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $sumberdana,
+                'data' => $unit,
             ]);
         } catch (\Exception $e) {
             return response()->json(
@@ -75,7 +75,7 @@ class SumberDanaController extends Controller
         }
         try {
 
-            SumberDana::create([
+            Unit::create([
                 'name' => $request->name,
                 'kode' => $request->kode,
             ]);
@@ -109,7 +109,7 @@ class SumberDanaController extends Controller
         }
 
         try {
-            $sumberdana = SumberDana::where('id', '=', $id)->update([
+            $unit = Unit::where('id', '=', $id)->update([
                 'name' => $request->name,
                 'kode' => $request->kode,
             ]);
@@ -131,15 +131,15 @@ class SumberDanaController extends Controller
     public function destroy($id)
     {
         try {
-            $sumberdana = SumberDana::find($id);
+            $unit = Unit::find($id);
 
-            if (!$sumberdana) {
+            if (!$unit) {
                 return response()->json([
                     'message' => 'Data not found',
                 ], 404);
             }
 
-            $sumberdana->delete();
+            $unit->delete();
 
             return response()->json([
                 'success' => true,

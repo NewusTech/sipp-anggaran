@@ -11,12 +11,15 @@ use App\Http\Controllers\API\LaporanController;
 use App\Http\Controllers\API\master\BidangController;
 use App\Http\Controllers\API\master\KegiatanController as MasterKegiatanController;
 use App\Http\Controllers\API\master\NomenKlaturController;
+use App\Http\Controllers\API\master\OrganisasiController;
 use App\Http\Controllers\API\master\PengawasController;
 use App\Http\Controllers\API\master\ProgramController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\RealisasiController;
 use App\Http\Controllers\API\master\SubKegiatanController;
 use App\Http\Controllers\API\master\SumberDanaController;
+use App\Http\Controllers\API\master\UnitController;
+use App\Http\Controllers\API\master\UrusanController;
 // use App\Http\Controllers\API\master\kegiatanController as MasterKegiatanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -184,5 +187,28 @@ Route::group(['middleware' => 'api', 'prefix' => 'master'], function () {
         Route::get('/{id}', [SumberDanaController::class, 'show']);
         Route::put('/{id}', [SumberDanaController::class, 'update']);
         Route::delete('/{id}', [SumberDanaController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'urusan'], function () {
+        Route::get('/', [UrusanController::class, 'index']);
+        Route::post('/', [UrusanController::class, 'store']);
+        Route::get('/{id}', [UrusanController::class, 'show']);
+        Route::put('/{id}', [UrusanController::class, 'update']);
+        Route::delete('/{id}', [UrusanController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'organisasi'], function () {
+        Route::get('/', [OrganisasiController::class, 'index']);
+        Route::post('/', [OrganisasiController::class, 'store']);
+        Route::get('/{id}', [OrganisasiController::class, 'show']);
+        Route::put('/{id}', [OrganisasiController::class, 'update']);
+        Route::delete('/{id}', [OrganisasiController::class, 'destroy']);
+    });
+    Route::group(['prefix' => 'unit'], function () {
+        Route::get('/', [UnitController::class, 'index']);
+        Route::post('/', [UnitController::class, 'store']);
+        Route::get('/{id}', [UnitController::class, 'show']);
+        Route::put('/{id}', [UnitController::class, 'update']);
+        Route::delete('/{id}', [UnitController::class, 'destroy']);
     });
 });

@@ -9,15 +9,15 @@ use Illuminate\Support\Facades\Validator;
 
 class SumberDanaController extends Controller
 {
-  /**
+	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index()
 	{
-			$sumberDana = SumberDana::orderBy('created_at', 'desc')->get();
-			return view('backend.sumber_dana.index', compact('sumberDana'));
+		$sumberDana = SumberDana::orderBy('created_at', 'desc')->get();
+		return view('backend.sumber_dana.index', compact('sumberDana'));
 	}
 
 	/**
@@ -27,7 +27,7 @@ class SumberDanaController extends Controller
 	 */
 	public function create()
 	{
-			//
+		//
 	}
 
 	/**
@@ -38,22 +38,22 @@ class SumberDanaController extends Controller
 	 */
 	public function store(Request $request)
 	{
-			$validator = Validator::make($request->all(), [
-					'name' => 'required',
-					'kode' => 'required',
-			]);
-			
-			if ($validator->fails()) {
-					return redirect()->route('backend.sumberDana.index')
-												->withErrors($validator)
-												->withInput();
-			}
+		$validator = Validator::make($request->all(), [
+			'name' => 'required',
+			'kode' => 'required',
+		]);
 
-			$sumberDana = SumberDana::create([
-					'name' => $request->name,
-					'kode' => $request->kode,
-			]);
-			return redirect()->route('backend.sumber_dana.index')->with('success', 'Sumber Dana berhasil disimpan');
+		if ($validator->fails()) {
+			return redirect()->route('backend.sumberDana.index')
+				->withErrors($validator)
+				->withInput();
+		}
+
+		$sumberDana = SumberDana::create([
+			'name' => $request->name,
+			'kode' => $request->kode,
+		]);
+		return redirect()->route('backend.sumber_dana.index')->with('success', 'data berhasil diupdate');
 	}
 
 	/**
@@ -64,7 +64,7 @@ class SumberDanaController extends Controller
 	 */
 	public function show($id)
 	{
-			//
+		//
 	}
 
 	/**
@@ -75,7 +75,7 @@ class SumberDanaController extends Controller
 	 */
 	public function edit($id)
 	{
-			//
+		//
 	}
 
 	/**
@@ -87,11 +87,11 @@ class SumberDanaController extends Controller
 	 */
 	public function update(Request $request, $id)
 	{
-			$sumberDana = SumberDana::where('id', '=',$id)->update([
-					'name' => $request->name,
-					'kode' => $request->kode,
-			]);
-			return redirect()->route('backend.sumber_dana.index')->with('success', 'Sumber Dana berhasil disimpan');
+		$sumberDana = SumberDana::where('id', '=', $id)->update([
+			'name' => $request->name,
+			'kode' => $request->kode,
+		]);
+		return redirect()->route('backend.sumber_dana.index')->with('success', 'data berhasil diupdate');
 	}
 
 	/**
@@ -102,8 +102,8 @@ class SumberDanaController extends Controller
 	 */
 	public function destroy($id)
 	{
-			$sumberDana = SumberDana::where('id',$id)->first();
-			$sumberDana->delete();
-			return redirect()->route('backend.sumber_dana.index')->with('success', 'Sumber Dana berhasil dihapus');
+		$sumberDana = SumberDana::where('id', $id)->first();
+		$sumberDana->delete();
+		return redirect()->route('backend.sumber_dana.index')->with('success', 'Sumber Dana berhasil dihapus');
 	}
 }
