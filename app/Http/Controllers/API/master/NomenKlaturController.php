@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class NomenKlaturController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'logout']]);
+    }
+
     public function index()
     {
         $nomenklatur = Nomenklatur::orderBy('created_at', 'desc')->first();

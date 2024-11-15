@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class SumberDanaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'logout']]);
+    }
+
     public function index(Request $request)
     {
         $seacth = $request->query('search');
