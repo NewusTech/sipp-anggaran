@@ -20,6 +20,7 @@ use App\Http\Controllers\API\master\SubKegiatanController;
 use App\Http\Controllers\API\master\SumberDanaController;
 use App\Http\Controllers\API\master\UnitController;
 use App\Http\Controllers\API\master\UrusanController;
+use App\Http\Controllers\API\master\UserController;
 // use App\Http\Controllers\API\master\kegiatanController as MasterKegiatanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -97,12 +98,6 @@ Route::group(['middleware' => 'api', 'prefix' => 'detail-anggaran/{detail_kegita
     Route::post('/titik-lokasi', [DetailAnggaranController::class, 'updateLokasi']);
 });
 
-// helper
-Route::group(['middleware' => 'api'], function () {
-    Route::get('/list-penanggung-jawab', [DetailAnggaranController::class, 'getListPenanggungJawab']);
-    Route::get('/bidang-program', [MasterKegiatanController::class, 'getBidangAndProgram']);
-    Route::get('/list-kegiatan ', [SubKegiatanController::class, 'getkegiatan']);
-});
 
 Route::group(['middleware' => 'api', 'prefix' => 'laporan'], function () {
     Route::get('/bidang', [LaporanController::class, 'getBidang']);
@@ -211,4 +206,22 @@ Route::group(['middleware' => 'api', 'prefix' => 'master'], function () {
         Route::put('/{id}', [UnitController::class, 'update']);
         Route::delete('/{id}', [UnitController::class, 'destroy']);
     });
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::post('/', [UserController::class, 'store']);
+        Route::get('/{id}', [UserController::class, 'show']);
+        Route::put('/{id}', [UserController::class, 'update']);
+        Route::delete('/{id}', [UserController::class, 'destroy']);
+        Route::put('/{id}/password', [UserController::class, 'updatePass']);
+    });
+});
+
+
+// helper
+Route::group(['middleware' => 'api'], function () {
+    Route::get('/list-penanggung-jawab', [DetailAnggaranController::class, 'getListPenanggungJawab']);
+    Route::get('/bidang-program', [MasterKegiatanController::class, 'getBidangAndProgram']);
+    Route::get('/list-kegiatan ', [SubKegiatanController::class, 'getkegiatan']);
+    Route::get('/list-role ', [UserController::class, 'getListRole']);
 });
