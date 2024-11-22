@@ -21,6 +21,8 @@ class UserController extends Controller
     {
 
         $user_role = auth('api')->user()->getRoleNames();
+
+        // dd($user_role);
         if ($user_role[0] == 'Super Admin') {
             $roles = Role::all();
         } else {
@@ -131,7 +133,7 @@ class UserController extends Controller
         }
 
         try {
-            $user = User::create([
+            $userCreate = User::create([
                 'name' => $request->name,
                 'nip' => $request->nip,
                 'email' => $request->email,
@@ -142,11 +144,17 @@ class UserController extends Controller
                 'phone_number' => $request->phone_number
             ]);
 
-            $user->assignRole($request->roles);
+            $role = Role::where('name', $request->roles)->where('guard_name', 'web')->first();
+
+            if (!$role) {
+                return response()->json(['error' => 'Role not found for web guard'], 404);
+            }
+
+            $userCreate->assignRole($role);
 
             return response()->json([
                 'success' => true,
-                'data' => $user,
+                'data' => $userCreate,
             ]);
         } catch (\Exception $e) {
             return response()->json(
@@ -207,7 +215,13 @@ class UserController extends Controller
                 'bidang_id' => $bidang_id,
             ]);
 
-            $user->syncRoles($request->roles);
+            $role = Role::where('name', $request->roles)->where('guard_name', 'web')->first();
+
+            if (!$role) {
+                return response()->json(['error' => 'Role not found for web guard'], 404);
+            }
+
+            $user->assignRole($role);
 
             return response()->json([
                 'success' => true,
