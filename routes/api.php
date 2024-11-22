@@ -14,6 +14,7 @@ use App\Http\Controllers\API\master\NomenKlaturController;
 use App\Http\Controllers\API\master\OrganisasiController;
 use App\Http\Controllers\API\master\PengawasController;
 use App\Http\Controllers\API\master\ProgramController;
+use App\Http\Controllers\API\master\RoleController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\RealisasiController;
 use App\Http\Controllers\API\master\SubKegiatanController;
@@ -215,6 +216,15 @@ Route::group(['middleware' => 'api', 'prefix' => 'master'], function () {
         Route::delete('/{id}', [UserController::class, 'destroy']);
         Route::put('/{id}/password', [UserController::class, 'updatePass']);
     });
+
+    Route::group(['prefix' => 'role'], function () {
+        Route::get('/', [RoleController::class, 'index']);
+        // Route::post('/', [UserController::class, 'store']);
+        // Route::get('/{id}', [UserController::class, 'show']);
+        // Route::put('/{id}', [UserController::class, 'update']);
+        // Route::delete('/{id}', [UserController::class, 'destroy']);
+        // Route::put('/{id}/password', [UserController::class, 'updatePass']);
+    });
 });
 
 
@@ -224,4 +234,5 @@ Route::group(['middleware' => 'api'], function () {
     Route::get('/bidang-program', [MasterKegiatanController::class, 'getBidangAndProgram']);
     Route::get('/list-kegiatan ', [SubKegiatanController::class, 'getkegiatan']);
     Route::get('/list-role ', [UserController::class, 'getListRole']);
+    Route::get('/list-permissions', [RoleController::class, 'getPermision']);
 });
